@@ -10,8 +10,8 @@ function Header({}: Props) {
         <Heading color={"brand.secondary"}> AltInvest</Heading>
       </Flex>
       <Flex width={"50%"} height={"100%"} align={"center"} justify={"flex-end"}>
-        <Button>Invest Now</Button>
-        <Button marginLeft={10}>Connect Wallet</Button>
+        <Button bg={"brand.secondary"} onClick={() => window.open("/invest", "_self")}>Invest Now</Button>
+        <Button marginLeft={10} colorScheme='telegram'>Connect Wallet</Button>
       </Flex>
     </Flex>
   )
