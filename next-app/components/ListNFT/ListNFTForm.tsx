@@ -24,42 +24,42 @@ function ListNFTForm() {
 	};
 
 	const handleFileUpload = () => {
-		if (selectedFile) {
-			console.log("Uploading file:", selectedFile);
-		} else {
-			console.log("No file selected");
-		}
+		// if (selectedFile) {
+		// 	console.log("Uploading file:", selectedFile);
+		// } else {
+		// 	console.log("No file selected");
+		// }
 	};
 
 	const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
 		const file = event.target && event.target.files ? event.target.files[0] : null;
-		let fileHash = await sendFileToIPFS(file);
-		console.log(fileHash);
-		setHash(fileHash);
+		// let fileHash = await sendFileToIPFS(file);
+		// console.log(fileHash);
+		// setHash(fileHash);
 	};
 
 	const handleRegistration = async (e: React.FormEvent) => {
 		e.preventDefault();
 		// const filedata = new FormData();
 		// filedata.set("file", selectedFile);
-		const data = {
-			name: e.target.name.value,
-			username: e.target.username.value.toLowerCase(),
-			age: e.target.age.value,
-			address: e.target.address.value,
-			aadhar: e.target.aadhar.value,
-			pan: e.target.pan.value,
-			aadharHash: hash,
-			email: e.target.email.value,
-			password: e.target.password.value,
-		};
-		console.log(data);
-		const result = await axios.post("/api/registerUser", data, {
-			headers: { "Content-Type": "application/json" },
-		});
-		console.log(result.data);
-		setHash("");
-		onClose();
+		// const data = {
+		// 	name: e.target.name.value,
+		// 	username: e.target.username.value.toLowerCase(),
+		// 	age: e.target.age.value,
+		// 	address: e.target.address.value,
+		// 	aadhar: e.target.aadhar.value,
+		// 	pan: e.target.pan.value,
+		// 	aadharHash: hash,
+		// 	email: e.target.email.value,
+		// 	password: e.target.password.value,
+		// };
+		// console.log(data);
+		// const result = await axios.post("/api/registerUser", data, {
+		// 	headers: { "Content-Type": "application/json" },
+		// });
+		// console.log(result.data);
+		// setHash("");
+		// onClose();
 	};
 
 
