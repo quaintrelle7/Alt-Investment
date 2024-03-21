@@ -15,8 +15,8 @@ export const theme = extendTheme({
   colors: {
     brand: {
       primary: "#000",
-      secondary: "#FFA500",
-      ternary: "#808080",
+      secondary: "#24E500",
+      ternary: "#8A8A8A",
       danger: "#EA047E",
       success: "#A31ACB",
       lavenderBlush: '#FFF0F5'

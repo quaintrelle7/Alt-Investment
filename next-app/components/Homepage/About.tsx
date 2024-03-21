@@ -33,7 +33,7 @@ function About({}: Props) {
               <Image
                 objectFit='cover'
                 maxW={{ base: '50%' }}
-                src='https://images.unsplash.com/photo-1560961911-dd5c0bdd004a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60'
+                src='https://images.unsplash.com/photo-1631603090989-93f9ef6f9d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60'
                 alt='Caffe Latte'
               />  </Center>       
             <Heading fontSize={20}>Buy Fractions</Heading>
