@@ -35,7 +35,7 @@ function portfolio() {
     </Flex>
     </Center>
     <PortfolioTable/>
-    <div style={{position:"sticky", bottom:"0", width:"100%"}}>
+    <div style={{ bottom:"0", width:"100%"}}>
         <Footer/>
     </div>
     </>

@@ -1,9 +1,10 @@
-import {Center, Image, Stack, Heading} from '@chakra-ui/react'
+import {Center, Image, Stack, Heading, Link} from '@chakra-ui/react'
 import React from 'react'
 
 function NFTCard() {
   return (
     <>
+    <Link href="/company" style={{ textDecoration: 'none' }}>
     <Stack>
         <Center>
               <Image
@@ -17,6 +18,7 @@ function NFTCard() {
         {"AltInvest"}
         </Heading>
     </Stack> 
+    </Link>
     </>
   )
 }
