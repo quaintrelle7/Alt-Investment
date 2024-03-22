@@ -13,21 +13,21 @@ function Footer({}: Props) {
 
                 <Link href='https://www.linkedin.com/in/sharayushendre/' target='_blank'>
 
-                    <Icon fontSize={30} color={'brand.100'} borderRadius={'full'} as={AiFillLinkedin} />
+                    <Icon fontSize={30} color={'brand.secondary'} borderRadius={'full'} as={AiFillLinkedin} _hover={{color: 'brand.quinary'}}/>
 
                 </Link>
 
                 <Link href='https://twitter.com/qua_intrelle7' target='_blank'>
-                    <Icon fontSize={30} color={'brand.100'} borderRadius={'full'} as={AiFillTwitterCircle} /></Link>
+                    <Icon fontSize={30} color={'brand.secondary'} borderRadius={'full'} as={AiFillTwitterCircle} _hover={{color: 'brand.quinary'}} /></Link>
 
 
                 <Link href='https://github.com/quaintrelle7' target='_blank'>
-                    <Icon fontSize={30} color={'brand.100'} borderRadius={'full'} as={AiFillGithub} />
+                    <Icon fontSize={30} color={'brand.secondary'} borderRadius={'full'} as={AiFillGithub} _hover={{color: 'brand.quinary'}} />
                 </Link>
 
          
                 <Link href='https://discord.com/users/qua_intrelle7#9505' target='_blank'>
-                    <Icon fontSize={30} color={'brand.100'} borderRadius={'full'} as={BsDiscord} /></Link>
+                    <Icon fontSize={30} color={'brand.secondary'} borderRadius={'full'} as={BsDiscord} _hover={{color: 'brand.quinary'}} /></Link>
 
     </Flex>
     </Center>

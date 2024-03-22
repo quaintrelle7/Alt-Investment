@@ -28,4 +28,39 @@ body{
   }
 }
 
+h1{
+  font-weight:700;
+  background: -webkit-linear-gradient(0deg, hsla(288, 47%, 65%, 1) 4%, hsla(212, 43%, 65%, 1) 55%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+   font-family: Ubuntu, Helvetica, sans-serif;
+   /* transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); */
+    opacity: 1;
+    /* transform-style: preserve-3d; */
 
+}
+
+
+/* Purple: #C07DD0 Blue: #7FA3CC Dark: #111214 Light: #18191C  */
+/* https://coolors.co/gradient-maker/c07dd0-1ea3e6?position=33,100&opacity=100,100&type=linear&rotation=135 */
+
+
+/* background: hsla(288, 47%, 65%, 1);
+
+background: linear-gradient(135deg, hsla(288, 47%, 65%, 1) 4%, hsla(212, 43%, 65%, 1) 55%);
+
+background: -moz-linear-gradient(135deg, hsla(288, 47%, 65%, 1) 4%, hsla(212, 43%, 65%, 1) 55%);
+
+background: -webkit-linear-gradient(135deg, hsla(288, 47%, 65%, 1) 4%, hsla(212, 43%, 65%, 1) 55%);
+
+filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#C07DD0", endColorstr="#7FA3CC", GradientType=1 ); */
+
+
+/* <Center
+      borderRadius='8px'
+      border='2px'
+      borderColor='transparent'
+      bg='linear-gradient(#141414 0%, #2e2e2e 50%, #141414 100%) padding-box, 
+          linear-gradient(#272726 0%, #4d4d4c 50%, #161616 100%) border-box'
+    >
+    </Center> */

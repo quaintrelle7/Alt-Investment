@@ -65,7 +65,7 @@ function ListNFTForm() {
 
   return (
     <>
-      <Button bg="brand.secondary" onClick={onOpen}>List NFT</Button>
+      <Button onClick={onOpen}>List NFT</Button>
      
       <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />

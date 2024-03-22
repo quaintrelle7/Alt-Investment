@@ -1,8 +1,9 @@
-import {Center, Heading, Stack} from '@chakra-ui/react'
+import {Center, Heading, Stack, Flex, Text, Button, Box} from '@chakra-ui/react'
 import React from 'react'
 import About from './About'
 import Footer from '../Header/Footer'
 import AboutCompanies from './AboutCompanies'
+import ListNFTForm from '../ListNFT/ListNFTForm'
 
 type Props = {}
 
@@ -10,23 +11,31 @@ function Homepage({}: Props) {
   return (
     <>
     
-    <Center padding={100} mt="10vh">
-         <Stack textAlign={"center"}>
+    <Flex padding={100} mt={{base:"0", md:"10"}} height={"80vh"}>
+         <Stack textAlign={"left"} width={"40%"} >
          
-                <Heading fontSize={50} textShadow={  "rgb(7, 7, 7) 1px 0 10px"}
-                color={"brand.secondary"}>AltInvest</Heading>
-                   <Heading mt={10}>Invest in Real Companies using Crypto</Heading>
+         <Box fontSize={{base:"3xl", md:"60px"}}>
+            <h1>Grow Your Wealth With Crypto</h1>
+         </Box>
+         <Text mt={10} fontSize={20}>We believe in the potential of transformative investments. Our cutting-edge crypto platform revolutionizes how you invest in companies using cryptocurrency</Text>
+
+         <Flex justify={"flex-start"} mt="10">
+                 <Button mr={10} onClick={() => window.open("/invest", "_self")}>Invest Now</Button>
+                 <ListNFTForm/>
+         </Flex>
+
+
         
-        <div className="w-[40rem] h-40 relative">
+        {/* <div className="w-[40rem] h-40 relative">
             <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-[2px] w-3/4 blur-sm" />
             <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-px w-3/4" />
             <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-[5px] w-1/4 blur-sm" />
             <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-px w-1/4" /> 
-       </div>
+       </div> */}
                 
         </Stack>
         
-    </Center>
+    </Flex>
      
      <About/>
      <AboutCompanies/>

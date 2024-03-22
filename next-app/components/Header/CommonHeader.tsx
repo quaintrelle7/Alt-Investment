@@ -4,16 +4,21 @@ import {Button, Flex, Heading, Image, Link} from '@chakra-ui/react'
 function CommonHeader() {
   return (
     <>
-    <Flex width={"100vw"} height={"3rem"} bg={"brand.primary"} px={10} py={10}>
-      <Flex width={"50%"} height={"100%"} align={"center"} justify={"flex-start"}>
-        <Link marginRight={10} color={"white"} href='/'> Home </Link>
-        <p color={"white"}>Wallet Address</p>
+    <Flex position={"sticky"} top={"0"} width={"100vw"} height={"3rem"} bg={"brand.primary"} px={10} py={10}>
+      <Flex width={"30%"} align={"center"} justify={"flex-start"}>
+        <Heading color={"brand.secondary"}> AltInvest</Heading>
+      </Flex>
+      <Flex w={"40%"} align={"center"} justify={"center"}>
+        <Link style={{textDecoration:'none', fontSize:15, fontWeight:600}} _hover={{color:"brand.quinary"}}  href="/">Home</Link>
+        <Link  mx="10" style={{textDecoration:'none', fontSize:15, fontWeight:600}} _hover={{color:"brand.quinary"}}  href="/portfolio">My Portfolio</Link>
+        <Link  style={{textDecoration:'none', fontSize:15, fontWeight:600}} _hover={{color:"brand.quinary"}}  href="/invest">Invest Now</Link>
 
       </Flex>
-      <Flex width={"50%"} height={"100%"} align={"center"} justify={"flex-end"}>
-          <Link color={"brand.secondary"} href='/invest'>Invest Now</Link>
-          <Link  marginLeft={10} color={"brand.secondary"} href='/portfolio'>My Portfolio</Link>  
-       </Flex>
+      <Flex width={"30%"}  align={"center"} justify={"flex-end"}>
+        {/* <ListNFTForm/>
+        <Button marginLeft={10} onClick={() => window.open("/invest", "_self")}>Invest Now</Button> */}
+        <Button marginLeft={10}>Connect Wallet</Button>
+      </Flex>
     </Flex>
     </>
   )

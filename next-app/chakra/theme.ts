@@ -1,5 +1,6 @@
 // 1. Import `extendTheme`
-import { extendTheme } from "@chakra-ui/react";
+import {  extendTheme } from "@chakra-ui/react";
+import { Button } from "./button";
 
 // 2. Call `extendTheme` and pass your custom values
 const breakpoints = {
@@ -14,14 +15,18 @@ export const theme = extendTheme({
   breakpoints,
   colors: {
     brand: {
-      primary: "#000",
-      secondary: "#24E500",
-      ternary: "#8A8A8A",
+      primary: "#111214", //black
+      secondary: "#FFFFFF", //white
+      ternary: "#18191C", //gray
+      quaternary: "#C07DD0", //purple
+      quinary:"#53BCC9", //green blue
+      senary: "#7FA3CC", //blue shade
       danger: "#EA047E",
       success: "#A31ACB",
       lavenderBlush: '#FFF0F5'
     }
   },
+
 
   fonts: {
     body: "Inter,  sans-serif"
@@ -30,11 +35,14 @@ export const theme = extendTheme({
   styles: {
     global: () => ({
       body: {
-        bg: "black",
+        bg: "brand.primary",
         color: "white"
       }
     })
   },
 
+components: {
+    Button
+  }
   
 });

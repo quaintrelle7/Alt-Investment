@@ -21,13 +21,13 @@ function PortfolioTable() {
          <Table textAlign={"center"}>
         <Thead>
           <Tr>
-            <Th>Company</Th>
-            <Th>Current</Th>
-            <Th>Invested</Th>
-            <Th>Total NFTs</Th>
+            <Th color={"brand.quinary"}>Company</Th>
+            <Th color={"brand.quinary"}>Current</Th>
+            <Th color={"brand.quinary"}>Invested</Th>
+            <Th color={"brand.quinary"}>Total NFTs</Th>
           </Tr>
         </Thead>
-        <Tbody color={"brand.primary"} >
+        <Tbody color={"brand.secondary"} >
           <Tr>
             <Td>Tesla</Td>
             <Td>130000</Td>
