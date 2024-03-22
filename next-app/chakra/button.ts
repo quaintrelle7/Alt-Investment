@@ -26,11 +26,13 @@ export const Button: ComponentStyleConfig = {
       borderRadius: "50em",
       border: "4px solid transparent",
       fontWeight:500,
+      zIndex: 0,
      _hover: {
         bg: "linear-gradient(135deg, hsla(288, 47%, 65%, 1) 35%, hsla(187, 52%, 56%, 1) 68%);",
         color: "black",
         fontWeight:800,
-        border: "1px solid transparent",
+        borderRadius: "50em",
+        border: "1px solid black",
 
       }
     },
