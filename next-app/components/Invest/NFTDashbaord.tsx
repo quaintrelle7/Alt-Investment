@@ -1,6 +1,5 @@
 import React from 'react'
 import {Button, Text, Flex, Heading, Stack, Image} from '@chakra-ui/react'
-import NFTCard from './NFTCard'
 
 function NFTDashbaord() {
   return (
@@ -22,31 +21,31 @@ function NFTDashbaord() {
             
 
             <Stack>
-                <Text color={"brand.senary"}>Company</Text>
+                <Text color={"brand.quinary"}>Company</Text>
                 <Heading fontSize={20}>Tesla</Heading>
             </Stack>
             <Stack>
-                <Text color={"brand.senary"}>Title</Text>
+                <Text color={"brand.quinary"}>Title</Text>
                 <Heading fontSize={20}>New Factory</Heading>
             </Stack>
             <Stack>
-                <Text color={"brand.senary"}>Floor</Text>
+                <Text color={"brand.quinary"}>Floor</Text>
                 <Heading fontSize={20}>1 Eth</Heading>
             </Stack>
             <Stack>
-                <Text color={"brand.senary"}>Total volume</Text>
+                <Text color={"brand.quinary"}>Total volume</Text>
                 <Heading fontSize={20}>Company</Heading>
             </Stack>
 
             <Stack>
-                <Text color={"brand.senary"}>Year of launch</Text>
+                <Text color={"brand.quinary"}>Year of launch</Text>
                 <Heading fontSize={20}>2024</Heading>
             </Stack>
             
         </Flex>
         <Flex>
         <Stack mt={10}>
-            <Text color={"brand.senary"}>The 2023 Tesla Model 3 is the cheapest Tesla car currently offered. The base rear-wheel drive (RWD) trim has an official starting price of $40,240. The Model 3 Long Range is a tad more expensive at $47,240. The most expensive Model 3 is the Performance model, which costs a minimum of $53,240.</Text>
+            <Text color={"brand.quinary"}>The 2023 Tesla Model 3 is the cheapest Tesla car currently offered. The base rear-wheel drive (RWD) trim has an official starting price of $40,240. The Model 3 Long Range is a tad more expensive at $47,240. The most expensive Model 3 is the Performance model, which costs a minimum of $53,240.</Text>
             <Button position={"absolute"} bottom={"0"} >View Docs</Button>
         </Stack>
         

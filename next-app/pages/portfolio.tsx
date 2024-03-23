@@ -1,40 +1,40 @@
 import CommonHeader from '@/components/Header/CommonHeader'
 import Footer from '@/components/Header/Footer'
+import InvestmentSummary from '@/components/Portfolio/InvestmentSummary'
+import MyDashboard from '@/components/Portfolio/UserDashboard'
 import PortfolioTable from '@/components/Portfolio/PortfolioTable'
 import {Center, Flex, Heading, Stack, Text} from '@chakra-ui/react'
 import React from 'react'
+import UserDashboard from '@/components/Portfolio/UserDashboard'
+import { Tabs, TabList, TabPanels, Tab, TabPanel, Box } from '@chakra-ui/react'
+import InvestmentHistory from '@/components/Portfolio/InvestmentHistory'
 
 function portfolio() {
   return (
     <>
-    <CommonHeader/>
-        
-        <h1 style={{textAlign:"center", marginTop:"70px", fontSize:"40px"}}>Investment Summary</h1>
-    <Center>
-    <Flex mx={50} mt={10} mb={20} justify={"space-between"} width="50%"  borderRadius={10} bg={"brand.primary"} border={"solid 1px gray"} px={10} py={5}>
-        <Stack width="50%">
-            <Stack justify={"flex-start"}>
-                <Text color={"brand.senary"}>Current</Text>
-                <Text fontSize={20} color={"brand.secondary"}>120000</Text>
-            </Stack>
-            <Stack justify={"flex-start"}>
-                <Text color={"brand.senary"}>Invested</Text>
-                <Text fontSize={20} color={"brand.secondary"}>120000</Text>
-            </Stack>
-        </Stack>
-        <Stack width={"50%"} textAlign={"right"}>
-            <Stack>
-                <Text color={"brand.senary"}>Total NFTs</Text>
-                <Text fontSize={20} color={"brand.secondary"}>120000</Text>
-            </Stack>
-            <Stack >
-                <Text color={"brand.senary"}>Total Returns</Text>
-                <Text fontSize={20} color={"brand.secondary"}>120000</Text>
-            </Stack>
-        </Stack>
-    </Flex>
-    </Center>
-    <PortfolioTable/>
+    <CommonHeader/>        
+    <UserDashboard/>
+
+   <div style={{marginTop:"150px", marginRight:"2.5rem"}}>
+    <Tabs variant='soft-rounded' ml={10}>
+      <TabList  >
+        <Tab bg={"brand.ternary"}  _selected={{bg:"brand.quinary", color:"brand.primary"}}>Summary</Tab>
+        <Tab bg={"brand.ternary"} mx="5"  _selected={{bg:"brand.quinary", color:"brand.primary"}}>Holdings</Tab>
+        <Tab bg={"brand.ternary"}  _selected={{bg:"brand.quinary", color:"brand.primary"}}>History</Tab>
+      </TabList>
+      <TabPanels bg="brand.ternary" mt="10">
+        <TabPanel>
+            <InvestmentSummary/>
+        </TabPanel>
+        <TabPanel>
+            <PortfolioTable/>
+        </TabPanel>
+        <TabPanel>
+            <InvestmentHistory/>
+        </TabPanel>
+      </TabPanels>
+    </Tabs>
+   </div>
     <div style={{ bottom:"0", width:"100%"}}>
         <Footer/>
     </div>

@@ -16,8 +16,9 @@ import {
 function PortfolioTable() {
   return (
     <>
-     <Heading fontSize={25} textAlign={"center"}>Current Holding</Heading>
-    <Center p={20} mx={20} my={10} bg={"brand.ternary"}>
+    <Center style={{ marginTop:"70px", fontSize:"30px"}}>
+            <h1>Current Holdings</h1>
+    </Center>    <Center p={20} mx={20} my={10} bg={"brand.ternary"}>
          <Table textAlign={"center"}>
         <Thead>
           <Tr>

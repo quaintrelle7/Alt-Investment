@@ -2,7 +2,8 @@ import CommonHeader from '@/components/Header/CommonHeader'
 import Footer from '@/components/Header/Footer'
 import NFTCard from '@/components/Invest/NFTCard'
 import NFTDashbaord from '@/components/Invest/NFTDashbaord'
-import {Divider, Grid, Heading, Stack} from '@chakra-ui/react'
+import ProfileCard from '@/components/Invest/ProfileCard'
+import {Divider, Grid, Heading, Stack, Center, Image, Box} from '@chakra-ui/react'
 import React from 'react'
 
 function company() {
@@ -16,11 +17,21 @@ function company() {
     <Divider mb={10}/>
         <Heading>Investors (50)</Heading>
 
-    <Grid mt={20} bg={"brand.ternary"} borderRadius={"10"} p={20}templateColumns='repeat(4, 1fr)' gap={6}>
-               <NFTCard/>
-               <NFTCard/>
-               <NFTCard/>
-               <NFTCard/>
+    <Grid mt={20} bg={"brand.ternary"} borderRadius={"10"}  templateColumns={{
+            base: "repeat(2, 1fr)",
+            sm: "repeat(2, 1fr)",
+            md: "repeat(5, 1fr)",    
+          }}
+          gap={8}
+          alignItems={"center"}
+          p={20}>    
+        <ProfileCard/>
+        <ProfileCard/>
+        <ProfileCard/>
+        <ProfileCard/>
+        <ProfileCard/>
+        <ProfileCard/>
+
      </Grid>
      </Stack>
      <Footer/>

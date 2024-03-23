@@ -5,8 +5,8 @@ function CommonHeader() {
   return (
     <>
     <Flex position={"sticky"} top={"0"} width={"100vw"} height={"3rem"} bg={"brand.primary"} px={10} py={10}>
-      <Flex width={"30%"} align={"center"} justify={"flex-start"}>
-        <Heading color={"brand.secondary"}> AltInvest</Heading>
+      <Flex width={"30%"} align={"center"} justify={"flex-start"} >
+        <Link href="/" style={{textDecoration:"none"}}><h1 style={{fontSize:"30px"}}> AltInvest</h1></Link>
       </Flex>
       <Flex w={"40%"} align={"center"} justify={"center"}>
         <Link style={{textDecoration:'none', fontSize:15, fontWeight:600}} _hover={{color:"brand.quinary"}}  href="/">Home</Link>
