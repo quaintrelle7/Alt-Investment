@@ -1,4 +1,4 @@
-import {Center, Heading, Stack, Flex, Text, Button, Box} from '@chakra-ui/react'
+import {Center, Heading, Stack, Flex, Text, Button, Box, Image} from '@chakra-ui/react'
 import React from 'react'
 import About from './About'
 import Footer from '../Header/Footer'
@@ -34,7 +34,17 @@ function Homepage({}: Props) {
        </div> */}
                 
         </Stack>
+    
+        <Flex justify={"flex-end"} width={"60%"}>
         
+          <Stack>
+            <Image src="/assets/homepage.png"
+            alt=""/>
+          </Stack>
+        </Flex>
+
+        
+
     </Flex>
      
      <About/>
