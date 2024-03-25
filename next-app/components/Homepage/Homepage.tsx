@@ -4,6 +4,9 @@ import About from './About'
 import Footer from '../Header/Footer'
 import AboutCompanies from './AboutCompanies'
 import ListNFTForm from '../ListNFT/ListNFTForm'
+import Lottie from 'lottie-react'
+import animationDataHome from '../../public/assets/js/homepage.json'
+
 
 type Props = {}
 
@@ -35,11 +38,10 @@ function Homepage({}: Props) {
                 
         </Stack>
     
-        <Flex justify={"flex-end"} width={"60%"}>
-        
-          <Stack>
-            <Image src="/assets/homepage.png"
-            alt=""/>
+        <Flex justify={"center"} width={"60%"}>
+            <Stack>
+           <Lottie style={{width:"40rem", height:"40rem"}} animationData={animationDataHome}
+                ></Lottie>
           </Stack>
         </Flex>
 

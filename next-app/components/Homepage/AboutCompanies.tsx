@@ -24,7 +24,7 @@ function AboutCompanies({}: Props) {
         
     </Center>
     <Stack height={"50vh"}>
-    <Flex justifyContent={"space-between"} className='buildSlide'>
+    <Flex justifyContent={"space-between"} className='company-cards'>
                     {
                         companies.map((item) => (
                             <Box bg="brand.ternary" borderRadius={"20em"}  p="4" my={5} mx={5} key={item}>
