@@ -1,4 +1,3 @@
-import CommonHeader from '@/components/Header/CommonHeader'
 import Footer from '@/components/Header/Footer'
 import InvestmentSummary from '@/components/Portfolio/InvestmentSummary'
 import PortfolioTable from '@/components/Portfolio/PortfolioTable'
@@ -6,11 +5,12 @@ import React from 'react'
 import UserDashboard from '@/components/Portfolio/UserDashboard'
 import { Tabs, TabList, TabPanels, Tab, TabPanel, Box } from '@chakra-ui/react'
 import InvestmentHistory from '@/components/Portfolio/InvestmentHistory'
+import Header from '@/components/Header/Header'
 
 function portfolio() {
   return (
     <>
-    <CommonHeader/>        
+    <Header/>        
     <UserDashboard/>
 
    <div style={{marginTop:"150px", marginRight:"2.5rem"}}>

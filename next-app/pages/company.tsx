@@ -1,5 +1,5 @@
-import CommonHeader from '@/components/Header/CommonHeader'
 import Footer from '@/components/Header/Footer'
+import Header from '@/components/Header/Header'
 import NFTCard from '@/components/Invest/NFTCard'
 import NFTDashbaord from '@/components/Invest/NFTDashbaord'
 import ProfileCard from '@/components/Invest/ProfileCard'
@@ -9,7 +9,7 @@ import React from 'react'
 function company() {
   return (
     <>
-    <CommonHeader/>
+    <Header/>
     <NFTDashbaord/>
 
     

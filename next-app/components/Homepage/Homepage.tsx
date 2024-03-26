@@ -6,11 +6,15 @@ import AboutCompanies from './AboutCompanies'
 import ListNFTForm from '../ListNFT/ListNFTForm'
 import Lottie from 'lottie-react'
 import animationDataHome from '../../public/assets/js/homepage.json'
+import { useAccount, useSignMessage } from "wagmi";
 
 
 type Props = {}
 
 function Homepage({}: Props) {
+
+ const { address, isConnected } = useAccount();
+
   return (
     <>
     
@@ -37,6 +41,7 @@ function Homepage({}: Props) {
        </div> */}
                 
         </Stack>
+
     
         <Flex justify={"center"} width={"60%"}>
             <Stack>

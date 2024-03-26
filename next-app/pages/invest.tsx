@@ -1,5 +1,5 @@
-import CommonHeader from '@/components/Header/CommonHeader'
 import Footer from '@/components/Header/Footer'
+import Header from '@/components/Header/Header'
 import HeroSection from '@/components/Invest/HeroSection'
 import NFTCard from '@/components/Invest/NFTCard'
 import {WavyBackground} from '@/components/ui/wavy-background'
@@ -10,7 +10,7 @@ function invest() {
   return (
     <>
     <Stack>
-        <CommonHeader/>
+        <Header/>
         <HeroSection/>
 
         {/* <Center fontSize={{base:"2xl", md:"50px"}} textAlign={"center"}>

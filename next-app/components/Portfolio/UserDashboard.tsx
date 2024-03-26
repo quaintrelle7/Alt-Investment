@@ -1,9 +1,13 @@
 import {Flex, Image, Input, Center, Stack, Box} from '@chakra-ui/react'
 import React, {useState} from 'react'
+import {useAccount} from 'wagmi';
 
 type Props = {}
 
 function UserDashboard({}: Props) {
+  
+  const {address} = useAccount();
+  const walletAddress =  address?.slice(0, 7) + "..." + address?.slice(-6);
 
   const [profilePic, setProfilePic] = useState<string>();
   const handleChange = (e:any) =>{
@@ -16,9 +20,9 @@ function UserDashboard({}: Props) {
         <Center fontSize={{base:"2xl", md:"5xl"}} mt="20" p={35}><h1>This is your space, feel free to ruin it!</h1></Center>
         <Stack fontSize={{base:"xl", md:"xl"}} ml={10} height={"7rem"} mt={0}>
             <Image src="assets/add-user.gif" borderRadius={"full"} objectFit='cover'
-         maxW={{ base: '8em' }} maxH={{ base: '90em' }}/>
+         maxW={{ base: '8em' }} maxH={{ base: '90em' }} alt="profile-picture"/>
             
-            <Box fontSize={{base:"xl", md:"xl"}} fontWeight={"bold"}> Wallet Address</Box>
+            {walletAddress && <Box fontSize={{base:"md", md:"xl"}} width={"20%"} fontWeight={"bold"} className='wallet-address'> {walletAddress}</Box>}
         </Stack>
         </Stack>
     </Flex>
