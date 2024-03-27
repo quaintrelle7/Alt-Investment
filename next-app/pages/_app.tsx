@@ -5,17 +5,37 @@ import { theme } from "@/chakra/theme";
 import '@rainbow-me/rainbowkit/styles.css'
  import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
  import { WagmiProvider, http } from 'wagmi'
- import { mainnet } from 'wagmi/chains'
+ import { mainnet, polygonMumbai, shardeumSphinx } from 'wagmi/chains'
   import { RainbowKitProvider, darkTheme} from '@rainbow-me/rainbowkit'
  import { getDefaultConfig } from '@rainbow-me/rainbowkit'
 
+import {  optimism } from 'wagmi/chains';
+import { Chain } from '@rainbow-me/rainbowkit';
+
+const chains: readonly [Chain, ...Chain[]] = [
+  {
+    ...mainnet,
+    iconBackground: '#000',
+    iconUrl: 'https://example.com/icons/ethereum.png',
+  },
+  {
+    ...optimism,
+    iconBackground: '#ff0000',
+    iconUrl: 'https://example.com/icons/optimism.png',
+  },
+];
+
+
+//To-Do Add URL for Shardeum Sphinx
 
  const config = getDefaultConfig({
    appName: 'RainbowKit demo',
    projectId: '7564d8ad0218271d25696e1c5fc7b379',
-   chains: [mainnet],
+   chains: [mainnet, polygonMumbai, optimism, shardeumSphinx],
    transports: {
      [mainnet.id]: http(),
+     [polygonMumbai.id]: http(),
+     [shardeumSphinx.id]: http()
    },
  })
 

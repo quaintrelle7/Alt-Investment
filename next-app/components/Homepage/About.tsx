@@ -20,10 +20,10 @@ function About({}: Props) {
     //   }
     // };
   return (
-    <Stack id='About'  mx={20} pt={20} >
+    <Stack id='About'  mx={20} pt={20} my={10} >
     
         <Flex  justify={"center"}>
-            <Center width={{base:"60%", md:"40%"}}fontSize={{base:"2xl", md:"50px"}} textAlign={"center"}>
+            <Center width={{base:"60%", md:"60%", lg:"70%", xl:"50%"}}fontSize={{base:"2xl", md:"3xl", lg:"5xl"}} textAlign={"center"}>
                 <h1 color="brand.primary">Welcome to Innovative Investment Platform</h1>
             </Center>
             
@@ -42,7 +42,7 @@ function About({}: Props) {
                 <Heading fontSize={20}>Invest Globally</Heading>
                 <Divider />  
 
-            <p>Compliance with foreign regulations often requires expertise and resources.</p>
+            <p>Unlock global investment opportunities, tapping into diverse markets.</p>
             </Stack>
         </Center>
             
@@ -59,7 +59,7 @@ function About({}: Props) {
             <Heading fontSize={20} mt={5}>Buy Fractions</Heading>
                         <Divider />  
 
-            <p>Compliance with foreign regulations often requires expertise and resources.</p>
+            <p>Diversify with fractional share ownership, enabling flexible investing.</p>
             </Stack>
         </Center>
 
@@ -70,10 +70,10 @@ function About({}: Props) {
                 ></Lottie>
               
               </Center>       
-            <Heading fontSize={20} mt={5}>Buy Fractions</Heading>
+            <Heading fontSize={20} mt={5}>Multi-Chain Operability</Heading>
                         <Divider />  
 
-            <p>Compliance with foreign regulations often requires expertise and resources.</p>
+            <p>Streamline transactions across networks with multi-chain integration.</p>
             </Stack>
        </Center>
 

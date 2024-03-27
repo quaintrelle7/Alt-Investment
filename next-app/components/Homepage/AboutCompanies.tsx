@@ -15,7 +15,7 @@ function AboutCompanies({}: Props) {
 
     
     <Flex  justify={"center"}>
-            <Center width={{base:"60%", md:"40%"}}fontSize={{base:"2xl", md:"50px"}} textAlign={"center"}>
+            <Center width={{base:"60%", md:"60%", lg:"70%", xl:"50%"}}fontSize={{base:"2xl", md:"3xl", lg:"5xl"}} textAlign={"center"}>
                 <h1 color="brand.primary">Invest in your favourite companies globally</h1>
             </Center>
             

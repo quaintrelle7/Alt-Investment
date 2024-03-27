@@ -22,7 +22,7 @@ function UserDashboard({}: Props) {
             <Image src="assets/add-user.gif" borderRadius={"full"} objectFit='cover'
          maxW={{ base: '8em' }} maxH={{ base: '90em' }} alt="profile-picture"/>
             
-            {walletAddress && <Box fontSize={{base:"md", md:"xl"}} width={"20%"} fontWeight={"bold"} className='wallet-address'> {walletAddress}</Box>}
+            <Box fontSize={{base:"md", md:"xl"}} width={"20%"}  className='wallet-address'> <span> {address ? walletAddress : "Connect Wallet"}</span></Box> 
         </Stack>
         </Stack>
     </Flex>

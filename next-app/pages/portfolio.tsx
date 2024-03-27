@@ -3,7 +3,7 @@ import InvestmentSummary from '@/components/Portfolio/InvestmentSummary'
 import PortfolioTable from '@/components/Portfolio/PortfolioTable'
 import React from 'react'
 import UserDashboard from '@/components/Portfolio/UserDashboard'
-import { Tabs, TabList, TabPanels, Tab, TabPanel, Box } from '@chakra-ui/react'
+import { Tabs, TabList, TabPanels, Tab, TabPanel, Box, Stack } from '@chakra-ui/react'
 import InvestmentHistory from '@/components/Portfolio/InvestmentHistory'
 import Header from '@/components/Header/Header'
 
@@ -13,7 +13,7 @@ function portfolio() {
     <Header/>        
     <UserDashboard/>
 
-   <div style={{marginTop:"150px", marginRight:"2.5rem"}}>
+   <Stack style={{marginTop:"150px", marginRight:"2.5rem"}}>
     <Tabs variant='soft-rounded' ml={10}>
       <TabList  >
         <Tab bg={"brand.ternary"}  _selected={{bg:"brand.quinary", color:"brand.primary"}}>Summary</Tab>
@@ -32,8 +32,8 @@ function portfolio() {
         </TabPanel>
       </TabPanels>
     </Tabs>
-   </div>
-    <div style={{ bottom:"0", width:"100%"}}>
+   </Stack>
+    <div style={{ bottom:"0", width:"auto"}}>
         <Footer/>
     </div>
     </>

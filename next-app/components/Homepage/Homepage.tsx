@@ -24,7 +24,7 @@ function Homepage({}: Props) {
          <Box fontSize={{base:"3xl", md:"60px"}}>
             <h1>Grow Your Wealth With Crypto</h1>
          </Box>
-         <Text mt={10} fontSize={20}>We believe in the potential of transformative investments. Our cutting-edge crypto platform revolutionizes how you invest in companies using cryptocurrency</Text>
+         <Text mt={10} fontSize={20}>We believe in the potential of transformative investments. Our cutting-edge crypto platform revolutionizes how you invest in companies using cryptocurrency.</Text>
 
          <Flex justify={"flex-start"} mt="10">
                  <Button mr={10} onClick={() => window.open("/invest", "_self")}>Invest Now</Button>

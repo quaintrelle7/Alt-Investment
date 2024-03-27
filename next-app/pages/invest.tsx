@@ -35,7 +35,7 @@ function invest() {
         </Grid>
         
         </Stack>
-    <div style={{position:"static", bottom:"0", width:"100%"}}>
+    <div style={{position:"static", bottom:"0", width:"auto"}}>
         <Footer/>
     </div>
     </>

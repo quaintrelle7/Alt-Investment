@@ -1,4 +1,4 @@
-import {useDisclosure, Input, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, FormControl, FormLabel, ModalFooter, Container} from '@chakra-ui/react'
+import {useDisclosure, Input, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, FormControl, FormLabel, ModalFooter, Container, Textarea} from '@chakra-ui/react'
 import React, {useState} from 'react'
 
 function ListNFTForm() {
@@ -69,7 +69,7 @@ function ListNFTForm() {
      
       <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent color={"brand.primary"}>
+        <ModalContent bg= "brand.ternary" color={"brand.secondary"}>
           <ModalHeader>List Company NFT</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
@@ -108,7 +108,7 @@ function ListNFTForm() {
 							/>
 
 							<label htmlFor="description">Description</label>
-							<Input
+							<Textarea
 								marginBottom="15px"
 								marginTop="2px"
 								type="text"
