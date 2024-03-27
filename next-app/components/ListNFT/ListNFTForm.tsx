@@ -111,10 +111,9 @@ function ListNFTForm() {
 							<Textarea
 								marginBottom="15px"
 								marginTop="2px"
-								type="text"
 								name="address"
 								value={formData.address}
-								onChange={handleInputChange}
+                                onChange={()=>{}}
 							/>
 							<label htmlFor="aadhar">Aadhar</label>
 							<Input

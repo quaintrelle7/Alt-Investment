@@ -1,10 +1,10 @@
 import { useAccount, useConnect, useDisconnect } from 'wagmi'
 
-import { SignMessage } from '../Wallet/SignMessage'
+// import { SignMessage } from '../Wallet/SignMessage'
 
 export function Profile() {
   const { isConnected } = useAccount()
-  const { connect, connectors, error, isLoading, pendingConnector } =
+  const { connect, connectors, error } =
     useConnect()
   const { disconnect } = useDisconnect()
 
@@ -12,7 +12,7 @@ export function Profile() {
     return (
       <div>
         Whatttt The hElls
-        <SignMessage />
+        {/* <SignMessage /> */}
       </div>
     )
   }
