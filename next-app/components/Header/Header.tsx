@@ -19,6 +19,7 @@ function Header({}: Props) {
   const { openConnectModal } = useConnectModal();
   const { openAccountModal } = useAccountModal();
   const { openChainModal } = useChainModal();
+  const router = useRouter()
 
 const handleRoute = (path: string) => (event: React.MouseEvent<HTMLButtonElement>) => {
             console.log(event)
@@ -33,8 +34,6 @@ const handleRoute = (path: string) => (event: React.MouseEvent<HTMLButtonElement
         
     }
   }
-
-  const router = useRouter()
 
 
 //To-DO Sign IN Message

@@ -11,6 +11,7 @@ import '@rainbow-me/rainbowkit/styles.css'
 
 import {  optimism } from 'wagmi/chains';
 import { Chain } from '@rainbow-me/rainbowkit';
+import Layout from '@/components/Layout'
 
 const chains: readonly [Chain, ...Chain[]] = [
   {
@@ -45,7 +46,8 @@ const chains: readonly [Chain, ...Chain[]] = [
 export default function App({ Component, pageProps }: AppProps) {
 
 
-  return (<WagmiProvider config={config}>
+  return (
+        <WagmiProvider config={config}>
        <QueryClientProvider client={queryClient}>
         <RainbowKitProvider  
          coolMode
@@ -56,12 +58,16 @@ export default function App({ Component, pageProps }: AppProps) {
         borderRadius: 'large',
       })}
       >
+      <Layout>  
         <ChakraProvider theme={theme}>
         <Component {...pageProps} />
       </ChakraProvider>
+          </Layout>
         </RainbowKitProvider>
        </QueryClientProvider>
             </WagmiProvider>
+        
+
 
   );
 }
