@@ -22,8 +22,7 @@ function Header({}: Props) {
   const router = useRouter()
 
 const handleRoute = (path: string) => (event: React.MouseEvent<HTMLButtonElement>) => {
-            console.log(event)
-
+    
     if(openConnectModal){
         openConnectModal();
     }else{

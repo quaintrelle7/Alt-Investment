@@ -47,27 +47,24 @@ export default function App({ Component, pageProps }: AppProps) {
 
 
   return (
-        <WagmiProvider config={config}>
-       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider  
-         coolMode
-        theme={darkTheme({
-        accentColor: 'linear-gradient(135deg, hsla(288, 47%, 65%, 1) 35%, hsla(187, 52%, 56%, 1) 68%)',
-        // accentColor: "linear-gradient(black, black) padding-box, linear-gradient(135deg, hsla(288, 47%, 65%, 1) 35%, hsla(187, 52%, 56%, 1) 68%)",
-        accentColorForeground: 'black',
-        borderRadius: 'large',
-      })}
-      >
-      <Layout>  
-        <ChakraProvider theme={theme}>
-        <Component {...pageProps} />
-      </ChakraProvider>
-          </Layout>
-        </RainbowKitProvider>
-       </QueryClientProvider>
-            </WagmiProvider>
-        
-
-
-  );
+		<WagmiProvider config={config}>
+			<QueryClientProvider client={queryClient}>
+				<RainbowKitProvider
+					coolMode
+					theme={darkTheme({
+						accentColor:
+							"linear-gradient(135deg, hsla(288, 47%, 65%, 1) 35%, hsla(187, 52%, 56%, 1) 68%)",
+						// accentColor: "linear-gradient(black, black) padding-box, linear-gradient(135deg, hsla(288, 47%, 65%, 1) 35%, hsla(187, 52%, 56%, 1) 68%)",
+						accentColorForeground: "black",
+						borderRadius: "large",
+					})}>
+					<Layout>
+						<ChakraProvider theme={theme}>
+							<Component {...pageProps} />
+						</ChakraProvider>
+					</Layout>
+				</RainbowKitProvider>
+			</QueryClientProvider>
+		</WagmiProvider>
+	)
 }

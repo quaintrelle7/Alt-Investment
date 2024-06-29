@@ -1,11 +1,13 @@
-import {Flex, Image, Center, Stack, Box} from '@chakra-ui/react'
+'use client'
+
+import {Flex, Stack, Center, Image, Box} from '@chakra-ui/react'
 import React, {useState} from 'react'
 import {useAccount} from 'wagmi';
 
 type Props = {}
 
-function UserDashboard({}: Props) {
-  
+const ClientDashboard = (props: Props) => {
+    
   const {address} = useAccount();
   const walletAddress =  address?.slice(0, 7) + "..." + address?.slice(-6);
 
@@ -22,7 +24,7 @@ function UserDashboard({}: Props) {
             <Image src="assets/add-user.gif" borderRadius={"full"} objectFit='cover'
          maxW={{ base: '8em' }} maxH={{ base: '90em' }} alt="profile-picture"/>
             
-            <Box fontSize={{base:"md", md:"xl"}} width={"20%"}  className='wallet-address' suppressHydrationWarning> <span> {address ? walletAddress : "Connect Wallet"}</span></Box> 
+            <Box fontSize={{base:"md", md:"xl"}} width={"20%"}  className='wallet-address' suppressHydrationWarning={true}>  {address ? walletAddress : "Connect Wallet"}</Box> 
         </Stack>
         </Stack>
     </Flex>
@@ -30,4 +32,4 @@ function UserDashboard({}: Props) {
   )
 }
 
-export default UserDashboard
+export default ClientDashboard
