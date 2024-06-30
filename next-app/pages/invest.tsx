@@ -4,46 +4,77 @@ import HeroSection from '@/components/Invest/HeroSection'
 import InvoiceInfo from '@/components/Invest/InvoiceInfo'
 import NFTCard from '@/components/Invest/NFTCard'
 import {WavyBackground} from '@/components/ui/wavy-background'
-import {Box, Divider, Grid, GridItem, Heading, Stack, Center} from '@chakra-ui/react'
-import React from 'react'
+import { FaSort } from "react-icons/fa"
+import { FaFilter } from "react-icons/fa"
+
+import {
+	Box,
+	Divider,
+	Grid,
+	GridItem,
+	Heading,
+	Stack,
+	Center,
+	Flex,
+	Button,
+	Container,
+} from "@chakra-ui/react"
+import React from "react"
 
 function invest() {
-  return (
-    <>
-    <Stack>
-        <Header/>
-        {/* <HeroSection/> */}
-        <Center> <Heading>Invoice Marketplace</Heading> </Center>
+	return (
+		<>
+			<Stack>
+				<Header />
+				{/* <HeroSection/> */}
+				<Center mt={10}>
+					<Heading>Invoice Marketplace</Heading>{" "}
+				</Center>
 
-        {/* <Center fontSize={{base:"2xl", md:"50px"}} textAlign={"center"}>
+				<Flex mt={20} p={6}>
+					<Button width={"150px"}>
+						Sort
+						<FaSort style={{ marginLeft: "10px" }} />
+					</Button>
+					<Button width={"150px"} ml={10}>
+						Filter
+						<FaFilter style={{ marginLeft: "10px" }} />
+					</Button>
+				</Flex>
+
+				<Flex px="6">
+					<Divider></Divider>
+				</Flex>
+
+				{/* <Center fontSize={{base:"2xl", md:"50px"}} textAlign={"center"}>
                 <h1 color="brand.primary">Welcome to Innovative Investment Platform</h1>
             </Center> */}
 
-        <Grid mt={40} templateColumns={{
-            base: "repeat(2, 1fr)",
-            sm: "repeat(2, 1fr)",
-            md: "repeat(4, 1fr)",    
-          }}
-          gap={8}
-          alignItems={"center"}
-          p={6}>
-              <InvoiceInfo/>
-              <InvoiceInfo/>
-              <InvoiceInfo/>
-              <InvoiceInfo/>
-              <InvoiceInfo/>
-              <InvoiceInfo/>
-              <InvoiceInfo/>
-              <InvoiceInfo/>
-              
-        </Grid>
-        
-        </Stack>
-    <div style={{position:"static", bottom:"0", width:"auto"}}>
-        <Footer/>
-    </div>
-    </>
-  )
+				<Grid
+					mt={5}
+					templateColumns={{
+						base: "repeat(2, 1fr)",
+						sm: "repeat(2, 1fr)",
+						md: "repeat(4, 1fr)",
+					}}
+					gap={8}
+					alignItems={"center"}
+					p={6}>
+					<InvoiceInfo />
+					<InvoiceInfo />
+					<InvoiceInfo />
+					<InvoiceInfo />
+					<InvoiceInfo />
+					<InvoiceInfo />
+					<InvoiceInfo />
+					<InvoiceInfo />
+				</Grid>
+			</Stack>
+			<div style={{ position: "static", bottom: "0", width: "auto" }}>
+				<Footer />
+			</div>
+		</>
+	)
 }
 
 export default invest

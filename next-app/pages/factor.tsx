@@ -61,6 +61,8 @@ export default function ({}: Props) {
 			//Here comes the blockchain functionality
 			//Everything from this invoice should go to blockchain
 			//That you have to handle in backend or just pop-up a form
+			//Pop - Up a form to add amount, discountedAmount, due date, fees, agreement url
+			//ROI?.
 		}
 	}
 
@@ -78,7 +80,7 @@ export default function ({}: Props) {
 						<Tr>
 							<Th color={"brand.quinary"}>File Name</Th>
 							<Th color={"brand.quinary"}>Date (YYYY-MM-DD)</Th>
-							<Th color={"brand.quinary"}>Wallet Address</Th>
+							<Th color={"brand.quinary"}>Seller Address</Th>
 							<Th color={"brand.quinary"}>File URL</Th>
 							<Th color={"brand.quinary"}>Email</Th>
 							<Th color={"brand.quinary"}>Verify</Th>
