@@ -16,7 +16,7 @@ contract InvoiceFinal{
     uint256 public discountedAmount;
     uint256 private totalInvestedAmount = 0;
     uint256 private paidAmount;
-    enum Status { PROCESSING, APPROVED, DECLINED, PURCHSED, COMPLETED}
+    enum Status { PROCESSING, APPROVED, DECLINED, PURCHASED, COMPLETED}
     Status status;
 
     modifier _onlySeller{
@@ -109,7 +109,7 @@ contract InvoiceFinal{
         investors.push(msg.sender);
         // investedAmount = _investedAmount;
         totalInvestedAmount += msg.value;
-
+        status = Status.PURCHASED;
         emit InvoicePurchased(msg.sender);
 
         transferMoneyToSeller();
