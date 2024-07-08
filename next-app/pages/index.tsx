@@ -3,25 +3,33 @@ import Header from "@/components/Header/Header";
 import Homepage from "@/components/Homepage/Homepage";
 import Footer from "@/components/Header/Footer";
 import {useAccount} from 'wagmi';
+import type { GetServerSideProps, NextPage } from "next"
+import { getServerSession } from "next-auth"
+import { getAuthOptions } from "./api/auth/[...nextauth]"
 
+const inter = Inter({ subsets: ["latin"] })
 
-const inter = Inter({ subsets: ["latin"] });
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+	return {
+		props: {
+			session: await getServerSession(req, res, getAuthOptions(req)),
+		},
+	}
+}
 
 export default function Home() {
-    const {address} = useAccount();
+	const { address } = useAccount()
 
-    if(address)
-    localStorage.setItem('walletAddress', address?.toString());
-    
+	// if(address)
+	// localStorage.setItem('walletAddress', address?.toString());
 
-  return (
-    <>
-    <Header/>
-    <Homepage/>
-    {/* <About/> */}
-    {/* <AboutCompanies/> */}
-    <Footer/>
-
-    </>
-  );
+	return (
+		<>
+			<Header />
+			<Homepage />
+			{/* <About/> */}
+			{/* <AboutCompanies/> */}
+			<Footer />
+		</>
+	)
 }
