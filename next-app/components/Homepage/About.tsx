@@ -27,7 +27,7 @@ function About({}: Props) {
 					fontSize={{ base: "2xl", md: "3xl", lg: "5xl" }}
 					textAlign={"center"}>
 					<h1 color="brand.primary">
-						Welcome to Innovative Investment Platform
+						Welcome to Invoice Discouting Investment Platform
 					</h1>
 				</Center>
 			</Flex>
