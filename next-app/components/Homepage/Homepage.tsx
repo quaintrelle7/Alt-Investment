@@ -267,8 +267,8 @@ function Homepage({}: Props) {
 					</Box>
 					<Text mt={10} fontSize={20}>
 						We believe in the potential of transformative investments. Our
-						cutting-edge crypto platform revolutionizes how you invest in
-						companies using cryptocurrency.
+						platform helps you in generating high returns on your crypto
+						investment.
 					</Text>
 
 					<Flex justify={"flex-start"} mt="10">
