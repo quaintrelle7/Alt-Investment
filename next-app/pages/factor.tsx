@@ -10,6 +10,15 @@ import {
 	Tr,
 	Button,
 	Text,
+	Input,
+	Modal,
+	ModalBody,
+	ModalCloseButton,
+	ModalContent,
+	ModalFooter,
+	ModalHeader,
+	ModalOverlay,
+	Stack,
 } from "@chakra-ui/react"
 import Link from "next/link"
 import React, { useEffect, useState } from "react"
@@ -29,6 +38,15 @@ type Props = {}
 export default function ({}: Props) {
 	const [uploadedInvoices, setUploadedInvoices] = useState([])
 	const { address, isConnected } = useAccount()
+	const [approveForm, setApproveForm] = useState(false)
+	const [isSubmitting, setIsSubmitting] = useState(false)
+
+	const [formData, setFormData] = useState({
+		invoiceAmount: "",
+		discountedAmount: "",
+		fees: "",
+		agreementHash: "",
+	})
 
 	useEffect(() => {
 		const fetchInvoices = async () => {
@@ -44,30 +62,133 @@ export default function ({}: Props) {
 	const updateDecline = async (invoice: UploadedInvoice) => {}
 
 	const approveInvoice = async (invoice: UploadedInvoice) => {
-		let approvedInvoice = invoice
-		approvedInvoice.verifierAddress = address
-		approvedInvoice.approved = true
+		setApproveForm(true)
 
-		const updatedInvoice = await fetch("api/uploaded_invoices", {
-			method: "PUT",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(approvedInvoice),
-		})
+		// let approvedInvoice = invoice
+		// approvedInvoice.verifierAddress = address
+		// approvedInvoice.approved = true
 
-		const res = await updatedInvoice.json()
-		if (res.acknowledged) {
-			//Here comes the blockchain functionality
-			//Everything from this invoice should go to blockchain
-			//That you have to handle in backend or just pop-up a form
-			//Pop - Up a form to add amount, discountedAmount, due date, fees, agreement url
-			//ROI?.
-		}
+		// const updatedInvoice = await fetch("api/uploaded_invoices", {
+		// 	method: "PUT",
+		// 	headers: {
+		// 		"Content-Type": "application/json",
+		// 	},
+		// 	body: JSON.stringify(approvedInvoice),
+		// })
+
+		// const res = await updatedInvoice.json()
+		// if (res.acknowledged) {
+		//Here comes the blockchain functionality
+		//Everything from this invoice should go to blockchain
+		//That you have to handle in backend or just pop-up a form
+		//Pop - Up a form to add amount, discountedAmount, due date, fees, agreement url
+		//ROI?.
+		// }
+	}
+
+	const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const { name, value } = event.target
+		setFormData((prevFormData) => ({
+			...prevFormData,
+			[name]: value,
+		}))
+	}
+
+	const submitApproval = async () => {
+		setIsSubmitting(true)
+
+		//do the blockchain logic here
+
+		//get the smart contract Id
+
+		//fetch the invoice from the database using the smart contract Id and update it ...calls the approveInvoice();
+
+		setIsSubmitting(false)
+		// setApproveForm(false)
+
+		//notification success or error!
 	}
 
 	return (
 		<>
+			<Modal isOpen={approveForm} onClose={() => setApproveForm(false)}>
+				<ModalOverlay />
+				<ModalContent bg={"brand.ternary"}>
+					<ModalHeader>Approve Invoice</ModalHeader>
+					<ModalCloseButton />
+					<ModalBody>
+						<Center>
+							<Stack>
+								<form onSubmit={submitApproval}>
+									<label htmlFor="invoiceAmount">Invoice Amount</label>
+									<Input
+										required
+										type="number"
+										marginBottom="20px"
+										marginTop="2px"
+										name="invoiceAmount"
+										placeholder="Amount in Eth"
+										value={formData.invoiceAmount}
+										onChange={handleInputChange}
+									/>
+
+									<label htmlFor="discountedAmount">Discounted Amount</label>
+									<Input
+										type="number"
+										marginBottom="20px"
+										marginTop="2px"
+										placeholder="Discounted Amount"
+										name="discountedAmount"
+										value={formData.discountedAmount}
+										onChange={handleInputChange}
+										required
+									/>
+
+									<label htmlFor="fees">Factor Fees</label>
+									<Input
+										type="number"
+										marginBottom="20px"
+										marginTop="2px"
+										placeholder="Fees Amount"
+										name="fees"
+										value={formData.fees}
+										onChange={handleInputChange}
+										required
+									/>
+
+									<label htmlFor="agreementHash">Agreement Hash</label>
+									<Input
+										type="number"
+										marginBottom="25px"
+										marginTop="2px"
+										placeholder="Agreement Hash"
+										name="agreementHash"
+										value={formData.agreementHash}
+										onChange={handleInputChange}
+										required={true}
+									/>
+
+									<ModalFooter>
+										{isSubmitting ? (
+											<Button isLoading loadingText="Submitting">
+												Submit
+											</Button>
+										) : (
+											<Button type="submit">Submit</Button>
+										)}
+
+										<Button ml={4} onClick={() => setApproveForm(false)}>
+											Close
+										</Button>
+									</ModalFooter>
+								</form>
+							</Stack>
+						</Center>
+					</ModalBody>
+
+					{/* {renderAlert()} */}
+				</ModalContent>
+			</Modal>
 			<Header />
 			<Center>
 				<Heading fontSize={25} mt={"40px"}>

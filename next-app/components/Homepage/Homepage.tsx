@@ -170,8 +170,10 @@ function Homepage({}: Props) {
 		setFile(e.target.files[0])
 	}
 
-	const handleSubmit = (e: any) => {
+	const handleSubmit = async (e: any) => {
 		e.preventDefault()
+
+		//await blockchain transaction - once it returns the IDof the Smart contract then proceed with the MongoDB storage
 		uploadFile(file, email, address)
 	}
 
@@ -213,7 +215,7 @@ function Homepage({}: Props) {
 					<ModalBody>
 						<Center>
 							<Stack>
-								<form>
+								<form onSubmit={handleSubmit}>
 									<label htmlFor="file">Invoice</label>
 									<Input
 										border="0px"
@@ -237,25 +239,25 @@ function Homepage({}: Props) {
 										onChange={(e) => setEmail(e.target.value)}
 										required
 									/>
+
+									<ModalFooter>
+										{isSubmitting ? (
+											<Button isLoading loadingText="Submitting">
+												Submit
+											</Button>
+										) : (
+											<Button type="submit">Submit</Button>
+										)}
+
+										<Button ml={4} onClick={() => setUploadClicked(false)}>
+											Close
+										</Button>
+									</ModalFooter>
 								</form>
 							</Stack>
 						</Center>
 					</ModalBody>
-					<ModalFooter>
-						{isSubmitting ? (
-							<Button isLoading loadingText="Submitting">
-								Submit
-							</Button>
-						) : (
-							<Button type="submit" onClick={handleSubmit}>
-								Submit
-							</Button>
-						)}
 
-						<Button ml={4} onClick={() => setUploadClicked(false)}>
-							Close
-						</Button>
-					</ModalFooter>
 					{/* {renderAlert()} */}
 				</ModalContent>
 			</Modal>
