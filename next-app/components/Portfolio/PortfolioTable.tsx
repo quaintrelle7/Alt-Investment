@@ -26,7 +26,8 @@ function PortfolioTable() {
 							<Th color={"brand.quinary"}>Company</Th>
 							<Th color={"brand.quinary"}>Current</Th>
 							<Th color={"brand.quinary"}>Invested</Th>
-							<Th color={"brand.quinary"}>Total NFTs</Th>
+							<Th color={"brand.quinary"}>Repayment Date</Th>
+							<Th color={"brand.quinary"}>Total Units</Th>
 						</Tr>
 					</Thead>
 					<Tbody color={"brand.secondary"}>
@@ -34,18 +35,21 @@ function PortfolioTable() {
 							<Td>Tesla</Td>
 							<Td>130000</Td>
 							<Td>100000</Td>
+							<Td>1/1/2025</Td>
 							<Td>25</Td>
 						</Tr>
 						<Tr>
 							<Td>Tesla</Td>
 							<Td>130000</Td>
 							<Td>100000</Td>
+							<Td>1/1/2025</Td>
 							<Td>25</Td>{" "}
 						</Tr>
 						<Tr>
 							<Td>Tesla</Td>
 							<Td>130000</Td>
 							<Td>100000</Td>
+							<Td>1/1/2025</Td>
 							<Td>25</Td>{" "}
 						</Tr>
 					</Tbody>

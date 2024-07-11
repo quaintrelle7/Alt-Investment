@@ -8,18 +8,16 @@ import { FaSort } from "react-icons/fa"
 import { FaFilter } from "react-icons/fa"
 
 import {
-	Box,
 	Divider,
 	Grid,
-	GridItem,
 	Heading,
 	Stack,
 	Center,
 	Flex,
 	Button,
-	Container,
 } from "@chakra-ui/react"
 import React from "react"
+import IDFAQ from "@/components/FAQ/IDFAQ"
 
 function invest() {
 	return (
@@ -28,7 +26,7 @@ function invest() {
 				<Header />
 				{/* <HeroSection/> */}
 				<Center mt={10}>
-					<Heading>Invoice Marketplace</Heading>{" "}
+					<Heading>Invoice Discounting MarketPlace</Heading>{" "}
 				</Center>
 
 				<Flex mt={20} p={6}>
@@ -70,6 +68,7 @@ function invest() {
 					<InvoiceInfo />
 				</Grid>
 			</Stack>
+
 			<div style={{ position: "static", bottom: "0", width: "auto" }}>
 				<Footer />
 			</div>

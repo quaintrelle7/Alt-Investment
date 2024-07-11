@@ -40,6 +40,23 @@ h1{
 
 }
 
+.invoice-card-heading{
+    font-size: 13px;
+    color:rgba(190, 191, 193, 0.748);
+    margin-bottom: -10px
+}
+
+.invoice-detail-heading{
+    font-size: 15px;
+    font-weight: 500;
+    color:rgba(190, 191, 193, 0.748);
+    margin-bottom: -10px
+}
+
+.invoice-detail-text{
+    font-weight: 600;
+    font-size: 20px;
+}
 
 /* Purple: #C07DD0 Blue: #7FA3CC Dark: #111214 Light: #18191C  */
 /* https://coolors.co/gradient-maker/c07dd0-1ea3e6?position=33,100&opacity=100,100&type=linear&rotation=135 */
