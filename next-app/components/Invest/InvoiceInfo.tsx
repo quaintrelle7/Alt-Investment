@@ -28,7 +28,11 @@ const InvoiceInfo = (props: Props) => {
 					<Stack width={"100%"}>
 						<Flex textAlign={"center"} justifyContent={"space-between"}>
 							<Flex width={"50%"}>
-								<LiaIndustrySolid size={60} color="cyan" />
+								<LiaIndustrySolid
+									style={{ transform: "rotateY(180deg)", marginRight: "10px" }}
+									size={60}
+									color="cyan"
+								/>
 								<Stack>
 									<Text className="invoice-card-heading">Seller</Text>
 									<Text>Apple</Text>

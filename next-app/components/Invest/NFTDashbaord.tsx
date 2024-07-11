@@ -34,9 +34,23 @@ function HookUsage() {
 						No. of Units
 					</Text>
 					<HStack>
-						<Button {...inc}>+</Button>
+						<Button
+							{...inc}
+							background={"brand.quinary"}
+							color={"white"}
+							border={"1px solid black"}
+							fontWeight={"extrabold"}>
+							+
+						</Button>
 						<Input {...input} />
-						<Button {...dec}>-</Button>
+						<Button
+							{...dec}
+							background={"brand.quinary"}
+							color={"white"}
+							border={"1px solid black"}
+							fontWeight={"extrabold"}>
+							-
+						</Button>
 					</HStack>
 				</Stack>
 			</Center>
@@ -82,7 +96,7 @@ function NFTDashbaord() {
 						<Text className="invoice-detail-text">Low</Text>
 					</Stack>
 					<Stack width={"20%"}>
-						<Text className="invoice-detail-heading">Blockchain ID</Text>
+						<Text className="invoice-detail-heading">View Contract</Text>
 						<Text className="invoice-detail-text">Link</Text>
 					</Stack>
 				</Flex>

@@ -28,7 +28,7 @@ function portfolio() {
 				<Heading>My Portfolio</Heading>
 			</Center>
 
-			<Stack style={{ marginTop: "150px", marginRight: "2.5rem" }}>
+			<Stack mt={20} style={{ marginRight: "2.5rem" }}>
 				<Tabs variant="soft-rounded" ml={10}>
 					<TabList>
 						<Tab
@@ -38,13 +38,13 @@ function portfolio() {
 						</Tab>
 						<Tab
 							bg={"brand.ternary"}
-							mx="5"
+							ml="5"
 							_selected={{ bg: "brand.quinary", color: "brand.primary" }}>
 							Holdings
 						</Tab>
 						<Tab
 							bg={"brand.ternary"}
-							mx="5"
+							ml="5"
 							_selected={{ bg: "brand.quinary", color: "brand.primary" }}>
 							Summary
 						</Tab>

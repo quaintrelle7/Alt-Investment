@@ -26,7 +26,7 @@ function invest() {
 				<Header />
 				{/* <HeroSection/> */}
 				<Center mt={10}>
-					<Heading>Invoice Discounting MarketPlace</Heading>{" "}
+					<Heading>Invoice Discounting Marketplace</Heading>{" "}
 				</Center>
 
 				<Flex mt={20} p={6}>
