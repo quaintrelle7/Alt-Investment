@@ -55,8 +55,7 @@ export default function App({ Component, pageProps }: AppProps) {
 		<WagmiProvider config={config}>
 			<SessionProvider refetchInterval={0} session={pageProps.session}>
 				<QueryClientProvider client={queryClient}>
-					{/* <RainbowKitSiweNextAuthProvider */}
-					{/* getSiweMessageOptions={getSiweMessageOptions}> */}
+					<RainbowKitSiweNextAuthProvider getSiweMessageOptions={getSiweMessageOptions}> 
 					<RainbowKitProvider
 						coolMode
 						theme={darkTheme({
@@ -72,7 +71,7 @@ export default function App({ Component, pageProps }: AppProps) {
 							</ChakraProvider>
 						</Layout>
 					</RainbowKitProvider>
-					{/* </RainbowKitSiweNextAuthProvider> */}
+					</RainbowKitSiweNextAuthProvider>
 				</QueryClientProvider>
 			</SessionProvider>
 		</WagmiProvider>

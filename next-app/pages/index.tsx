@@ -5,17 +5,16 @@ import Footer from "@/components/Header/Footer";
 import {useAccount} from 'wagmi';
 import type { GetServerSideProps, NextPage } from "next"
 import { getServerSession } from "next-auth"
-import { getAuthOptions } from "./api/auth/[...nextauth]"
 
 const inter = Inter({ subsets: ["latin"] })
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-	return {
-		props: {
-			session: await getServerSession(req, res, getAuthOptions(req)),
-		},
-	}
-}
+// export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+// 	return {
+// 		props: {
+// 			session: await getServerSession(req, res),
+// 		},
+// 	}
+// }
 
 export default function Home() {
 	const { address } = useAccount()
