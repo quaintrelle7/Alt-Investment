@@ -24,12 +24,12 @@ export default async function auth(req: any, res: any) {
       async authorize(credentials) {
         try {
           const siwe = new SiweMessage(JSON.parse(credentials?.message || "{}"))
-          const nextAuthUrl = process.env.NEXTAUTH_URL ? new URL(process.env.NEXTAUTH_URL) : process.env.VERCEL_URL ? new URL(process.env.VERCEL_URL) : null;
+          const nextAuthUrl =  process.env.VERCEL_URL ? new URL(process.env.VERCEL_URL) : null;
 
 					if (!nextAuthUrl) {
 						return null
 					}
-                    
+
           const result = await siwe.verify({
             signature: credentials?.signature || "",
             domain: nextAuthUrl.host,
