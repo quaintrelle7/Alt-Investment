@@ -51,15 +51,15 @@ export default async function auth(req: any, res: any) {
     }),
   ]
 
-  const isDefaultSigninPage =
-    req.method === "GET" 
+//   const isDefaultSigninPage =
+//     req.method === "GET" 
 
-  // Hide Sign-In with Ethereum from default sign page
-  if (isDefaultSigninPage) {
-    console.log("provider 1: ", providers);
-    providers.pop()
-    console.log("provider 1: ", providers);
-  }
+//   // Hide Sign-In with Ethereum from default sign page
+//   if (isDefaultSigninPage) {
+//     console.log("provider 1: ", providers);
+//     providers.pop()
+//     console.log("provider 1: ", providers);
+//   }
 
   return await NextAuth(req, res, {
     // https://next-auth.js.org/configuration/providers/oauth
