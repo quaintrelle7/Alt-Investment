@@ -199,7 +199,7 @@ export default function ({}: Props) {
 				<Table textAlign={"center"}>
 					<Thead>
 						<Tr>
-							<Th color={"brand.quinary"}>File Name</Th>
+							<Th color={"brand.quinary"} width={"100px"}>File Name</Th>
 							<Th color={"brand.quinary"}>Date (YYYY-MM-DD)</Th>
 							<Th color={"brand.quinary"}>Seller Address</Th>
 							<Th color={"brand.quinary"}>File URL</Th>
@@ -211,7 +211,7 @@ export default function ({}: Props) {
 						uploadedInvoices.map((invoice: UploadedInvoice) => (
 							<Tbody color={"brand.secondary"} key={invoice._id}>
 								<Tr>
-									<Td>{invoice.fileName}</Td>
+									<Td maxWidth={"200px"}><Text textOverflow={"ellipsis"}>{invoice.fileName}</Text></Td>
 									<Td>{invoice.date_added.slice(0, 10)}</Td>
 									<Td fontSize={15}>
 										{/* <Center bg={"brand.quinary"} fontSize={15}> */}

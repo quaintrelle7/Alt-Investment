@@ -6,6 +6,8 @@ import { SiweMessage } from "siwe"
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
 export default async function auth(req: any, res: any) {
+
+  console.log("req: ", req);
   const providers = [
     CredentialsProvider({
       name: "Ethereum",
@@ -24,12 +26,11 @@ export default async function auth(req: any, res: any) {
       async authorize(credentials) {
         try {
           const siwe = new SiweMessage(JSON.parse(credentials?.message || "{}"))
-          const nextAuthUrl =  process.env.VERCEL_URL ? new URL(process.env.VERCEL_URL) : null;
+            const nextAuthUrl = process.env.NEXTAUTH_URL ? new URL(process.env.NEXTAUTH_URL) : process.env.VERCEL_URL ? new URL(process.env.VERCEL_URL) : null;
 
 					if (!nextAuthUrl) {
 						return null
 					}
-
           const result = await siwe.verify({
             signature: credentials?.signature || "",
             domain: nextAuthUrl.host,
@@ -43,6 +44,7 @@ export default async function auth(req: any, res: any) {
           }
           return null
         } catch (e) {
+            console.log("eee: ", e);
           return null
         }
       },
@@ -50,11 +52,13 @@ export default async function auth(req: any, res: any) {
   ]
 
   const isDefaultSigninPage =
-    req.method === "GET" && req.query.nextauth.includes("signin")
+    req.method === "GET" 
 
   // Hide Sign-In with Ethereum from default sign page
   if (isDefaultSigninPage) {
+    console.log("provider 1: ", providers);
     providers.pop()
+    console.log("provider 1: ", providers);
   }
 
   return await NextAuth(req, res, {
@@ -62,9 +66,6 @@ export default async function auth(req: any, res: any) {
     providers,
     session: {
       strategy: "jwt",
-    },
-     jwt: {
-      secret: process.env.JWT_SECRET,
     },
     secret: process.env.NEXTAUTH_SECRET,
     callbacks: {
