@@ -18,6 +18,7 @@ import Layout from "@/components/Layout"
 import { SessionProvider } from "next-auth/react"
 import type { Session } from "next-auth"
 
+
 const chains: readonly [Chain, ...Chain[]] = [
 	{
 		...mainnet,
@@ -32,6 +33,7 @@ const chains: readonly [Chain, ...Chain[]] = [
 ]
 
 //To-Do Add URL for Shardeum Sphinx
+
 
 const config = getDefaultConfig({
 	appName: "AltInvest",
