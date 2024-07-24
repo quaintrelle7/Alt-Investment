@@ -12,9 +12,18 @@ import {
 import React from "react"
 import { LiaIndustrySolid } from "react-icons/lia"
 
-type Props = {}
+type Props = {
+    seller: string;
+    buyer: string;
+    unitCost: string;
+    repaymentPerUnit: string;
+    xirr: string;
+    unitsInvested: number;
+    totalUnits: number;
+    tenure: number;
+}
 
-const InvoiceInfo = (props: Props) => {
+const InvoiceInfo = (props:Props) => {
 	return (
 		<Link href="/company" style={{ textDecoration: "none" }}>
 			<Stack
@@ -35,14 +44,14 @@ const InvoiceInfo = (props: Props) => {
 								/>
 								<Stack>
 									<Text className="invoice-card-heading">Seller</Text>
-									<Text>Apple</Text>
+									<Text>{props.seller}</Text>
 								</Stack>
 							</Flex>
 
 							<Flex>
 								<Stack mr={"0"}>
 									<Text className="invoice-card-heading">Buyer</Text>
-									<Text>Imagine Store</Text>
+									<Text>{props.buyer}</Text>
 								</Stack>
 								<LiaIndustrySolid size={60} />
 							</Flex>
@@ -52,29 +61,29 @@ const InvoiceInfo = (props: Props) => {
 						<Flex textAlign={"center"} justifyContent={"space-between"}>
 							<Stack>
 								<Text className="invoice-card-heading">Unit Cost</Text>
-								<Text>$100</Text>
+								<Text>{props.unitCost}</Text>
 							</Stack>
 
 							<Stack>
 								<Text className="invoice-card-heading">Repayment/Unit</Text>
-								<Text>$110</Text>
+								<Text>{props.repaymentPerUnit}</Text>
 							</Stack>
 
 							<Stack>
 								<Text className="invoice-card-heading">XIRR</Text>
-								<Text>10%</Text>
+								<Text>{props.xirr}</Text>
 							</Stack>
 						</Flex>
 
 						<Flex textAlign={"center"} justifyContent={"space-between"}>
 							<Stack>
 								<Text className="invoice-card-heading">Units Left</Text>
-								<Text>200/500</Text>
+								<Text>{props.totalUnits - props.unitsInvested} / {props.totalUnits}</Text>
 							</Stack>
 
 							<Stack>
 								<Text className="invoice-card-heading">Tenure</Text>
-								<Text>60 Days</Text>
+								<Text>{props.tenure} Days</Text>
 							</Stack>
 						</Flex>
 					</Stack>

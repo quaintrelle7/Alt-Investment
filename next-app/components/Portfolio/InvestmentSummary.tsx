@@ -25,13 +25,13 @@ function InvestmentSummary({}: Props) {
 						<Stack justify={"flex-start"}>
 							<Text color={"brand.quinary"}>Current</Text>
 							<Text fontSize={20} color={"brand.secondary"}>
-								120000
+								11000
 							</Text>
 						</Stack>
 						<Stack justify={"flex-start"}>
 							<Text color={"brand.quinary"}>Invested</Text>
 							<Text fontSize={20} color={"brand.secondary"}>
-								120000
+								10000
 							</Text>
 						</Stack>
 					</Stack>
@@ -39,13 +39,13 @@ function InvestmentSummary({}: Props) {
 						<Stack>
 							<Text color={"brand.quinary"}>XIRR</Text>
 							<Text fontSize={20} color={"brand.secondary"}>
-								12%
+								10%
 							</Text>
 						</Stack>
 						<Stack>
 							<Text color={"brand.quinary"}>Total Returns</Text>
 							<Text fontSize={20} color={"brand.secondary"}>
-								120000
+								1000
 							</Text>
 						</Stack>
 					</Stack>

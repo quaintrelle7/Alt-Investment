@@ -20,16 +20,12 @@ import {
 } from "@chakra-ui/react"
 import React, { useEffect, useRef, useState } from "react"
 import About from "./About"
-import Footer from "../Header/Footer"
-import AboutCompanies from "./AboutCompanies"
-import ListNFTForm from "../ListNFT/ListNFTForm"
 import Lottie from "lottie-react"
 import animationDataHome from "../../public/assets/js/homepage.json"
 import { useAccount, useSignMessage } from "wagmi"
 import { useConnectModal } from "@rainbow-me/rainbowkit"
 import axios from "axios"
 import UploadedInvoice from "@/models/UploadedInvoice"
-import { NodeNextRequest } from "next/dist/server/base-http/node"
 // import UploadedInvoice from "@/models/UploadedInvoice"
 
 type Props = {}
@@ -268,9 +264,8 @@ function Homepage({}: Props) {
 						<h1>Grow Your Wealth With Crypto</h1>
 					</Box>
 					<Text mt={10} fontSize={20}>
-						We believe in the potential of transformative investments. Our
-						platform helps you in generating high returns on your crypto
-						investment.
+						We help you in generating fixed-yields on your crypto
+						investment. Diversify your portfolio now with Invoice Discounting.
 					</Text>
 
 					<Flex justify={"flex-start"} mt="10">
@@ -299,7 +294,7 @@ function Homepage({}: Props) {
 			</Flex>
 
 			<About />
-			<AboutCompanies />
+			{/* <AboutCompanies /> */}
 		</>
 	)
 }

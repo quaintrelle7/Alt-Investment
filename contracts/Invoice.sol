@@ -8,7 +8,7 @@ contract InvoiceFinal{
     address public seller;
     string public invoiceHash;
     string public agreementHash;
-    address[] public investors;
+    Investor[] public investors;
     address public factor;
     address public payer;
     uint256 public fees;
@@ -18,6 +18,12 @@ contract InvoiceFinal{
     uint256 private paidAmount;
     enum Status { PROCESSING, APPROVED, DECLINED, PURCHASED, COMPLETED}
     Status status;
+    
+    struct Investor{
+        address investor_address;
+        uint256 invested_amount;
+        uint256 repayment_amount;
+    }
 
     modifier _onlySeller{
         require(msg.sender==seller, "Agreement should be signed by invoice seller.");
@@ -103,16 +109,21 @@ contract InvoiceFinal{
     }
 
 
-    //considering only one investor for now
     function purchaseInvoice() payable external _invoiceApproved{
         require(discountedAmount==msg.value, "Invested amount does not match invoice amount.");
-        investors.push(msg.sender);
+        Investor memory investor;
+        
+        investor.investor_address = msg.sender;
+        investor.invested_amount = msg.value;
+        investor.repayment_amount = 100;
+
+        investors.push(investor);
+
         // investedAmount = _investedAmount;
-        totalInvestedAmount += msg.value;
-        status = Status.PURCHASED;
+     
         emit InvoicePurchased(msg.sender);
 
-        transferMoneyToSeller();
+        // transferMoneyToSeller();
         
     }
 
@@ -124,11 +135,11 @@ contract InvoiceFinal{
         
     }
 
-    function transferMoneyToInvestor() internal _invoiceApproved{
-        (bool success, ) = payable(investors[0]).call{value: paidAmount-fees}("");
-        require(success, "Transfer to investor failed");
-        emit MoneyTransferToInvestor(investors[0], paidAmount-fees);
-    }
+    // function transferMoneyToInvestor() internal _invoiceApproved{
+    //     (bool success, ) = payable(investors[0]).call{value: paidAmount-fees}("");
+    //     require(success, "Transfer to investor failed");
+    //     emit MoneyTransferToInvestor(investors[0], paidAmount-fees);
+    // }
 
     function payInvoiceAmount() payable external _invoiceApproved{
        require(msg.value == amount , "Paid amount must be equal to the invoice amount");
@@ -136,7 +147,7 @@ contract InvoiceFinal{
         payer = msg.sender;
         emit InvoicePaid(msg.value, msg.sender);
 
-        transferMoneyToInvestor();
+        // transferMoneyToInvestor();
         transferFeeToFactor();
     }
  

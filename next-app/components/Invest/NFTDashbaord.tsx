@@ -122,19 +122,19 @@ function NFTDashbaord() {
 
 				<Flex justifyContent={"space-between"}>
 					<Text className="invoice-card-heading">Unit Value</Text>
-					<Text>$10</Text>
+					<Text>$100</Text>
 				</Flex>
 				<Flex justifyContent={"space-between"}>
 					<Text className="invoice-card-heading">Invested Amount</Text>
-					<Text>Units * Unit_Value</Text>
+					<Text>$200</Text>
 				</Flex>
 				<Flex justifyContent={"space-between"}>
 					<Text className="invoice-card-heading">Repayment Date</Text>
-					<Text>Today + 60 days</Text>
+					<Text>Septemeber 24, 2024</Text>
 				</Flex>
 				<Flex justifyContent={"space-between"}>
 					<Text className="invoice-card-heading">Repayment Value</Text>
-					<Text>Units*Repayment_Unit</Text>
+					<Text>$220</Text>
 				</Flex>
 				<Center>
 					<Button

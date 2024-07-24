@@ -17,8 +17,109 @@ import {
 	Button,
 } from "@chakra-ui/react"
 import React from "react"
-import IDFAQ from "@/components/FAQ/IDFAQ"
 
+type Invoice = {
+    seller: string;
+    buyer: string;
+    unitCost: string;
+    repaymentPerUnit: string;
+    xirr: string;
+    unitsInvested: number;
+    totalUnits: number;
+    tenure: number;
+}
+const invoices : Invoice[] = [
+    {
+        seller: "Apple",
+        buyer: "Imagine Store",
+        unitCost: "$100",
+        repaymentPerUnit: "$110",
+        xirr:"14%",
+        unitsInvested:700,
+        totalUnits: 1000,
+        tenure:60
+    },
+    {
+        seller: "Reliance",
+        buyer: "Sangeeta Mobiles",
+        unitCost: "$100",
+        repaymentPerUnit: "$109",
+        xirr:"14.9%",
+        unitsInvested:300,
+        totalUnits: 1000,
+        tenure:60
+    },
+    {
+        seller: "Medicare",
+        buyer: "Netmeds",
+        unitCost: "$100",
+        repaymentPerUnit: "$110",
+        xirr:"14%",
+        unitsInvested:900,
+        totalUnits: 1000,
+        tenure:30
+    },
+    {
+        seller: "Jio",
+        buyer: "Sangeetha Mobiles",
+        unitCost: "$100",
+        repaymentPerUnit: "$109",
+        xirr:"14.9%",
+        unitsInvested:300,
+        totalUnits: 1000,
+        tenure:60
+    },
+    {
+        seller: "Apple",
+        buyer: "Imagine Store",
+        unitCost: "$100",
+        repaymentPerUnit: "$110",
+        xirr:"14%",
+        unitsInvested:700,
+        totalUnits: 1000,
+        tenure:60
+    },
+    {
+        seller: "Reliance",
+        buyer: "Sangeeta Mobiles",
+        unitCost: "$100",
+        repaymentPerUnit: "$109",
+        xirr:"14.9%",
+        unitsInvested:300,
+        totalUnits: 1000,
+        tenure:60
+    },
+    {
+        seller: "Medicare",
+        buyer: "Netmeds",
+        unitCost: "$100",
+        repaymentPerUnit: "$110",
+        xirr:"14%",
+        unitsInvested:900,
+        totalUnits: 1000,
+        tenure:30
+    },
+    {
+        seller: "Jio",
+        buyer: "Sangeetha Mobiles",
+        unitCost: "$100",
+        repaymentPerUnit: "$109",
+        xirr:"14.9%",
+        unitsInvested:300,
+        totalUnits: 1000,
+        tenure:60
+    },
+    {
+        seller: "MedPlus",
+        buyer: "Patanjali",
+        unitCost: "$100",
+        repaymentPerUnit: "$110",
+        xirr:"14%",
+        unitsInvested:900,
+        totalUnits: 1000,
+        tenure:30
+    }
+]
 function invest() {
 	return (
 		<>
@@ -58,14 +159,12 @@ function invest() {
 					gap={8}
 					alignItems={"center"}
 					p={6}>
-					<InvoiceInfo />
-					<InvoiceInfo />
-					<InvoiceInfo />
-					<InvoiceInfo />
-					<InvoiceInfo />
-					<InvoiceInfo />
-					<InvoiceInfo />
-					<InvoiceInfo />
+                    {invoices.map((invoice) => (
+                        <InvoiceInfo
+                            key={invoice.seller}
+                            {...invoice}
+                        />
+                    ))}
 				</Grid>
 			</Stack>
 
