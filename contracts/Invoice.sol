@@ -8,14 +8,22 @@ contract InvoiceFinal{
     address public seller;
     string public invoiceHash;
     string public agreementHash;
-    Investor[] public investors;
     address public factor;
-    address public payer;
+    address public recourse_payer;
+
+    uint256 public totalInvoiceAmount;
     uint256 public fees;
-    uint256 public amount;
-    uint256 public discountedAmount;
+    uint256 public amountPerUnit;
+    uint256 public repaymentPerUnit;
+    uint256 public totalUnits;
+    uint256 public purchasedUnits = 0;
+
+    uint256 private expected_repayment_date;
+    uint256 private expected_payout_date;
+
     uint256 private totalInvestedAmount = 0;
     uint256 private paidAmount;
+
     enum Status { PROCESSING, APPROVED, DECLINED, PURCHASED, COMPLETED}
     Status status;
     
@@ -23,7 +31,11 @@ contract InvoiceFinal{
         address investor_address;
         uint256 invested_amount;
         uint256 repayment_amount;
+        uint256 total_units;
     }
+
+        Investor[] public investors;
+
 
     modifier _onlySeller{
         require(msg.sender==seller, "Agreement should be signed by invoice seller.");
@@ -65,20 +77,29 @@ contract InvoiceFinal{
         string memory _ipfsHash
     ){
         seller = msg.sender;
+        recourse_payer = seller;
         invoiceHash = _ipfsHash;
     }
 
 
-    function approveInvoice(uint256 _amount, uint256 _discountedAmount, string memory _agreementHash, uint256 _fees)_onlyFactor external{
+    function approveInvoice(
+        uint256 _totalInvoiceAmount, 
+        uint256 _amountPerunit, 
+        uint256 _repaymentPerUnit, 
+        uint256 _totalUnits,
+        string memory _agreementHash, 
+        uint256 _fees)  _onlyFactor external{
+        
         // require(factor == msg.sender, "Only factor can approve invoice");
-        assert(_discountedAmount<_amount);
-        assert(fees<_amount);
+        assert(fees<_totalInvoiceAmount);
 
         factor = msg.sender;
-        amount = _amount *(10**18);
-        discountedAmount = _discountedAmount *(10**18);
+        totalInvoiceAmount = _totalInvoiceAmount *(10**18);
         agreementHash = _agreementHash;
         fees = _fees * (10**18);
+        amountPerUnit = _amountPerunit * (10**18);
+        repaymentPerUnit = _repaymentPerUnit * (10**18);
+        totalUnits = _totalUnits;
         status = Status.APPROVED;
         emit InvoiceApproved(factor); 
     }
@@ -100,7 +121,7 @@ contract InvoiceFinal{
     }
 
     function transferMoneyToSeller() internal  _invoiceApproved{
-        require(totalInvestedAmount == discountedAmount, "Invested amount does not match invoice amount");
+        require(totalInvestedAmount == totalInvoiceAmount, "Invested amount does not match invoice amount");
         // payable(seller).transfer(address(this).balance);
         (bool success, ) = payable(seller).call{value: address(this).balance}("");
         require(success, "Transfer to seller failed");
@@ -109,22 +130,26 @@ contract InvoiceFinal{
     }
 
 
-    function purchaseInvoice() payable external _invoiceApproved{
-        require(discountedAmount==msg.value, "Invested amount does not match invoice amount.");
+    function purchaseInvoice(uint256 totalPurchasedUnits) payable external _invoiceApproved{
+        require((totalPurchasedUnits*amountPerUnit)==msg.value, "Keep proper balance.");
+       
         Investor memory investor;
         
         investor.investor_address = msg.sender;
         investor.invested_amount = msg.value;
-        investor.repayment_amount = 100;
+        investor.repayment_amount = totalPurchasedUnits * repaymentPerUnit;
+        investor.total_units = totalPurchasedUnits;
 
         investors.push(investor);
 
-        // investedAmount = _investedAmount;
-     
-        emit InvoicePurchased(msg.sender);
+        totalInvestedAmount += (totalPurchasedUnits * amountPerUnit);
+        purchasedUnits += totalPurchasedUnits;
 
-        // transferMoneyToSeller();
-        
+        emit InvoicePurchased(msg.sender);  
+
+        if(purchasedUnits==totalUnits){
+            transferMoneyToSeller();
+        } 
     }
 
      function  transferFeeToFactor() internal _invoiceApproved{
@@ -135,19 +160,27 @@ contract InvoiceFinal{
         
     }
 
-    // function transferMoneyToInvestor() internal _invoiceApproved{
-    //     (bool success, ) = payable(investors[0]).call{value: paidAmount-fees}("");
-    //     require(success, "Transfer to investor failed");
-    //     emit MoneyTransferToInvestor(investors[0], paidAmount-fees);
-    // }
+    function transferMoneyToInvestor() internal _invoiceApproved{
+
+        for(uint256 i=0; i < investors.length; i++){
+            address investorAddress = investors[i].investor_address;
+            uint256 repaymentAmount = investors[i].repayment_amount;
+
+            (bool success, ) = payable(investorAddress).call{value: repaymentAmount}("");
+            require(success, "Transfer to investor failed");
+        }
+
+        // emit MoneyTransferToInvestor(investors[0], paidAmount-fees);
+    }
 
     function payInvoiceAmount() payable external _invoiceApproved{
-       require(msg.value == amount , "Paid amount must be equal to the invoice amount");
+       require(msg.value == ((totalUnits * repaymentPerUnit) + fees)
+                             , "Amount must be equal to the repay amount");
         paidAmount +=msg.value;
-        payer = msg.sender;
+        
         emit InvoicePaid(msg.value, msg.sender);
 
-        // transferMoneyToInvestor();
+        transferMoneyToInvestor();
         transferFeeToFactor();
     }
  
