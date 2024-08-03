@@ -13,7 +13,11 @@ const InvoiceSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
-	walletAddress: {
+    contractAddress: {
+        type: String,
+        required: true,
+    },
+	sellerAddress: {
 		type: String,
 		required: true,
 	},
@@ -22,10 +26,6 @@ const InvoiceSchema = new mongoose.Schema({
 		default: Date.now,
 	},
 	fileURL: {
-		type: String,
-		required: true,
-	},
-	fileName: {
 		type: String,
 		required: true,
 	},
@@ -41,7 +41,7 @@ const InvoiceSchema = new mongoose.Schema({
 		type: Boolean,
 		default: false,
 	},
-	verifierAddress: {
+	factorAddress: {
 		type: String,
 		default: "",
 	},

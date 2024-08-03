@@ -1,3 +1,4 @@
+
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { ChakraProvider } from "@chakra-ui/react";
@@ -5,14 +6,14 @@ import { theme } from "@/chakra/theme";
 import '@rainbow-me/rainbowkit/styles.css'
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { WagmiProvider, http } from "wagmi"
-import { mainnet, polygonMumbai, shardeumSphinx } from "wagmi/chains"
+import { liskSepolia, mainnet, optimismSepolia, polygonMumbai, shardeumSphinx } from "wagmi/chains"
 import { RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit"
 import { getDefaultConfig } from "@rainbow-me/rainbowkit"
 import {
 	RainbowKitSiweNextAuthProvider,
 	GetSiweMessageOptions,
 } from "@rainbow-me/rainbowkit-siwe-next-auth"
-import { optimism } from "wagmi/chains"
+import { optimism, } from "wagmi/chains"
 import { Chain } from "@rainbow-me/rainbowkit"
 import Layout from "@/components/Layout"
 import { SessionProvider } from "next-auth/react"
@@ -32,18 +33,24 @@ const chains: readonly [Chain, ...Chain[]] = [
 	},
 ]
 
+
 //To-Do Add URL for Shardeum Sphinx
+
+
 
 
 const config = getDefaultConfig({
 	appName: "AltInvest",
 	projectId: "7564d8ad0218271d25696e1c5fc7b379", //https://cloud.walletconnect.com/
-	chains: [mainnet, polygonMumbai, optimism, shardeumSphinx],
+	chains: [mainnet, polygonMumbai, optimism, shardeumSphinx, optimismSepolia, liskSepolia],
 	transports: {
 		[mainnet.id]: http(),
 		[polygonMumbai.id]: http(),
 		[shardeumSphinx.id]: http(),
+        [optimismSepolia.id]: http(),
+        [liskSepolia.id]: http()
 	},
+    
 })
 
 const queryClient = new QueryClient()

@@ -23,6 +23,7 @@ import {
 import Link from "next/link"
 import React, { useEffect, useState } from "react"
 import { useAccount } from "wagmi"
+import {factoryContract} from "@/blockend/interact"
 
 type Props = {}
 
@@ -35,11 +36,22 @@ type Props = {}
 // 	return data
 // }
 
+
+
+
 export default function ({}: Props) {
 	const [uploadedInvoices, setUploadedInvoices] = useState([])
 	const { address, isConnected } = useAccount()
 	const [approveForm, setApproveForm] = useState(false)
 	const [isSubmitting, setIsSubmitting] = useState(false)
+    const [invoiceAddresses, setInvoiceAddresses] = useState([])
+
+    const getInvoices = async() => {
+        const result = await factoryContract.methods.getDeployedContracts().call();
+        setInvoiceAddresses(result);
+    }
+
+    getInvoices();
 
 	const [formData, setFormData] = useState({
 		invoiceAmount: "",

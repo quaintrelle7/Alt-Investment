@@ -21,6 +21,7 @@ export async function connectToDatabase() {
     if (process.env.NODE_ENV === "development") {
       if (!global._mongoClient) {
         mongoClient = await new MongoClient(uri, options).connect();
+        console.log("mongoClient: ", mongoClient);
         global._mongoClient = mongoClient;
       } else {
         mongoClient = global._mongoClient;

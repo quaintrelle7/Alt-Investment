@@ -26,7 +26,7 @@ import { useAccount, useSignMessage } from "wagmi"
 import { useConnectModal } from "@rainbow-me/rainbowkit"
 import axios from "axios"
 import UploadedInvoice from "@/models/UploadedInvoice"
-// import UploadedInvoice from "@/models/UploadedInvoice"
+import {factoryContract} from "@/blockend/interact"
 
 type Props = {}
 
@@ -39,6 +39,9 @@ function Homepage({}: Props) {
 	const [email, setEmail] = useState("")
 	const [isSubmitting, setIsSubmitting] = useState(false)
 	const [alertStatus, setAlertStatus] = useState("")
+    const [ipfsHash, setIPFSHash] = useState("");
+    const [isFileuploaded, setIsFileUploaded] = useState(false);
+    const [deployedContractAddress, setDeployedContractAddress] = useState('');
 
 	const pinataConfig = {
 		root: "https://api.pinata.cloud",
@@ -60,7 +63,10 @@ function Homepage({}: Props) {
 
 	useEffect(() => {
 		testPinataConnection()
+        
 	})
+
+
 
 	const handleUploadInvoice = () => {
 		if (openConnectModal) {
@@ -108,6 +114,7 @@ function Homepage({}: Props) {
 				}
 				formData.append("pinataOptions", JSON.stringify(pinataBody.options))
 				formData.append("pinataMetadata", JSON.stringify(pinataBody.metadata))
+
 				const url = `${pinataConfig.root}/pinning/pinFileToIPFS`
 				const response = await axios({
 					method: "post",
@@ -116,35 +123,12 @@ function Homepage({}: Props) {
 					headers: pinataConfig.headers,
 				})
 
-				const newInvoice = new UploadedInvoice({
-					email: email,
-					walletAddress: address,
-					date_added: Date.now(),
-					fileURL: response.data.IpfsHash,
-					fileName: file.name,
-				})
 
-				const uploadedInvoices = await fetch("api/uploaded_invoices", {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(newInvoice),
-				})
+                console.log("response: ", response);
 
-				const result = await uploadedInvoices.json()
-
-				setIsSubmitting(false)
-				console.log("result: ", result)
-				setUploadClicked(false)
-
-				if (result.acknowledged) {
-					setAlertStatus("success")
-					alert("Invoice uploaded successfully")
-				} else {
-					setAlertStatus("error")
-					alert("There was an error uploading the invoice")
-				}
+                setIPFSHash(response.data.IpfsHash);
+                setIsFileUploaded(true);
+                console.log(ipfsHash);			
 
 				queryPinataFiles()
 			} else {
@@ -162,15 +146,79 @@ function Homepage({}: Props) {
 		setEmail("")
 	}
 
+    const saveToMongoDB = async() => {
+        	const newInvoice = new UploadedInvoice({
+					email: email,
+                    contractAddress: deployedContractAddress,
+					sellerAddress: address,
+					date_added: Date.now(),
+					fileURL: ipfsHash,
+				})
+
+            const uploadedInvoices = await fetch("api/uploaded_invoices", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(newInvoice),
+			})
+
+			const result = await uploadedInvoices.json()
+
+			setIsSubmitting(false)
+			console.log("result: ", result)
+			setUploadClicked(false)
+
+				if (result.acknowledged) {
+					setAlertStatus("success")
+					alert("Invoice uploaded successfully to MongoDb")
+				} else {
+					setAlertStatus("error")
+					alert("There was an error uploading the invoice")
+				}
+
+    }
+
 	const handleChange = (e: any) => {
 		setFile(e.target.files[0])
 	}
+
+    useEffect(()=>{
+         if (file!=undefined) { 
+            uploadFile(file, email, address);
+        }
+    }, [file, email])
+
+
+    const getInvoices = async() => {
+        const result = await factoryContract.methods.getDeployedContracts().call();
+        console.log("result: ", result);
+        setDeployedContractAddress(result[result.length-1]);
+        console.log("result: ", deployedContractAddress);
+    }
+
+    // getInvoices();
+    // saveToMongoDB();
+
+
+    useEffect(() => {
+        saveToMongoDB();
+    },[deployedContractAddress]);
 
 	const handleSubmit = async (e: any) => {
 		e.preventDefault()
 
 		//await blockchain transaction - once it returns the IDof the Smart contract then proceed with the MongoDB storage
-		uploadFile(file, email, address)
+
+        try{
+            const res = await factoryContract.methods.createID(ipfsHash).send({from: address});
+            console.log("Invoice Uploaded: ", res);
+            getInvoices();
+
+        } catch{
+
+        }
+         
 	}
 
 	const renderAlert = () => {
@@ -237,13 +285,15 @@ function Homepage({}: Props) {
 									/>
 
 									<ModalFooter>
-										{isSubmitting ? (
+										{/* {isSubmitting ? (
 											<Button isLoading loadingText="Submitting">
 												Submit
 											</Button>
 										) : (
-											<Button type="submit">Submit</Button>
-										)}
+										)} */}
+
+                                        <Button isDisabled={!isFileuploaded} type="submit">Submit</Button>
+
 
 										<Button ml={4} onClick={() => setUploadClicked(false)}>
 											Close
