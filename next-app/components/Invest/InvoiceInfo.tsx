@@ -1,3 +1,4 @@
+import web3 from "@/blockend/web3";
 import {
 	Stack,
 	Center,
@@ -9,8 +10,9 @@ import {
 	Container,
 	Divider,
 } from "@chakra-ui/react"
-import React from "react"
+import React, {useEffect, useState} from "react"
 import { LiaIndustrySolid } from "react-icons/lia"
+import invoiceAbi from '@/blockend/build/invoice.json'
 
 type Props = {
     seller: string;
@@ -21,12 +23,35 @@ type Props = {
     unitsInvested: number;
     totalUnits: number;
     tenure: number;
+    contractAddress: any;
 }
 
+
 const InvoiceInfo = (props:Props) => {
+
+    const [invoiceDetails, setInvoiceDetails] =useState<any>(null);
+
+
+    //write a function to get all of these
+    useEffect(() => {
+        const fetchInvoiceInfo = async () => {
+          const invoiceContract = new web3.eth.Contract(invoiceAbi, props.contractAddress);
+          try {
+            const res = await invoiceContract.methods.getInvoiceInfo().call();
+            setInvoiceDetails(res || {});  // Ensure the state is always an object
+            console.log("ID: ", res);
+          } catch (error) {
+            console.error("Error fetching invoice info:", error);
+          }
+        };
+
+    fetchInvoiceInfo();
+  }, [props.contractAddress]);
+
+    
 	return (
-		<Link href="/company" style={{ textDecoration: "none" }}>
-			<Stack
+		<Link href={`/company/${props.contractAddress}`} style={{ textDecoration: "none" }}>
+			<Stack hidden={!invoiceDetails}
 				borderRadius={"10"}
 				px={5}
 				pt={5}
@@ -44,14 +69,14 @@ const InvoiceInfo = (props:Props) => {
 								/>
 								<Stack>
 									<Text className="invoice-card-heading">Seller</Text>
-									<Text>{props.seller}</Text>
+									<Text>{invoiceDetails?.sellerName || "Loading ..."}</Text>
 								</Stack>
 							</Flex>
 
 							<Flex>
 								<Stack mr={"0"}>
 									<Text className="invoice-card-heading">Buyer</Text>
-									<Text>{props.buyer}</Text>
+									<Text>{invoiceDetails?.buyerName}</Text>
 								</Stack>
 								<LiaIndustrySolid size={60} />
 							</Flex>
@@ -61,29 +86,29 @@ const InvoiceInfo = (props:Props) => {
 						<Flex textAlign={"center"} justifyContent={"space-between"}>
 							<Stack>
 								<Text className="invoice-card-heading">Unit Cost</Text>
-								<Text>{props.unitCost}</Text>
+								<Text>{Number(invoiceDetails?.amountPerUnit)/10**9}</Text>
 							</Stack>
 
 							<Stack>
 								<Text className="invoice-card-heading">Repayment/Unit</Text>
-								<Text>{props.repaymentPerUnit}</Text>
+								<Text>{Number(invoiceDetails?.repaymentPerUnit)/10**9}</Text>
 							</Stack>
 
 							<Stack>
 								<Text className="invoice-card-heading">XIRR</Text>
-								<Text>{props.xirr}</Text>
+								<Text>{Number(invoiceDetails?.xirr)/100}</Text>
 							</Stack>
 						</Flex>
 
 						<Flex textAlign={"center"} justifyContent={"space-between"}>
 							<Stack>
 								<Text className="invoice-card-heading">Units Left</Text>
-								<Text>{props.totalUnits - props.unitsInvested} / {props.totalUnits}</Text>
+								<Text>{Number(invoiceDetails?.totalUnits) - Number(invoiceDetails?.purchasedUnits)} / {invoiceDetails?.totalUnits.toString()}</Text>
 							</Stack>
 
 							<Stack>
 								<Text className="invoice-card-heading">Tenure</Text>
-								<Text>{props.tenure} Days</Text>
+								<Text>{invoiceDetails?.tenure.toString()} Days</Text>
 							</Stack>
 						</Flex>
 					</Stack>

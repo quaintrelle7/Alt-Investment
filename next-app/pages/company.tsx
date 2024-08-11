@@ -1,8 +1,7 @@
 import IDFAQ from "@/components/FAQ/IDFAQ"
 import Footer from "@/components/Header/Footer"
 import Header from "@/components/Header/Header"
-import NFTCard from "@/components/Invest/NFTCard"
-import NFTDashbaord from "@/components/Invest/NFTDashbaord"
+import InvoiceDetails from "@/components/Invest/InvoiceDetails"
 import ProfileCard from "@/components/Invest/ProfileCard"
 import {
 	Divider,
@@ -21,7 +20,8 @@ function company() {
 	return (
 		<>
 			<Header />
-			<NFTDashbaord />
+
+			<InvoiceDetails />
 
 			<Stack mx={20} my={20}>
 				<Divider mb={10} />
@@ -37,6 +37,7 @@ function company() {
 						</Text>
 
 						<IDFAQ />
+                        
 					</Stack>
 					<Stack width={"30%"}>
 						<Text mb={2} className="invoice-detail-text">

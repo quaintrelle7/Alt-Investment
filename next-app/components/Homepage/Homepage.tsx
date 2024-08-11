@@ -36,12 +36,12 @@ function Homepage({}: Props) {
 	const [uploadClicked, setUploadClicked] = useState(false)
 	const inputFile = useRef(null)
 	const [file, setFile] = useState<File | undefined>()
-	const [email, setEmail] = useState("")
+	const [email, setEmail] = useState('')
 	const [isSubmitting, setIsSubmitting] = useState(false)
-	const [alertStatus, setAlertStatus] = useState("")
-    const [ipfsHash, setIPFSHash] = useState("");
+	const [alertStatus, setAlertStatus] = useState('')
+    const [ipfsHash, setIPFSHash] = useState(null);
     const [isFileuploaded, setIsFileUploaded] = useState(false);
-    const [deployedContractAddress, setDeployedContractAddress] = useState('');
+    const [deployedContractAddress, setDeployedContractAddress] = useState(null);
 
 	const pinataConfig = {
 		root: "https://api.pinata.cloud",
@@ -202,8 +202,11 @@ function Homepage({}: Props) {
 
 
     useEffect(() => {
-        saveToMongoDB();
+        if(deployedContractAddress){
+            saveToMongoDB();
+        }
     },[deployedContractAddress]);
+
 
 	const handleSubmit = async (e: any) => {
 		e.preventDefault()
@@ -211,9 +214,10 @@ function Homepage({}: Props) {
 		//await blockchain transaction - once it returns the IDof the Smart contract then proceed with the MongoDB storage
 
         try{
-            const res = await factoryContract.methods.createID(ipfsHash).send({from: address});
+            const res = await factoryContract.methods.createID(ipfsHash).send({from: address}).then(() =>  
+                {getInvoices();})
             console.log("Invoice Uploaded: ", res);
-            getInvoices();
+            
 
         } catch{
 

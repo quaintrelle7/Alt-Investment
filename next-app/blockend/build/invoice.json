@@ -10,6 +10,11 @@
 				"internalType": "address",
 				"name": "_seller",
 				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_factoryAddress",
+				"type": "address"
 			}
 		],
 		"stateMutability": "nonpayable",
@@ -198,6 +203,11 @@
 				"type": "uint256"
 			},
 			{
+				"internalType": "uint256",
+				"name": "_tenure",
+				"type": "uint256"
+			},
+			{
 				"internalType": "string",
 				"name": "_agreementHash",
 				"type": "string"
@@ -206,11 +216,39 @@
 				"internalType": "uint256",
 				"name": "_fees",
 				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_sellerName",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_buyerName",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_xirr",
+				"type": "uint256"
 			}
 		],
 		"name": "approveInvoice",
 		"outputs": [],
 		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "buyerName",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -235,7 +273,130 @@
 	},
 	{
 		"inputs": [],
-		"name": "fees",
+		"name": "factoryAddress",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getAllInvestors",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "investor_address",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "invested_amount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "repayment_amount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "total_units",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct Invoice.Investor[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getInvoiceInfo",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "invoiceHash",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "agreementHash",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "sellerName",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "buyerName",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "xirr",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "totalInvoiceAmount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "fees",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amountPerUnit",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "repaymentPerUnit",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "totalUnits",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "purchasedUnits",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "tenure",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct Invoice.InvoiceInfo",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getPayableAmount",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -367,9 +528,35 @@
 	},
 	{
 		"inputs": [],
+		"name": "sellerName",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "signAgreement",
 		"outputs": [],
 		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "tenure",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -388,6 +575,26 @@
 	{
 		"inputs": [],
 		"name": "totalUnits",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "triggerPaymentOnCampaignClose",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "xirr",
 		"outputs": [
 			{
 				"internalType": "uint256",

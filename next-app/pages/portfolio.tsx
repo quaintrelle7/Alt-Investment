@@ -17,8 +17,11 @@ import {
 import InvestmentHistory from "@/components/Portfolio/InvestmentHistory"
 import Header from "@/components/Header/Header"
 import ClientDashboard from "@/components/Portfolio/ClientDashboard"
+import {useAccount} from 'wagmi'
 
 function portfolio() {
+
+    const {address} = useAccount();
 	return (
 		<>
 			<Header />
@@ -52,7 +55,7 @@ function portfolio() {
 					<TabPanels bg="brand.ternary" mt="10">
 						//check if walletAddress is seller then only show this tab
 						<TabPanel>
-							<ClientDashboard />
+							<ClientDashboard address= {address}/>
 						</TabPanel>
 						<TabPanel>
 							<PortfolioTable />

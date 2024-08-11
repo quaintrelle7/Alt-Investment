@@ -52,6 +52,10 @@ const InvoiceSchema = new mongoose.Schema({
 	verificationDate: {
 		type: Date,
 	},
+    signedBySeller:{
+        type: Boolean,
+        default:false
+    }
 
 	//Make a different database for approved invoices - With everything that an investor needs to know, like due date, amount, risk, company, rate of discount
 })

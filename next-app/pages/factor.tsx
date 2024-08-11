@@ -23,7 +23,8 @@ import {
 import Link from "next/link"
 import React, { useEffect, useState } from "react"
 import { useAccount } from "wagmi"
-import {factoryContract} from "@/blockend/interact"
+import invoiceAbi from '@/blockend/build/invoice.json'
+import web3 from "@/blockend/web3";
 
 type Props = {}
 
@@ -45,24 +46,31 @@ export default function ({}: Props) {
 	const [approveForm, setApproveForm] = useState(false)
 	const [isSubmitting, setIsSubmitting] = useState(false)
     const [invoiceAddresses, setInvoiceAddresses] = useState([])
+    const [invoice, setInvoice] = useState<UploadedInvoice>();
 
-    const getInvoices = async() => {
-        const result = await factoryContract.methods.getDeployedContracts().call();
-        setInvoiceAddresses(result);
-    }
+    // const getInvoices = async() => {
+    //     const result = await factoryContract.methods.getDeployedContracts().call();
+    //     setInvoiceAddresses(result);
+    // }
 
-    getInvoices();
+    // getInvoices();
 
 	const [formData, setFormData] = useState({
-		invoiceAmount: "",
-		discountedAmount: "",
-		fees: "",
+		totalInvoiceAmount: 0,
+        amountPerUnit:0,
+        repaymentPerUnit:0,
+        totalUnits:0,
+        tenure:0,
 		agreementHash: "",
+        fees:0,
+        seller: "",
+        buyer: "",
+        xirr:0
 	})
 
 	useEffect(() => {
 		const fetchInvoices = async () => {
-			const response = await fetch("api/uploaded_invoices").then((res) =>
+			const response = await fetch("api/uploaded_invoices?active=true&approved=false").then((res) =>
 				res.json()
 			)
 			setUploadedInvoices(response)
@@ -73,21 +81,15 @@ export default function ({}: Props) {
 
 	const updateDecline = async (invoice: UploadedInvoice) => {}
 
+    var varToSaveToMongoDb = null;
 	const approveInvoice = async (invoice: UploadedInvoice) => {
-		setApproveForm(true)
+        setApproveForm(true)
+        setInvoice(invoice);
+        
+    
 
-		// let approvedInvoice = invoice
-		// approvedInvoice.verifierAddress = address
-		// approvedInvoice.approved = true
 
-		// const updatedInvoice = await fetch("api/uploaded_invoices", {
-		// 	method: "PUT",
-		// 	headers: {
-		// 		"Content-Type": "application/json",
-		// 	},
-		// 	body: JSON.stringify(approvedInvoice),
-		// })
-
+		
 		// const res = await updatedInvoice.json()
 		// if (res.acknowledged) {
 		//Here comes the blockchain functionality
@@ -96,7 +98,42 @@ export default function ({}: Props) {
 		//Pop - Up a form to add amount, discountedAmount, due date, fees, agreement url
 		//ROI?.
 		// }
+
+
 	}
+
+    
+    const saveToMongoDB = async(invoice: UploadedInvoice) =>{
+        let approvedInvoice = invoice
+        
+		approvedInvoice.approved = true;
+        approvedInvoice.signedBySeller = false;
+
+		const updatedInvoice = await fetch("api/uploaded_invoices", {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(approvedInvoice),
+		})
+
+        const result = await updatedInvoice.json();
+
+        if (result.acknowledged) {
+					alert("Invoice uploaded successfully to MongoDb")
+				} else {
+					alert("There was an error uploading the invoice")
+	    }
+
+    }
+
+    // useEffect(() => {
+    //     if(varToSaveToMongoDb){
+    //         saveToMongoDB(invoice);
+    //     }
+    // },[varToSaveToMongoDb]);
+
+
 
 	const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target
@@ -106,17 +143,40 @@ export default function ({}: Props) {
 		}))
 	}
 
-	const submitApproval = async () => {
-		setIsSubmitting(true)
+	const submitApproval = async (e) => {
+        e.preventDefault();
+        
+        setIsSubmitting(true)
 
-		//do the blockchain logic here
+		const invoiceContract = new web3.eth.Contract(invoiceAbi, invoice.contractAddress)
 
-		//get the smart contract Id
+        console.log(invoice.contractAddress);
+        console.log(invoiceContract);
 
-		//fetch the invoice from the database using the smart contract Id and update it ...calls the approveInvoice();
+        const res = await invoiceContract.methods.approveInvoice(
+            formData.totalInvoiceAmount,
+            formData.amountPerUnit,
+            formData.repaymentPerUnit,
+            formData.totalUnits,
+            formData.tenure,
+            formData.agreementHash,
+            formData.fees,
+            formData.seller,
+            formData.buyer,
+            formData.xirr
+            ).send({from: address})        
+            .then(() => {
+                
+                saveToMongoDB(invoice);
 
-		setIsSubmitting(false)
-		// setApproveForm(false)
+                setIsSubmitting(false)
+		        setApproveForm(false)
+            });
+
+                    console.log("Invoice Approved: ", res);
+
+
+		
 
 		//notification success or error!
 	}
@@ -132,29 +192,55 @@ export default function ({}: Props) {
 						<Center>
 							<Stack>
 								<form onSubmit={submitApproval}>
-									<label htmlFor="invoiceAmount">Invoice Amount</label>
+									
+                                    <label htmlFor="totalInvoiceAmount">Invoice Amount</label>
 									<Input
 										required
 										type="number"
 										marginBottom="20px"
 										marginTop="2px"
-										name="invoiceAmount"
+										name="totalInvoiceAmount"
 										placeholder="Amount in Eth"
-										value={formData.invoiceAmount}
+										value={formData.totalInvoiceAmount}
 										onChange={handleInputChange}
 									/>
 
-									<label htmlFor="discountedAmount">Discounted Amount</label>
+									<label htmlFor="amountPerUnit">Unit Cost</label>
 									<Input
 										type="number"
 										marginBottom="20px"
 										marginTop="2px"
-										placeholder="Discounted Amount"
-										name="discountedAmount"
-										value={formData.discountedAmount}
+										placeholder="Amount per unit"
+										name="amountPerUnit"
+										value={formData.amountPerUnit}
 										onChange={handleInputChange}
 										required
 									/>
+
+                                    <label htmlFor="repaymentPerUnit">Repayment per Unit</label>
+									<Input
+										type="number"
+										marginBottom="20px"
+										marginTop="2px"
+										placeholder="Repayment per Unit"
+										name="repaymentPerUnit"
+										value={formData.repaymentPerUnit}
+										onChange={handleInputChange}
+										required
+									/>
+
+                                    <label htmlFor="totalUnits">Total Units</label>
+									<Input
+										type="number"
+										marginBottom="20px"
+										marginTop="2px"
+										placeholder="Total Units"
+										name="totalUnits"
+										value={formData.totalUnits}
+										onChange={handleInputChange}
+										required
+									/>
+
 
 									<label htmlFor="fees">Factor Fees</label>
 									<Input
@@ -170,7 +256,7 @@ export default function ({}: Props) {
 
 									<label htmlFor="agreementHash">Agreement Hash</label>
 									<Input
-										type="number"
+										type="text"
 										marginBottom="25px"
 										marginTop="2px"
 										placeholder="Agreement Hash"
@@ -179,6 +265,56 @@ export default function ({}: Props) {
 										onChange={handleInputChange}
 										required={true}
 									/>
+
+                                    <label htmlFor="tenure">Tenure</label>
+									<Input
+										type="number"
+										marginBottom="20px"
+										marginTop="2px"
+										placeholder="Tenure in days"
+										name="tenure"
+										value={formData.tenure}
+										onChange={handleInputChange}
+										required
+									/>
+
+                                    <label htmlFor="seller">Seller Name</label>
+									<Input
+										type="text"
+										marginBottom="20px"
+										marginTop="2px"
+										placeholder="Seller Name"
+										name="seller"
+										value={formData.seller}
+										onChange={handleInputChange}
+										required
+									/>
+
+                                    <label htmlFor="buyer">Buyer Name</label>
+									<Input
+										type="text"
+										marginBottom="20px"
+										marginTop="2px"
+										placeholder="Buyer Name"
+										name="buyer"
+										value={formData.buyer}
+										onChange={handleInputChange}
+										required
+									/>
+
+                                    <label htmlFor="xirr">XIRR * 100</label>
+									<Input
+										type="number"
+										marginBottom="20px"
+										marginTop="2px"
+										placeholder="XIRR"
+										name="xirr"
+										value={formData.xirr}
+										onChange={handleInputChange}
+										required
+									/>
+
+
 
 									<ModalFooter>
 										{isSubmitting ? (
@@ -211,7 +347,7 @@ export default function ({}: Props) {
 				<Table textAlign={"center"}>
 					<Thead>
 						<Tr>
-							<Th color={"brand.quinary"} width={"100px"}>File Name</Th>
+							<Th color={"brand.quinary"} width={"100px"}>Contract Address</Th>
 							<Th color={"brand.quinary"}>Date (YYYY-MM-DD)</Th>
 							<Th color={"brand.quinary"}>Seller Address</Th>
 							<Th color={"brand.quinary"}>File URL</Th>
@@ -221,13 +357,14 @@ export default function ({}: Props) {
 					</Thead>
 					{uploadedInvoices ? (
 						uploadedInvoices.map((invoice: UploadedInvoice) => (
+
 							<Tbody color={"brand.secondary"} key={invoice._id}>
 								<Tr>
-									<Td maxWidth={"200px"}><Text textOverflow={"ellipsis"}>{invoice.fileName}</Text></Td>
+									<Td maxWidth={"200px"}><Text textOverflow={"ellipsis"}>{invoice.contractAddress}</Text></Td>
 									<Td>{invoice.date_added.slice(0, 10)}</Td>
 									<Td fontSize={15}>
 										{/* <Center bg={"brand.quinary"} fontSize={15}> */}
-										{invoice.walletAddress}
+										{invoice.sellerAddress}
 										{/* </Center> */}
 									</Td>
 									<Td>

@@ -7,7 +7,7 @@ import web3 from "./web3";
 
 
 // Contract address of the InvoiceFactory contract
-const factoryAddress = '0x698e9d8C3Dc156bBB4bE95e8300b3C30212845E0';
+const factoryAddress = '0xa95E81dEE8E4cD3C37130e2396000DF6a69Ee723';
 
 // Setup provider (you can use Infura, Alchemy, or any other provider)
 // const provider = new ethers.providers.JsonRpcProvider('https://mainnet.infura.io/v3/09b5a24c345742ea95c3cf2636900c17');

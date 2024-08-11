@@ -12,7 +12,7 @@ export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse
 ) {
-	const { method } = req
+	const { method, query} = req
 	const connection = await connectToDatabase()
 	var collection
 
@@ -28,8 +28,40 @@ export default async function handler(
 	switch (method) {
 		case "GET":
 			try {
-				const results = await collection.find({}).limit(10).toArray()
-				res.status(200).json(results)
+                
+                const results = await collection.find({}).limit(10).toArray()
+
+                if(Object.keys(query).length ==0) {
+    				res.status(200).json(results)
+                }
+
+                if(query.active!== undefined && query.approved!== undefined) {
+                    const invoices = await collection
+                    .find({active:true, approved:false})
+                    .toArray();
+                    res.status(200).json(invoices);
+                }
+
+                if(query.signedBySeller!== undefined
+                     ) {
+                    const invoices = await collection
+                    .find({active:true, approved:true,
+                     signedBySeller:true})
+                    .toArray();
+                    res.status(200).json(invoices);
+                }
+
+
+                if(query.sellerAddress!== undefined
+                     ) {
+                    const invoices = await collection
+                    .find({active:true, approved:true
+                    , sellerAddress:query.sellerAddress,
+                     signedBySeller:false})
+                    .toArray();
+                    res.status(200).json(invoices);
+                }
+
 			} catch (error) {
 				console.error(error)
 				res.status(500).json({ error: "Internal Server Error" })
@@ -48,12 +80,13 @@ export default async function handler(
 		case "PUT":
 			try {
 				const uploadedInvoice = new UploadedInvoice(req.body)
-				const { _id, approved, verifierAddress } = uploadedInvoice
+				const { _id, approved, signedBySeller } = uploadedInvoice
 
-				const result = await collection.updateOne(
+				var result = await collection.updateOne(
 					{ _id: _id },
-					{ $set: { approved: approved, verifierAddress: verifierAddress } }
+					{ $set: { approved: approved, signedBySeller:signedBySeller } }
 				)
+                
 				res.status(201).json(result)
 			} catch (error) {
 				console.error(error)
