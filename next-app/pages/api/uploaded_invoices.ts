@@ -57,7 +57,7 @@ export default async function handler(
                     const invoices = await collection
                     .find({active:true, approved:true
                     , sellerAddress:query.sellerAddress,
-                     signedBySeller:false})
+                    })
                     .toArray();
                     res.status(200).json(invoices);
                 }

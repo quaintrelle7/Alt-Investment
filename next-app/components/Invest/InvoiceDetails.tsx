@@ -16,6 +16,7 @@ import {useRouter} from 'next/router';
 import invoiceAbi from '@/blockend/build/invoice.json'
 import web3 from "@/blockend/web3"
 import {useAccount} from 'wagmi';
+import Investor from '@/models/Investor';
 
 function InvoiceDetails(props:any) {
     
@@ -38,19 +39,81 @@ function InvoiceDetails(props:any) {
 	const inc = getIncrementButtonProps()
 	const dec = getDecrementButtonProps()
 	const input = getInputProps()
+    const [investor, setInvestor] = useState<Investor>(null);
 
-    const handleInvoicepurchase = () =>{
+    const handleInvoicepurchase = async() =>{
         
         //if(input.value)
         const invoiceContract = new web3.eth.Contract(invoiceAbi, invoiceAddress);
 
-        invoiceContract.methods.purchaseInvoice(parseInt(input.value))
-        .send({from:address,
-                value: web3.utils.toWei(parseInt(input.value) * Number(invoiceInfo?.amountPerUnit)/10**9, 'gwei')
-        }).then(()=>{
-            window.alert("Purchased units successfully");
-        })
+         try {
+    // Send transaction to purchase invoice
+        const res = await invoiceContract.methods.purchaseInvoice(parseInt(input.value))
+          .send({
+            from: address,
+            value: web3.utils.toWei(
+              (parseInt(input.value) * Number(invoiceInfo?.amountPerUnit)) / 10**9,
+              'gwei'
+            )
+          });
+
+        // Fetch investor data
+    const investorRes = await fetch(`/api/investors?investorAddress=${address}`);
+    
+        if (!investorRes.ok) {
+          throw new Error(`Error fetching investor: ${investorRes.status}`);
+        }
+
+        const investor = await investorRes.json();
+        let updatedInvestor;
+
+        if (investor) {
+          // Update existing investor's amount
+          updatedInvestor = { ...investor };
+          updatedInvestor.investedAmount += (parseInt(input.value) * Number(invoiceInfo?.amountPerUnit)) / 10**9;
+
+          // Send updated data to server
+          const updateRes = await fetch("/api/investors", {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updatedInvestor),
+          });
+
+          if (!updateRes.ok) {
+            throw new Error(`Error updating investor: ${updateRes.status}`);
+          }
+        } else {
+          // Create new investor data
+          const newInvestor = {
+            investedAmount: (parseInt(input.value) * Number(invoiceInfo?.amountPerUnit)) / 10**9,
+            investorAddress: address,
+          };
+
+          const createRes = await fetch("/api/investors", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newInvestor),
+          });
+
+          if (!createRes.ok) {
+            throw new Error(`Error creating investor: ${createRes.status}`);
+          }
+
+          const newInvestorData = await createRes.json();
+          setInvestor(newInvestorData); // Assuming setInvestor updates state or context
     }
+
+    window.alert("Purchased units successfully");
+
+    } catch (error) {
+    console.error('Error:', error);
+    window.alert(`An error occurred: ${error.message}`);
+    }
+}
 
 	return (
 		<Flex mt="20" mx={20} justify={"space-between"}>
@@ -171,6 +234,7 @@ function InvoiceDetails(props:any) {
 			</Stack>
 		</Flex>
 	)
-}
+ 
+ }
 
-export default InvoiceDetails
+export default InvoiceDetails;
