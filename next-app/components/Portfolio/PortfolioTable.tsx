@@ -10,7 +10,8 @@ import {
   TableCaption,
   TableContainer,
   Center,
-  Heading
+  Heading,
+  Text
 } from '@chakra-ui/react'
 
 function PortfolioTable() {
@@ -19,7 +20,9 @@ function PortfolioTable() {
 			<Center style={{ marginTop: "70px", fontSize: "30px" }}>
 				<h1>Current Holdings</h1>
 			</Center>
+              <Center><Text>Coming Soon...</Text></Center>
 			<Center p={20} mx={20} my={10} bg={"brand.ternary"}>
+
 				<Table textAlign={"center"}>
 					<Thead>
 						<Tr>

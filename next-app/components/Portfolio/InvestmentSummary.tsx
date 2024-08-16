@@ -9,6 +9,7 @@ function InvestmentSummary({}: Props) {
 			<Center style={{ marginTop: "70px", fontSize: "30px" }}>
 				<h1>Investment Summary</h1>
 			</Center>
+                <Center><Text>Coming Soon...</Text></Center>
 			<Center>
 				<Flex
 					mx={50}

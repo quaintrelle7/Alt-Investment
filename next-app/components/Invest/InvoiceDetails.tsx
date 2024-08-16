@@ -152,8 +152,8 @@ function InvoiceDetails(props:any) {
 						<Text className="invoice-detail-text">Low</Text>
 					</Stack>
 					<Stack width={"20%"}>
-						<Text className="invoice-detail-heading">View Contract</Text>
-						<Text className="invoice-detail-text">{}</Text>
+						<Text className="invoice-detail-heading">Invoice Contract</Text>
+						<Text fontSize="10" className="invoice-detail-text">{invoiceAddress}</Text>
 					</Stack>
 				</Flex>
 				<Flex>

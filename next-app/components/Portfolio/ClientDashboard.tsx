@@ -11,6 +11,7 @@ import {
 import React, {useEffect, useState} from "react"
 import invoiceAbi from '@/blockend/build/invoice.json'
 import web3 from "@/blockend/web3";
+import Link from "next/link";
 
 type Props = {
 }
@@ -86,8 +87,8 @@ const ClientDashboard = (sellerAddress:any) => {
 					<Thead>
 						<Tr>
 							<Th color={"brand.quinary"}>Contract Address</Th>
-							<Th color={"brand.quinary"}>Due Date</Th>
-							<Th color={"brand.quinary"}>Invoice URL</Th>
+							<Th color={"brand.quinary"}>Invoice Date</Th>
+							<Th color={"brand.quinary"}>View Invoice</Th>
 							<Th color={"brand.quinary"}>Sign Agreement</Th>
 							<Th color={"brand.quinary"}>Pay Invoice</Th>
 						</Tr>
@@ -96,8 +97,8 @@ const ClientDashboard = (sellerAddress:any) => {
                     {invoices.map((invoice:UploadedInvoice)=>(
                         <Tr>
 							<Td>{invoice.contractAddress}</Td>
-							<Td>{invoice.date_added}</Td>
-							<Td>{invoice.fileURL}</Td>
+							<Td>{invoice.date_added.slice(0,10)}</Td>
+							<Td color="brand.senary"><Link  target="_blank" href={`https://ipfs.io/ipfs/${invoice?.fileURL}`} >Click to View</Link></Td>
 							<Td>
 								<Button variant={"signUp"} onClick={()=>{handleSignAgreement(invoice)}}>Sign Agreement</Button>
 							</Td>
