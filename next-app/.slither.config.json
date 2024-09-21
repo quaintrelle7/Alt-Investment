@@ -1,0 +1,7 @@
+{
+  "remapping": [
+    "@openzeppelin=node_modules/@openzeppelin/contracts"
+  ],
+  "solc": "node_modules/solc/soljson.js",
+  "filter_paths": ["./contracts"]
+}
