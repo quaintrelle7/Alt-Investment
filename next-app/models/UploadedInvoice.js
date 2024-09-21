@@ -55,6 +55,14 @@ const InvoiceSchema = new mongoose.Schema({
     signedBySeller:{
         type: Boolean,
         default:false
+    },
+    chainId:{
+        type: String,
+        required: true
+    },
+    isCompleted: {
+        type:Boolean,
+        default:false
     }
 
 	//Make a different database for approved invoices - With everything that an investor needs to know, like due date, amount, risk, company, rate of discount

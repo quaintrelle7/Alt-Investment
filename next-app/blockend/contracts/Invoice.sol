@@ -1,334 +1,275 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.20;
 
-contract InvoiceFactory {
+import "C:/Next/Alt-Investment/Alt-Investment/next-app/node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "C:/Next/Alt-Investment/Alt-Investment/next-app/node_modules/@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "C:/Next/Alt-Investment/Alt-Investment/next-app/node_modules/@openzeppelin/contracts/access/AccessControl.sol";
+import "C:/Next/Alt-Investment/Alt-Investment/next-app/node_modules/@openzeppelin/contracts/utils/Pausable.sol";
+import "C:/Next/Alt-Investment/Alt-Investment/next-app/node_modules/@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+
+
+contract InvoiceFactory is AccessControl {
+
+    bytes32 public constant FACTOR_ROLE = keccak256("FACTOR_ROLE");
     address[] public deployedInvoices;
-    address[] public signedContracts;
     mapping(address => bool) public activeInvoices;
-    mapping(address=>bool) public factors;
-    address public admin;
+    address public immutable admin;
 
-    constructor(){
-        factors[msg.sender] = true;
+    // Fixed USDC token address (Ethereum mainnet)
+    address public constant USDC_ADDRESS = 0x2295B8D2b756163cFe8C6C9151be898E6109Eaa8;
+
+    event InvoiceCreated(address invoiceAddress, string ipfsHash);
+    event FactorAdded(address factor);
+    event FactorRemoved(address factor);
+
+    constructor() {
         admin = msg.sender;
+        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _grantRole(FACTOR_ROLE, msg.sender);
     }
 
-    function createID(string calldata ipfsHash) public returns (address) {
-        address newID = address(new Invoice(ipfsHash, msg.sender, address(this)));
-        deployedInvoices.push(newID);
-        activeInvoices[newID] = true;
-        return newID;
+    function createInvoice(string calldata ipfsHash) public returns (address) {
+        address newInvoice = address(new Invoice(ipfsHash, msg.sender, address(this)));
+        deployedInvoices.push(newInvoice);
+        Invoice(newInvoice).setFactor(admin);
+        activeInvoices[newInvoice] = true;
+        emit InvoiceCreated(newInvoice, ipfsHash);
+        return newInvoice;
     }
 
-    modifier onlyValidInvoice() {
-        require(activeInvoices[msg.sender], "Only valid Invoice contracts can call this function.");
-        _;
+    function addFactor(address _factor) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        grantRole(FACTOR_ROLE, _factor);
+        emit FactorAdded(_factor);
     }
 
-    modifier onlyAdmin(){
-        require(msg.sender==admin, "Only Admin can call this function");
-        _;
+
+    function removeFactor(address _factor) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        revokeRole(FACTOR_ROLE, _factor);
+        emit FactorRemoved(_factor);
     }
 
-    function addFactor(address _factor) public onlyAdmin{
-        factors[_factor]=true;
-    }
-
-    function removeFactor(address _factor) public onlyAdmin{
-        factors[_factor] = false;
-    }
-
-    function getDeployedContracts() public view returns (address[] memory) {
+    function getDeployedInvoices() public view returns (address[] memory) {
         return deployedInvoices;
     }
 
-    function getSignedContracts() public view returns (address[] memory) {
-        return signedContracts;
+    function markInvoiceInactive(address invoiceAddress) external {
+        require(activeInvoices[invoiceAddress], "Invoice not active");
+        require(Invoice(invoiceAddress).isCompleted(), "Invoice not completed");
+        activeInvoices[invoiceAddress] = false;
     }
 
-    function addSignedContract(address contractAddress) external onlyValidInvoice {
-        require(activeInvoices[contractAddress], "Only the invoice contract can call this function.");
-        signedContracts.push(contractAddress);
+    function addInvoiceFactor(address invoiceAddress, address newFactor) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        require(activeInvoices[invoiceAddress], "Invoice not active");
+        Invoice(invoiceAddress).setFactor(newFactor);
     }
 
-    function removeSignedContract(address contractAddress) external onlyValidInvoice{
-        require(activeInvoices[contractAddress], "Only the invoice contract can call this function.");
+    mapping(address => address[]) public investorInvoices; // Mapping of investor address to an array of invoice addresses.
 
-        for (uint i = 0; i < signedContracts.length; i++) {
-            if (signedContracts[i] == contractAddress) {
-                signedContracts[i] = signedContracts[signedContracts.length - 1];
-                signedContracts.pop();
-                break;
-            }
-        }
+    function addInvestorInvoice(address investor, address invoiceAddress) external {
+        require(activeInvoices[invoiceAddress], "Invoice is not active");
+        investorInvoices[investor].push(invoiceAddress); // Add the invoice to the investor's list
     }
 
-    function markinvoiceInactive(address contractAddress) external onlyValidInvoice {
-         require(activeInvoices[contractAddress], "Only the invoice contract can call this function.");
-         activeInvoices[contractAddress] = false;
+    // Function to get all invoices an investor has participated in
+    function getInvestorInvoices(address investor) public view returns (address[] memory) {
+        return investorInvoices[investor]; // Return the array of invoice addresses
     }
+
 }
 
+contract Invoice is ReentrancyGuard, AccessControl, Pausable {
+
+    bytes32 public constant FACTOR_ROLE = keccak256("FACTOR_ROLE");
+    bytes32 public constant SELLER_ROLE = keccak256("SELLER_ROLE");
+
+    using SafeERC20 for IERC20;
 
 
-contract Invoice{
+    IERC20 public immutable usdcToken;
+    address public immutable factoryAddress;
+    address public immutable seller;
 
 
-    address public seller;
     string public invoiceHash;
     string public agreementHash;
-    address public factor;
-    address public recourse_payer;
-
-    string public sellerName;
-    string public buyerName;
-    uint256 public xirr;
-    
     uint256 public totalInvoiceAmount;
-    uint256 private fees;
+    uint256 public fees;
     uint256 public amountPerUnit;
     uint256 public repaymentPerUnit;
     uint256 public totalUnits;
-    uint256 public purchasedUnits = 0;
+    uint256 public purchasedUnits;
     uint256 public tenure;
+    uint256 public expectedRepaymentDate;
+    uint256 public expectedPayoutDate;
+    bool public isCompleted;
 
-    uint256 private expected_repayment_date;
-    uint256 private expected_payout_date;
-
-    uint256 private totalInvestedAmount = 0;
-    uint256 private paidAmount;
-
-    address public factoryAddress;
-
-    uint256 private totalPayableAmount;
-
-    enum Status { PROCESSING, APPROVED, FACTOR_APPROVED, DECLINED, PURCHASED, COMPLETED}
-    Status status;
-    
-    struct Investor{
-        address investor_address;
-        uint256 invested_amount;
-        uint256 repayment_amount;
-        uint256 total_units;
+    struct Investor {
+        uint256 investedAmount;
+        uint256 repaymentAmount;
+        uint256 totalUnits;
+        bool hasClaimed;
     }
 
-    struct InvoiceInfo{
-        string  invoiceHash;
-        string  agreementHash;
+    mapping(address => Investor) public investors;
+    address[] public investorList;
 
-        string  sellerName;
-        string  buyerName;
-        uint256  xirr;
+    event InvoiceApproved(address factor, uint256 totalAmount, uint256 totalUnits);
+    event InvoicePurchased(address investor, uint256 units, uint256 amount);
+    event InvoicePaid(address payer, uint256 amount);
+    event FundsTransferredToSeller(address seller, uint256 amount);
+    event InvestorRepaid(address investor, uint256 amount);
+    event FeesTransferredToFactor(address factor, uint256 amount);
+
+    constructor(string memory _ipfsHash, address _seller, address _factoryAddress) {
+        require(_seller != address(0), "Seller address cannot be zero");
+        require(_factoryAddress != address(0), "Factory address cannot be zero");
         
-        uint256  totalInvoiceAmount;
-        uint256  fees;
-        uint256  amountPerUnit;
-        uint256  repaymentPerUnit;
-        uint256  totalUnits;
-        uint256  purchasedUnits;
-        uint256  tenure;
-    }
 
-        Investor[] public investors;
-
-
-    modifier _onlySeller{
-        require(msg.sender==seller, "Agreement should be signed by invoice seller.");
-        _;
-    }
-
-    modifier _onlyFactor{
-        require(InvoiceFactory(factoryAddress).factors(msg.sender), "Only factor can call this function.");
-        _;
-    }
-
-
-    modifier _onlyPayer{
-        _;
-    }
-
-
-    bool agreementSigned = false;
-
-
-    modifier _invoiceApproved{
-        require(agreementSigned, "Agreement approval required.");
-        _;
-    }
+        // require(usdcToken != address(0), "USDC token address cannot be zero");
 
     
-   
-    event InvoicePaid(uint256 amountPaid, address payer);
-    event InvoicePurchased(address investor);
-    event InvoiceApproved(address factor);
-    event InvoiceSigned(address seller);
-    event MoneyTransferToSeller(address seller, uint256 amount);
-    event FeesTransferToFactor(address factor, uint256 amount);
-    event MoneyTransferToInvestor(address investor, uint256 amount);
-    event Log(bool success, string text);
-
-
-
-    constructor(
-        string memory _ipfsHash,
-        address _seller,
-        address _factoryAddress
-    ){
-        seller = _seller;
-        recourse_payer = seller;
         invoiceHash = _ipfsHash;
         factoryAddress = _factoryAddress;
+        usdcToken = IERC20(InvoiceFactory(factoryAddress).USDC_ADDRESS());
+        seller = _seller;
+
+        //It should get only seller role
+
+        _grantRole(DEFAULT_ADMIN_ROLE, _factoryAddress);
+        _grantRole(SELLER_ROLE, _seller);
+        _setRoleAdmin(FACTOR_ROLE, DEFAULT_ADMIN_ROLE);
     }
+
+    function setFactor(address _factor) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        grantRole(FACTOR_ROLE, _factor);
+    }
+
 
 
     function approveInvoice(
-        uint256 _totalInvoiceAmount, 
-        uint256 _amountPerunit, 
-        uint256 _repaymentPerUnit, 
+        uint256 _totalInvoiceAmount,
+        uint256 _amountPerUnit,
+        uint256 _repaymentPerUnit,
         uint256 _totalUnits,
         uint256 _tenure,
-        string memory _agreementHash, 
-        uint256 _fees,
-        string memory _sellerName,
-        string memory _buyerName,
-        uint256 _xirr
-        )  _onlyFactor external{
-        
-        // require(factor == msg.sender, "Only factor can approve invoice");
-        assert(fees<_totalInvoiceAmount);
+        string memory _agreementHash,
+        uint256 _fees
+    ) external onlyRole(FACTOR_ROLE) whenNotPaused {
+        require(_fees < _totalInvoiceAmount, "Fees cannot be greater than total invoice amount");
+        require(_totalInvoiceAmount == _amountPerUnit*(_totalUnits), "Invalid total amount");
+        require(_repaymentPerUnit > _amountPerUnit, "Repayment per unit must be greater than amount per unit");
 
-        factor = msg.sender;
-        totalInvoiceAmount = _totalInvoiceAmount *(10**9);
+        totalInvoiceAmount = _totalInvoiceAmount* 10**6;
         agreementHash = _agreementHash;
-        fees = _fees * (10**9);
-        amountPerUnit = _amountPerunit * (10**9);
-        repaymentPerUnit = _repaymentPerUnit * (10**9);
+        fees = _fees * 10**6;
+        amountPerUnit = _amountPerUnit * 10**6;
+        repaymentPerUnit = _repaymentPerUnit * 10**6;
         totalUnits = _totalUnits;
-        totalPayableAmount = (totalUnits * repaymentPerUnit) + fees;
-        
-        status = Status.FACTOR_APPROVED;
         tenure = _tenure;
-        sellerName = _sellerName;
-        buyerName = _buyerName;
-        xirr = _xirr;
+        expectedRepaymentDate = block.timestamp + (tenure * (86400));       
+        // expectedPayoutDate = block.timestamp.add(1 days); // Assuming 1 day for payout after full investment
 
-        emit InvoiceApproved(factor); 
+        emit InvoiceApproved(msg.sender, totalInvoiceAmount, totalUnits);
     }
 
 
-    function declineInvoice() external _onlyFactor{
-        agreementSigned = false;
-        status=Status.DECLINED;
-    }
-
-
-    function signAgreement() external _onlySeller {
-        //Think on how to get it signed by Payer and Seller
-        //Request should go to seller's and payer's dashboard to sign - but apart from that
-        //It should be signed just by the seller - perhaps. Confirm on this with AB
-        require(status == Status.FACTOR_APPROVED, "Aggrement is not approved by factor.");
-        agreementSigned = true;
-        status = Status.APPROVED;
-        InvoiceFactory(factoryAddress).addSignedContract(address(this));
-        emit InvoiceSigned(msg.sender);
-    }
-
-    function transferMoneyToSeller() internal  _invoiceApproved{
-        require(totalInvestedAmount == totalInvoiceAmount, "Invested amount does not match invoice amount");
-        // payable(seller).transfer(address(this).balance);
-        (bool success, ) = payable(seller).call{value: address(this).balance}("");
-        require(success, "Transfer to seller failed");
-        totalInvestedAmount = 0;
-        emit MoneyTransferToSeller(seller, address(this).balance);
-    }
-
-
-    function purchaseInvoice(uint256 totalPurchasedUnits) payable external _invoiceApproved{
-        require((totalPurchasedUnits*amountPerUnit)==msg.value, "Keep proper balance.");
-       
-        Investor memory investor;
+    function purchaseInvoice(uint256 _units) external nonReentrant whenNotPaused {
+        require(_units > 0 && _units <= (totalUnits - purchasedUnits), "Invalid units");
+        uint256 purchaseAmount = _units * amountPerUnit;
         
-        investor.investor_address = msg.sender;
-        investor.invested_amount = msg.value;
-        investor.repayment_amount = totalPurchasedUnits * repaymentPerUnit;
-        investor.total_units = totalPurchasedUnits;
+        require(usdcToken.balanceOf(msg.sender) >= purchaseAmount, "Insufficient USDC balance");
+        require(usdcToken.allowance(msg.sender, address(this)) >= purchaseAmount, "Insufficient allowance");
 
-        investors.push(investor);
-
-        totalInvestedAmount += (totalPurchasedUnits * amountPerUnit);
-        purchasedUnits += totalPurchasedUnits;
-
-        emit InvoicePurchased(msg.sender);  
-
-        if(purchasedUnits==totalUnits){
-            transferMoneyToSeller();
-            InvoiceFactory(factoryAddress).removeSignedContract(address(this));
-        } 
-    }
-
-     function  transferFeeToFactor() internal _invoiceApproved{
-        (bool success, ) = payable(factor).call{value: address(this).balance}("");
-        require(success, "Transfer to factor failed");
-        status= Status.COMPLETED;
-        InvoiceFactory(factoryAddress).markinvoiceInactive(address(this));
-
-        emit FeesTransferToFactor(factor, address(this).balance);
-        
-    }
-
-    function transferMoneyToInvestor() internal _invoiceApproved{
-
-        for(uint256 i=0; i < investors.length; i++){
-            address investorAddress = investors[i].investor_address;
-            uint256 repaymentAmount = investors[i].repayment_amount;
-
-            (bool success, ) = payable(investorAddress).call{value: repaymentAmount}("");
-            require(success, "Transfer to investor failed");
+        // Update state before external calls
+        purchasedUnits += _units;
+        Investor storage investor = investors[msg.sender];
+        if (investor.investedAmount == 0) {
+            investorList.push(msg.sender);
         }
+        investor.investedAmount += purchaseAmount;
+        investor.repaymentAmount += _units * repaymentPerUnit;
+        investor.totalUnits += _units;
 
-        // emit MoneyTransferToInvestor(investors[0], paidAmount-fees);
+        InvoiceFactory(factoryAddress).addInvestorInvoice(msg.sender, address(this));
+
+        // Perform the transfer after state updates
+        usdcToken.safeTransferFrom(msg.sender, address(this), purchaseAmount);
+
+        emit InvoicePurchased(msg.sender, _units, purchaseAmount);
+
+        if (purchasedUnits == totalUnits) {
+            _transferToSeller();
+        }
     }
 
-    function getPayableAmount() public view returns (uint) {
-        return totalUnits * repaymentPerUnit + fees;
-    }
 
-    function payInvoiceAmount() payable external _invoiceApproved{
-       require(msg.value == ((totalUnits * repaymentPerUnit) + fees)
-                             , "Amount must be equal to the total payable amount.");
-        paidAmount +=msg.value;
+    function payInvoice() external nonReentrant whenNotPaused {
+        require(!isCompleted, "Invoice already completed");
+        require(purchasedUnits == totalUnits, "Invoice not fully funded");
+
+        uint256 totalPayable = (totalUnits * repaymentPerUnit) + fees;
         
-        emit InvoicePaid(msg.value, msg.sender);
+        // Update state before external calls
+        isCompleted = true;
 
-        transferMoneyToInvestor();
-        transferFeeToFactor();
+        // Perform the transfer after state updates
+        usdcToken.safeTransferFrom(msg.sender, address(this), totalPayable);
+
+        emit InvoicePaid(msg.sender, totalPayable);
     }
 
-    function getAllInvestors() public view returns (Investor[] memory){
-        return investors;
+    function claimRepayment() external nonReentrant whenNotPaused {
+        require(isCompleted, "Invoice not completed");
+        Investor storage investor = investors[msg.sender];
+        require(investor.investedAmount > 0, "No investment found");
+        require(!investor.hasClaimed, "Already claimed");
+
+        uint256 repaymentAmount = investor.repaymentAmount;
+        
+        // Update state before external calls
+        investor.hasClaimed = true;
+
+        // Perform the transfer after state updates
+        usdcToken.safeTransfer(msg.sender, repaymentAmount);
+
+        emit InvestorRepaid(msg.sender, repaymentAmount);
     }
 
-    function triggerPaymentOnCampaignClose() public _onlyFactor{
-        transferMoneyToSeller();
+
+    function claimFees() external onlyRole(FACTOR_ROLE) nonReentrant whenNotPaused {
+        require(isCompleted, "Invoice not completed");
+        require(fees > 0, "No fees to claim");
+
+        uint256 feeAmount = fees;
+        
+        // Update state before external calls
+        fees = 0;
+
+        // Perform the transfer after state updates
+        usdcToken.safeTransfer(msg.sender, feeAmount);
+
+        emit FeesTransferredToFactor(msg.sender, feeAmount);
     }
 
-    function getInvoiceInfo() public view returns(InvoiceInfo memory){
-        InvoiceInfo memory invoiceInfo;
-        invoiceInfo.agreementHash = agreementHash;
-        invoiceInfo.amountPerUnit = amountPerUnit;
-        invoiceInfo.buyerName = buyerName;
-        invoiceInfo.fees = fees;
-        invoiceInfo.invoiceHash = invoiceHash;
-        invoiceInfo.sellerName = sellerName;
-        invoiceInfo.xirr = xirr;
-        invoiceInfo.purchasedUnits = purchasedUnits;
-        invoiceInfo.repaymentPerUnit = repaymentPerUnit;
-        invoiceInfo.tenure = tenure;
-        invoiceInfo.totalInvoiceAmount = totalInvoiceAmount;
-        invoiceInfo.totalUnits = totalUnits;
-
-        return invoiceInfo;
-
+    function _transferToSeller() internal {
+        require(seller != address(0), "Seller address not set");
+        require(usdcToken.transfer(seller, totalInvoiceAmount), "Transfer to seller failed");
+        emit FundsTransferredToSeller(seller, totalInvoiceAmount);
     }
- 
+
+    function pause() external onlyRole(DEFAULT_ADMIN_ROLE) {
+        _pause();
+    }
+
+    function unpause() external onlyRole(DEFAULT_ADMIN_ROLE) {
+        _unpause();
+    }
+
+    function getInvestorInfo(address _investor) external view returns (Investor memory) {
+        return investors[_investor];
+    }
+
+    function getAllInvestors() external view returns (address[] memory) {
+        return investorList;
+    }
 }

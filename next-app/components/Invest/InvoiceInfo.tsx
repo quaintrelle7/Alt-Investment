@@ -86,12 +86,12 @@ const InvoiceInfo = (props:Props) => {
 						<Flex textAlign={"center"} justifyContent={"space-between"}>
 							<Stack>
 								<Text className="invoice-card-heading">Unit Cost</Text>
-								<Text>{Number(invoiceDetails?.amountPerUnit)/10**9}</Text>
+								<Text>{Number(invoiceDetails?.amountPerUnit)/10**6}</Text>
 							</Stack>
 
 							<Stack>
 								<Text className="invoice-card-heading">Repayment/Unit</Text>
-								<Text>{Number(invoiceDetails?.repaymentPerUnit)/10**9}</Text>
+								<Text>{Number(invoiceDetails?.repaymentPerUnit)/10**6}</Text>
 							</Stack>
 
 							<Stack>

@@ -17,6 +17,8 @@ import {
 	Input,
 	Alert,
 	AlertIcon,
+    Hide,
+    useToast
 } from "@chakra-ui/react"
 import React, { useEffect, useRef, useState } from "react"
 import About from "./About"
@@ -31,7 +33,7 @@ import {factoryContract} from "@/blockend/interact"
 type Props = {}
 
 function Homepage({}: Props) {
-	const { address, isConnected } = useAccount()
+	const { address, chainId} = useAccount()
 	const { openConnectModal } = useConnectModal()
 	const [uploadClicked, setUploadClicked] = useState(false)
 	const inputFile = useRef(null)
@@ -42,6 +44,8 @@ function Homepage({}: Props) {
     const [ipfsHash, setIPFSHash] = useState(null);
     const [isFileuploaded, setIsFileUploaded] = useState(false);
     const [deployedContractAddress, setDeployedContractAddress] = useState(null);
+    const toast = useToast()
+
 
 	const pinataConfig = {
 		root: "https://api.pinata.cloud",
@@ -153,6 +157,7 @@ function Homepage({}: Props) {
 					sellerAddress: address,
 					date_added: Date.now(),
 					fileURL: ipfsHash,
+                    chainId: chainId
 				})
 
             const uploadedInvoices = await fetch("api/uploaded_invoices", {
@@ -169,13 +174,13 @@ function Homepage({}: Props) {
 			console.log("result: ", result)
 			setUploadClicked(false)
 
-				if (result.acknowledged) {
-					setAlertStatus("success")
-					alert("Invoice uploaded successfully to MongoDb")
-				} else {
-					setAlertStatus("error")
-					alert("There was an error uploading the invoice")
-				}
+				// if (result.acknowledged) {
+				// 	setAlertStatus("success")
+				// 	alert("Invoice uploaded successfully to MongoDb")
+				// } else {
+				// 	setAlertStatus("error")
+				// 	alert("There was an error uploading the invoice")
+				// }
 
     }
 
@@ -191,15 +196,11 @@ function Homepage({}: Props) {
 
 
     const getInvoices = async() => {
-        const result = await factoryContract.methods.getDeployedContracts().call();
+        const result = await factoryContract.methods.getDeployedInvoices().call();
         console.log("result: ", result);
         setDeployedContractAddress(result[result.length-1]);
         console.log("result: ", deployedContractAddress);
     }
-
-    // getInvoices();
-    // saveToMongoDB();
-
 
     useEffect(() => {
         if(deployedContractAddress){
@@ -211,13 +212,23 @@ function Homepage({}: Props) {
 	const handleSubmit = async (e: any) => {
 		e.preventDefault()
 
-		//await blockchain transaction - once it returns the IDof the Smart contract then proceed with the MongoDB storage
-
+        setIsFileUploaded(false);
+        
         try{
-            const res = await factoryContract.methods.createID(ipfsHash).send({from: address}).then(() =>  
-                {getInvoices();})
-            console.log("Invoice Uploaded: ", res);
             
+            await factoryContract.methods.createInvoice(ipfsHash).send({from: address}).then(() =>  
+                {
+                    getInvoices();
+                    setUploadClicked(false);
+                    toast({
+                          title: 'Invoice Creation',
+                          description: "Invoice is created successfully.",
+                          status: 'success',
+                          duration: 9000,
+                          isClosable: true,
+                    })
+                
+                })
 
         } catch{
 
@@ -289,12 +300,7 @@ function Homepage({}: Props) {
 									/>
 
 									<ModalFooter>
-										{/* {isSubmitting ? (
-											<Button isLoading loadingText="Submitting">
-												Submit
-											</Button>
-										) : (
-										)} */}
+
 
                                         <Button isDisabled={!isFileuploaded} type="submit">Submit</Button>
 
@@ -312,12 +318,12 @@ function Homepage({}: Props) {
 				</ModalContent>
 			</Modal>
 
-			<Flex padding={100} mt={{ base: "0", md: "10" }} height={"80vh"}>
-				<Stack textAlign={"left"} width={"40%"}>
-					<Box fontSize={{ base: "3xl", md: "60px" }}>
+			<Flex padding={100}width={{base:"1000%", sm: "100%"}} mt={{ base: "0", md: "10" }} height={"80vh"}>
+				<Stack textAlign={"left"} width={{base:"40%", sm: "40%"}}>
+					<Box fontSize={{ base: "6xl", sm: "60px" }}>
 						<h1>Grow Your Wealth With Crypto</h1>
 					</Box>
-					<Text mt={10} fontSize={20}>
+					<Text mt={10} fontSize={{base:40, sm:20}}>
 						We help you in generating fixed-yields on your crypto
 						investment. Diversify your portfolio now with Invoice Discounting.
 					</Text>
@@ -329,22 +335,17 @@ function Homepage({}: Props) {
 						<Button onClick={handleUploadInvoice}>Upload Invoice</Button>
 						{/* <ListNFTForm/> */}
 					</Flex>
-
-					{/* <div className="w-[40rem] h-40 relative">
-            <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-[2px] w-3/4 blur-sm" />
-            <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-px w-3/4" />
-            <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-[5px] w-1/4 blur-sm" />
-            <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-px w-1/4" />
-       </div> */}
 				</Stack>
 
-				<Flex justify={"center"} width={"60%"}>
+                <Hide below="md">
+				<Flex width={{base:"60%"}} justify="center" >
 					<Stack>
 						<Lottie
 							style={{ width: "40rem", height: "40rem" }}
 							animationData={animationDataHome}></Lottie>
 					</Stack>
 				</Flex>
+                </Hide>
 			</Flex>
 
 			<About />

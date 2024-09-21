@@ -35,32 +35,44 @@ export default async function handler(
     				res.status(200).json(results)
                 }
 
-                if(query.active!== undefined && query.approved!== undefined) {
-                    const invoices = await collection
-                    .find({active:true, approved:false})
-                    .toArray();
-                    res.status(200).json(invoices);
-                }
+                if (
+									query.active !== undefined &&
+									query.approved !== undefined
+								) {
+									const invoices = await collection
+										.find({
+											active: true,
+											approved: false,
+											chainId: query.chainId,
+                                            isCompleted: false
+										})
+										.toArray()
+									res.status(200).json(invoices)
+								}
 
-                if(query.signedBySeller!== undefined
-                     ) {
-                    const invoices = await collection
-                    .find({active:true, approved:true,
-                     signedBySeller:true})
-                    .toArray();
-                    res.status(200).json(invoices);
-                }
+								if (query.signedBySeller !== undefined) {
+									const invoices = await collection
+										.find({
+											active: true,
+											approved: true,
+											signedBySeller: true,
+											chainId: query.chainId,
+										})
+										.toArray()
+									res.status(200).json(invoices)
+								}
 
-
-                if(query.sellerAddress!== undefined
-                     ) {
-                    const invoices = await collection
-                    .find({active:true, approved:true
-                    , sellerAddress:query.sellerAddress,
-                    })
-                    .toArray();
-                    res.status(200).json(invoices);
-                }
+								if (query.sellerAddress !== undefined) {
+									const invoices = await collection
+										.find({
+											active: true,
+											approved: true,
+											sellerAddress: query.sellerAddress,
+											chainId: query.chainId,
+										})
+										.toArray()
+									res.status(200).json(invoices)
+								}
 
 			} catch (error) {
 				console.error(error)

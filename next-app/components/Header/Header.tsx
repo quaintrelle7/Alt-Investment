@@ -1,4 +1,4 @@
-import {Button, Flex, Heading, Image, Link} from '@chakra-ui/react'
+import {Button, Flex, Heading, Image, Link, Show} from '@chakra-ui/react'
 import React from 'react'
 import ListNFTForm from '../ListNFT/ListNFTForm'
 import { ConnectButton } from '@rainbow-me/rainbowkit';
@@ -10,12 +10,13 @@ import {
   useChainModal,
 } from '@rainbow-me/rainbowkit';
 import {Profile} from '../Portfolio/Profile';
+import MintUSDC from '../USDC/MintUSDC';
 
 type Props = {}
 
 function Header({}: Props) {
 
-  const{isConnected} = useAccount();
+  const{address} = useAccount();
   const { openConnectModal } = useConnectModal();
   const { openAccountModal } = useAccountModal();
   const { openChainModal } = useChainModal();
@@ -51,58 +52,64 @@ const handleRoute = (path: string) => (event: React.MouseEvent<HTMLButtonElement
 					<h1 style={{ fontSize: "30px" }}> AltInvest</h1>
 				</Link>
 			</Flex>
-			<Flex w={"40%"} align={"center"} justify={"center"}>
-				{router.pathname !== "/" ? (
-					<Button
-						border={"none"}
-						bg={"transparent"}
-						style={{ textDecoration: "none", fontSize: 15, fontWeight: 600 }}
-						_hover={{ color: "brand.quinary", background: "transparent" }}>
-						<Link
-							style={{ textDecoration: "none", fontSize: 15, fontWeight: 600 }}
-							_hover={{ color: "brand.quinary" }}
-							href="/">
-							Home
-						</Link>
-					</Button>
-				) : (
-					<Button
-						border={"none"}
-						bg={"transparent"}
-						style={{ textDecoration: "none", fontSize: 15, fontWeight: 600 }}
-						_hover={{ color: "brand.quinary", background: "transparent" }}>
-						<Link
-							style={{ textDecoration: "none", fontSize: 15, fontWeight: 600 }}
-							_hover={{ color: "brand.quinary" }}
-							href="#About">
-							About
-						</Link>
-					</Button>
-				)}
 
-				<Button
-					border={"none"}
-					mx={"5"}
-					bg={"transparent"}
-					style={{ textDecoration: "none", fontSize: 15, fontWeight: 600 }}
-					_hover={{ color: "brand.quinary", background: "transparent" }}
-					onClick={handleRoute("invest")}>
-					Invest Now
-				</Button>
-				<Button
-					border={"none"}
-					bg={"transparent"}
-					style={{ textDecoration: "none", fontSize: 15, fontWeight: 600 }}
-					_hover={{ color: "brand.quinary", background: "transparent" }}
-					onClick={handleRoute("portfolio")}>
-					My Portfolio
-				</Button>
-				{/* <Button border={"none"} bg={"transparent"} style={{textDecoration:'none', fontSize:15, fontWeight:600}} _hover={{color:"brand.quinary", background:"transparent"}} onClick={openChainModal} >Switch Chain</Button> */}
-			</Flex>
+            <Show above="sm">			
+                <Flex w={"40%"} align={"center"} justify={"center"}>
+    				{router.pathname !== "/" ? (
+    					<Button
+    						border={"none"}
+    						bg={"transparent"}
+    						style={{ textDecoration: "none", fontSize: 15, fontWeight: 600 }}
+    						_hover={{ color: "brand.quinary", background: "transparent" }}>
+    						<Link
+    							style={{ textDecoration: "none", fontSize: 15, fontWeight: 600 }}
+    							_hover={{ color: "brand.quinary" }}
+    							href="/">
+    							Home
+    						</Link>
+    					</Button>
+    				) : (
+    					<Button
+    						border={"none"}
+    						bg={"transparent"}
+    						style={{ textDecoration: "none", fontSize: 15, fontWeight: 600 }}
+    						_hover={{ color: "brand.quinary", background: "transparent" }}>
+    						<Link
+    							style={{ textDecoration: "none", fontSize: 15, fontWeight: 600 }}
+    							_hover={{ color: "brand.quinary" }}
+    							href="#About">
+    							About
+    						</Link>
+    					</Button>
+    				)}
+
+    				<Button
+    					border={"none"}
+    					mx={"5"}
+    					bg={"transparent"}
+    					style={{ textDecoration: "none", fontSize: 15, fontWeight: 600 }}
+    					_hover={{ color: "brand.quinary", background: "transparent" }}
+    					onClick={handleRoute("invest")}>
+    					Invest Now
+    				</Button>
+    				<Button
+    					border={"none"}
+    					bg={"transparent"}
+    					style={{ textDecoration: "none", fontSize: 15, fontWeight: 600 }}
+    					_hover={{ color: "brand.quinary", background: "transparent" }}
+    					onClick={handleRoute("portfolio")}>
+    					My Portfolio
+    				</Button>
+
+    				{/* <Button border={"none"} bg={"transparent"} style={{textDecoration:'none', fontSize:15, fontWeight:600}} _hover={{color:"brand.quinary", background:"transparent"}} onClick={openChainModal} >Switch Chain</Button> */}
+    			</Flex>
+            </Show>
+
 
 			<Flex width={"30%"} mr={5} align={"center"} justify={"flex-end"}>
 				{/* {isConnected && <Profile/>} */}
 				{/* SIWE */}
+                <MintUSDC address={address}/>
 				<ConnectButton
 					accountStatus={{
 						smallScreen: "avatar",

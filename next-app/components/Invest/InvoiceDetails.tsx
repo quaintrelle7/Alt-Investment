@@ -17,6 +17,7 @@ import invoiceAbi from '@/blockend/build/invoice.json'
 import web3 from "@/blockend/web3"
 import {useAccount} from 'wagmi';
 import Investor from '@/models/Investor';
+import { usdcContract } from '@/blockend/interact';
 
 function InvoiceDetails(props:any) {
     
@@ -46,48 +47,47 @@ function InvoiceDetails(props:any) {
         //if(input.value)
         const invoiceContract = new web3.eth.Contract(invoiceAbi, invoiceAddress);
 
-         try {
-    // Send transaction to purchase invoice
-        const res = await invoiceContract.methods.purchaseInvoice(parseInt(input.value))
-          .send({
-            from: address,
-            value: web3.utils.toWei(
-              (parseInt(input.value) * Number(invoiceInfo?.amountPerUnit)) / 10**9,
-              'gwei'
-            )
-          });
+        //approve usdc allowance first after that only purchase invoice.
+        let amountPerUnit = Number(invoiceInfo?.amountPerUnit);
+        let units = parseInt(input?.value);
 
-        // Fetch investor data
-    const investorRes = await fetch(`/api/investors?investorAddress=${address}`);
+        try {
+            // const res = await usdcContract.methods.approve(invoiceAddress, units * amountPerUnit )).send({from: address});
+
+            
+            await invoiceContract.methods.purchaseInvoice(parseInt(input.value))
+                      .send({from: address});
+        
+            const investorRes = await fetch(`/api/investors?investorAddress=${address}`);
     
-        if (!investorRes.ok) {
-          throw new Error(`Error fetching investor: ${investorRes.status}`);
-        }
+            if (!investorRes.ok) {
+              throw new Error(`Error fetching investor: ${investorRes.status}`);
+            }
 
-        const investor = await investorRes.json();
-        let updatedInvestor;
+            const investor = await investorRes.json();
+            let updatedInvestor;
 
-        if (investor) {
-          // Update existing investor's amount
-          updatedInvestor = { ...investor };
-          updatedInvestor.investedAmount += (parseInt(input.value) * Number(invoiceInfo?.amountPerUnit)) / 10**9;
+         if (investor) {
+              // Update existing investor's amount
+              updatedInvestor = { ...investor };
+              updatedInvestor.investedAmount += (parseInt(input.value) * Number(invoiceInfo?.amountPerUnit)) / 10**6;
 
-          // Send updated data to server
-          const updateRes = await fetch("/api/investors", {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(updatedInvestor),
-          });
+              // Send updated data to server
+              const updateRes = await fetch("/api/investors", {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(updatedInvestor),
+              });
 
-          if (!updateRes.ok) {
-            throw new Error(`Error updating investor: ${updateRes.status}`);
-          }
+              if (!updateRes.ok) {
+                throw new Error(`Error updating investor: ${updateRes.status}`);
+              }
         } else {
-          // Create new investor data
+
           const newInvestor = {
-            investedAmount: (parseInt(input.value) * Number(invoiceInfo?.amountPerUnit)) / 10**9,
+            investedAmount: (parseInt(input.value) * Number(invoiceInfo?.amountPerUnit)) / 10**6,
             investorAddress: address,
           };
 
@@ -107,11 +107,10 @@ function InvoiceDetails(props:any) {
           setInvestor(newInvestorData); // Assuming setInvestor updates state or context
     }
 
-    window.alert("Purchased units successfully");
-
+        
     } catch (error) {
-    console.error('Error:', error);
-    window.alert(`An error occurred: ${error.message}`);
+        console.error('Error:', error);
+        window.alert(`An error occurred: ${error.message}`);
     }
 }
 
@@ -121,7 +120,7 @@ function InvoiceDetails(props:any) {
 				<Flex justify={"space-between"}>
 					<Stack width={"20%"}>
 						<Text className="invoice-detail-heading">Invoice Amount</Text>
-						<Text className="invoice-detail-text">{Number(invoiceInfo?.totalInvoiceAmount)/10**9}</Text>
+						<Text className="invoice-detail-text">{Number(invoiceInfo?.totalInvoiceAmount)/10**6}</Text>
 					</Stack>
 					<Stack width={"20%"}>
 						<Text className="invoice-detail-heading">XIRR</Text>
@@ -205,11 +204,11 @@ function InvoiceDetails(props:any) {
 
 				<Flex justifyContent={"space-between"}>
 					<Text className="invoice-card-heading">Unit Value</Text>
-					<Text>{Number(invoiceInfo?.amountPerUnit)/10**9}</Text>
+					<Text>{Number(invoiceInfo?.amountPerUnit)/10**6}</Text>
 				</Flex>
 				<Flex justifyContent={"space-between"}>
 					<Text className="invoice-card-heading">Invested Amount</Text>
-					<Text>{input.value * Number(invoiceInfo?.amountPerUnit)/10**9}</Text>
+					<Text>{input.value * Number(invoiceInfo?.amountPerUnit)/10**6}</Text>
 				</Flex>
 				<Flex justifyContent={"space-between"}>
 					<Text className="invoice-card-heading">Repayment Date</Text>
@@ -217,7 +216,7 @@ function InvoiceDetails(props:any) {
 				</Flex>
 				<Flex justifyContent={"space-between"}>
 					<Text className="invoice-card-heading">Repayment Value</Text>
-					<Text>{ input.value * Number(invoiceInfo?.repaymentPerUnit)/10**9 }</Text>
+					<Text>{ input.value * Number(invoiceInfo?.repaymentPerUnit)/10**6 }</Text>
 				</Flex>
 				<Center>
 					<Button

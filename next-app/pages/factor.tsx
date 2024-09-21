@@ -25,6 +25,8 @@ import React, { useEffect, useState } from "react"
 import { useAccount } from "wagmi"
 import invoiceAbi from '@/blockend/build/invoice.json'
 import web3 from "@/blockend/web3";
+import {error} from "console"
+import {BigNumber} from "ethers"
 
 type Props = {}
 
@@ -42,10 +44,9 @@ type Props = {}
 
 export default function ({}: Props) {
 	const [uploadedInvoices, setUploadedInvoices] = useState([])
-	const { address, isConnected } = useAccount()
+	const { address, chainId } = useAccount()
 	const [approveForm, setApproveForm] = useState(false)
 	const [isSubmitting, setIsSubmitting] = useState(false)
-    const [invoiceAddresses, setInvoiceAddresses] = useState([])
     const [invoice, setInvoice] = useState<UploadedInvoice>();
 
     // const getInvoices = async() => {
@@ -70,7 +71,7 @@ export default function ({}: Props) {
 
 	useEffect(() => {
 		const fetchInvoices = async () => {
-			const response = await fetch("api/uploaded_invoices?active=true&approved=false").then((res) =>
+			const response = await fetch(`api/uploaded_invoices?active=true&approved=false&chainId=${chainId}`).then((res) =>
 				res.json()
 			)
 			setUploadedInvoices(response)
@@ -81,25 +82,9 @@ export default function ({}: Props) {
 
 	const updateDecline = async (invoice: UploadedInvoice) => {}
 
-    var varToSaveToMongoDb = null;
 	const approveInvoice = async (invoice: UploadedInvoice) => {
         setApproveForm(true)
         setInvoice(invoice);
-        
-    
-
-
-		
-		// const res = await updatedInvoice.json()
-		// if (res.acknowledged) {
-		//Here comes the blockchain functionality
-		//Everything from this invoice should go to blockchain
-		//That you have to handle in backend or just pop-up a form
-		//Pop - Up a form to add amount, discountedAmount, due date, fees, agreement url
-		//ROI?.
-		// }
-
-
 	}
 
     
@@ -127,13 +112,6 @@ export default function ({}: Props) {
 
     }
 
-    // useEffect(() => {
-    //     if(varToSaveToMongoDb){
-    //         saveToMongoDB(invoice);
-    //     }
-    // },[varToSaveToMongoDb]);
-
-
 
 	const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target
@@ -152,8 +130,10 @@ export default function ({}: Props) {
 
         console.log(invoice.contractAddress);
         console.log(invoiceContract);
+        console.log(formData)
+        console.log(invoice);
 
-        const res = await invoiceContract.methods.approveInvoice(
+        await invoiceContract.methods.approveInvoice(
             formData.totalInvoiceAmount,
             formData.amountPerUnit,
             formData.repaymentPerUnit,
@@ -171,14 +151,11 @@ export default function ({}: Props) {
 
                 setIsSubmitting(false)
 		        setApproveForm(false)
-            });
-
-                    console.log("Invoice Approved: ", res);
-
-
-		
-
-		//notification success or error!
+            }).catch((error) => {
+                setIsSubmitting(false)
+                alert(error.message)
+            })
+           
 	}
 
 	return (
@@ -325,7 +302,7 @@ export default function ({}: Props) {
 											<Button type="submit">Submit</Button>
 										)}
 
-										<Button ml={4} onClick={() => setApproveForm(false)}>
+										<Button ml={4} onClick={() => {setApproveForm(false); setIsSubmitting(false)}}>
 											Close
 										</Button>
 									</ModalFooter>

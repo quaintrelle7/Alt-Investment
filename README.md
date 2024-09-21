@@ -42,5 +42,15 @@ Restrict Login URLs - Pop-Up the wallet
 Smart Contract Address on OP testnet: 0x698e9d8C3Dc156bBB4bE95e8300b3C30212845E0
 First seller smart contract Invoice: 0x8D5dfEA6B4659dbDA5f87ABa2Ee81607c9067430
 
-YOOO
+
+# Run this from blockend folder as it has dependencies
+
+slither C:/Next/Alt-Investment/Alt-Investment/next-app/blockend/contracts --solc-remaps @openzeppelin=C:/Next/Alt-Investment/Alt-Investment/next-app/node_modules/@openzeppelin/contracts
+
+
+
+
+Sepolia Eth -
+USDCoin : 0xf9fA7f55a571B847e29Af95eE2FA4145ED1EF62B
+InvoiceFactory: 0x34f9150E63dDf5dD0f5B0D45a50C7B14fa87142E
 

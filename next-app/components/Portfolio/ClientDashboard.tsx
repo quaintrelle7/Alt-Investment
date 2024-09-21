@@ -12,6 +12,7 @@ import React, {useEffect, useState} from "react"
 import invoiceAbi from '@/blockend/build/invoice.json'
 import web3 from "@/blockend/web3";
 import Link from "next/link";
+import {useAccount} from "wagmi";
 
 type Props = {
 }
@@ -20,6 +21,8 @@ const ClientDashboard = (sellerAddress:any) => {
     const [invoices, setInvoices] = useState([]);
 
     const address = sellerAddress['address'];
+
+    const {chainId} = useAccount();
     //get the agreements for the address == deployed.contract. seller
     //How will you find that - think
     //In activeInvoices check if anyseller has this or seller's -> invoice
@@ -30,7 +33,7 @@ const ClientDashboard = (sellerAddress:any) => {
 
     useEffect(() => {
 		const fetchInvoices = async () => {
-			const response = await fetch(`api/uploaded_invoices?sellerAddress=${address}`).then((res) =>
+			const response = await fetch(`api/uploaded_invoices?sellerAddress=${address}&chainId=${chainId}`).then((res) =>
 				res.json()
 			)
 			setInvoices(response)
@@ -46,24 +49,25 @@ const ClientDashboard = (sellerAddress:any) => {
 
             await invoiceContract.methods.signAgreement().send({from:address}).then((res)=>{
                 if(res){
-                    updateToMongoDB(invoice);
+                    updateToMongoDB(invoice, invoice.signedBySeller=true);
                 }
             }
             )
 
     }
 
-    const updateToMongoDB = async(invoice: UploadedInvoice) =>{
+    const updateToMongoDB = async(invoice: UploadedInvoice, fieldToUpdate) =>{
         let approvedInvoice = invoice
+        let invoiceId = invoice._id;
         
 		approvedInvoice.signedBySeller = true
 
-		const updatedInvoice = await fetch("api/uploaded_invoices", {
+		const updatedInvoice = await fetch(`api/uploaded_invoices/${invoiceId}`, {
 			method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify(approvedInvoice),
+			body: JSON.stringify(fieldToUpdate),
 		})
 
         const result = await updatedInvoice.json();
@@ -76,6 +80,15 @@ const ClientDashboard = (sellerAddress:any) => {
 
     }
 
+    const payInvoice = (invoice) => {
+        const invoiceContract = new web3.eth.Contract(invoiceAbi, invoice.contractAddress);
+
+        invoiceContract.methods.payInvoice().send({from:address}).then(()=>{
+            updateToMongoDB(invoice, invoice.isCompleted=true);
+            alert("Invoice paid successfully!");
+        })
+    }
+
 
 	return (
 		<>
@@ -83,7 +96,7 @@ const ClientDashboard = (sellerAddress:any) => {
 				<h1>Invoices</h1>
 			</Center>
 			<Center p={20} mx={20} my={10} bg={"brand.ternary"}>
-				<Table textAlign={"center"}>
+				<Table textAlign={"center"} fontSize={15}>
 					<Thead>
 						<Tr>
 							<Th color={"brand.quinary"}>Contract Address</Th>
@@ -100,10 +113,10 @@ const ClientDashboard = (sellerAddress:any) => {
 							<Td>{invoice.date_added.slice(0,10)}</Td>
 							<Td color="brand.senary"><Link  target="_blank" href={`https://ipfs.io/ipfs/${invoice?.fileURL}`} >Click to View</Link></Td>
 							<Td>
-								<Button variant={"signUp"} onClick={()=>{handleSignAgreement(invoice)}}>Sign Agreement</Button>
+								<Button isDisabled={invoice.signedBySeller} variant={"signUp"} onClick={()=>{handleSignAgreement(invoice)}}>Sign Agreement</Button>
 							</Td>
 							<Td>
-								<Button variant={"pay"}>Pay Invoice</Button>
+								<Button onClick={()=>payInvoice(invoice)} variant={"pay"}>Pay Invoice</Button>
 							</Td>
 						</Tr>
 

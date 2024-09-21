@@ -18,124 +18,21 @@ import {
 	Button,
 } from "@chakra-ui/react"
 import React, {useEffect, useState} from "react"
-
-type Invoice = {
-    seller: string;
-    buyer: string;
-    unitCost: string;
-    repaymentPerUnit: string;
-    xirr: string;
-    unitsInvested: number;
-    totalUnits: number;
-    tenure: number;
-}
-// const invoices : Invoice[] = [
-//     {
-//         seller: "Apple",
-//         buyer: "Imagine Store",
-//         unitCost: "$100",
-//         repaymentPerUnit: "$110",
-//         xirr:"14%",
-//         unitsInvested:700,
-//         totalUnits: 1000,
-//         tenure:60
-//     },
-//     {
-//         seller: "Reliance",
-//         buyer: "Sangeeta Mobiles",
-//         unitCost: "$100",
-//         repaymentPerUnit: "$109",
-//         xirr:"14.9%",
-//         unitsInvested:300,
-//         totalUnits: 1000,
-//         tenure:60
-//     },
-//     {
-//         seller: "Medicare",
-//         buyer: "Netmeds",
-//         unitCost: "$100",
-//         repaymentPerUnit: "$110",
-//         xirr:"14%",
-//         unitsInvested:900,
-//         totalUnits: 1000,
-//         tenure:30
-//     },
-//     {
-//         seller: "Jio",
-//         buyer: "Sangeetha Mobiles",
-//         unitCost: "$100",
-//         repaymentPerUnit: "$109",
-//         xirr:"14.9%",
-//         unitsInvested:300,
-//         totalUnits: 1000,
-//         tenure:60
-//     },
-//     {
-//         seller: "Apple",
-//         buyer: "Imagine Store",
-//         unitCost: "$100",
-//         repaymentPerUnit: "$110",
-//         xirr:"14%",
-//         unitsInvested:700,
-//         totalUnits: 1000,
-//         tenure:60
-//     },
-//     {
-//         seller: "Reliance",
-//         buyer: "Sangeeta Mobiles",
-//         unitCost: "$100",
-//         repaymentPerUnit: "$109",
-//         xirr:"14.9%",
-//         unitsInvested:300,
-//         totalUnits: 1000,
-//         tenure:60
-//     },
-//     {
-//         seller: "Medicare",
-//         buyer: "Netmeds",
-//         unitCost: "$100",
-//         repaymentPerUnit: "$110",
-//         xirr:"14%",
-//         unitsInvested:900,
-//         totalUnits: 1000,
-//         tenure:30
-//     },
-//     {
-//         seller: "Jio",
-//         buyer: "Sangeetha Mobiles",
-//         unitCost: "$100",
-//         repaymentPerUnit: "$109",
-//         xirr:"14.9%",
-//         unitsInvested:300,
-//         totalUnits: 1000,
-//         tenure:60
-//     },
-//     {
-//         seller: "MedPlus",
-//         buyer: "Patanjali",
-//         unitCost: "$100",
-//         repaymentPerUnit: "$110",
-//         xirr:"14%",
-//         unitsInvested:900,
-//         totalUnits: 1000,
-//         tenure:30
-//     }
-// ]
-
-
+import {useAccount} from 'wagmi'
 
 function invest() {
 
     const [signedInvoices, setSignedInvoices] = useState([]);
+	const { chainId } = useAccount()
 
 	useEffect(() => {
 		const fetchInvoices = async () => {
-			const response = await fetch("api/uploaded_invoices?signedBySeller=true").then((res) =>
+			const response = await fetch(`api/uploaded_invoices?signedBySeller=true&chainId=${chainId}&isCompleted=false`).then((res) =>
 				res.json()
 			)
 			setSignedInvoices(response)
+            console.log(response);
 		}
-
 		fetchInvoices()
 	}, [])
 
@@ -144,7 +41,7 @@ function invest() {
 		<>
 			<Stack>
 				<Header />
-				{/* <HeroSection/> */}
+                
 				<Center mt={10}>
 					<Heading>Invoice Discounting Marketplace</Heading>{" "}
 				</Center>
@@ -163,10 +60,6 @@ function invest() {
 				<Flex px="6">
 					<Divider></Divider>
 				</Flex>
-
-				{/* <Center fontSize={{base:"2xl", md:"50px"}} textAlign={"center"}>
-                <h1 color="brand.primary">Welcome to Innovative Investment Platform</h1>
-            </Center> */}
 
 				<Grid
 					mt={5}
