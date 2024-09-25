@@ -106,7 +106,7 @@ const handleRoute = (path: string) => (event: React.MouseEvent<HTMLButtonElement
             </Show>
 
 
-			<Flex width={"30%"} mr={5} align={"center"} justify={"flex-end"}>
+			<Flex width={"40%"} mr={5} align={"center"} justify={"flex-end"}>
 				{/* {isConnected && <Profile/>} */}
 				{/* SIWE */}
                 <MintUSDC address={address}/>

@@ -10,6 +10,7 @@ import {
 	useNumberInput,
 	HStack,
 	Center,
+    useToast,
 } from "@chakra-ui/react"
 import Link from 'next/link'
 import {useRouter} from 'next/router';
@@ -24,6 +25,9 @@ function InvoiceDetails(props:any) {
     const {invoiceInfo} = props;
 
     const {address} = useAccount();
+
+        const toast = useToast()
+
 
     const router = useRouter();
     const { invoiceAddress } = router.query;
@@ -52,11 +56,24 @@ function InvoiceDetails(props:any) {
         let units = parseInt(input?.value);
 
         try {
-            // const res = await usdcContract.methods.approve(invoiceAddress, units * amountPerUnit )).send({from: address});
+            usdcContract.methods.approve(invoiceAddress, units * amountPerUnit )
+            .send({from: address}).then((res)=>{
+                 invoiceContract.methods.purchaseInvoice(parseInt(input.value))
+                      .send({from: address}).then((res)=>{
+                          if(res){
+                             toast({
+                              title: 'Invoice Purchase',
+                              description: "Invoice units purchased successfully.",
+                              status: 'success',
+                              duration: 9000,
+                              isClosable: true,
+                        })
+                          }
+                      })
+            })
 
             
-            await invoiceContract.methods.purchaseInvoice(parseInt(input.value))
-                      .send({from: address});
+            
         
             const investorRes = await fetch(`/api/investors?investorAddress=${address}`);
     
@@ -81,9 +98,9 @@ function InvoiceDetails(props:any) {
                 body: JSON.stringify(updatedInvestor),
               });
 
-              if (!updateRes.ok) {
-                throw new Error(`Error updating investor: ${updateRes.status}`);
-              }
+            //   if (!updateRes.ok) {
+            //     throw new Error(`Error updating investor: ${updateRes.status}`);
+            //   }
         } else {
 
           const newInvestor = {
@@ -99,9 +116,9 @@ function InvoiceDetails(props:any) {
             body: JSON.stringify(newInvestor),
           });
 
-          if (!createRes.ok) {
-            throw new Error(`Error creating investor: ${createRes.status}`);
-          }
+        //   if (!createRes.ok) {
+        //     throw new Error(`Error creating investor: ${createRes.status}`);
+        //   }
 
           const newInvestorData = await createRes.json();
           setInvestor(newInvestorData); // Assuming setInvestor updates state or context

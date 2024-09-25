@@ -230,8 +230,8 @@ function Homepage({}: Props) {
                 
                 })
 
-        } catch{
-
+        } catch(error){
+            console.log(error);
         }
          
 	}

@@ -83,7 +83,7 @@ useEffect(() => {
 						<Tr>
 							<Th color={"brand.quinary"}>Contract</Th>
 							<Th color={"brand.quinary"}>Invested</Th>
-							<Th color={"brand.quinary"}>Repayment Date</Th>
+							<Th color={"brand.quinary"}>Repayment Amount</Th>
 							<Th color={"brand.quinary"}>Total Units</Th>
                             <Th color={"brand.quinary"}>Withdraw</Th>
 

@@ -479,7 +479,7 @@
 	},
 	{
 		"inputs": [],
-		"name": "claimInvoiceAMount",
+		"name": "claimInvoiceAmount",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -662,6 +662,11 @@
 						"internalType": "uint256",
 						"name": "tenure",
 						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "isCompleted",
+						"type": "bool"
 					}
 				],
 				"internalType": "struct Invoice.InvoiceInfo",
@@ -780,6 +785,19 @@
 			{
 				"internalType": "bool",
 				"name": "hasClaimed",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "invoiceClaimedBySeller",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
 				"type": "bool"
 			}
 		],

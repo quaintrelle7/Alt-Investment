@@ -6,7 +6,7 @@ import { theme } from "@/chakra/theme";
 import '@rainbow-me/rainbowkit/styles.css'
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { WagmiProvider, http } from "wagmi"
-import { sepolia, liskSepolia, mainnet, optimismSepolia, polygonMumbai, shardeumSphinx, polygonAmoy } from "wagmi/chains"
+import { sepolia, liskSepolia, mainnet, optimismSepolia, polygonMumbai, shardeumSphinx, polygonAmoy, polygonZkEvmTestnet, polygonZkEvmCardona } from "wagmi/chains"
 import { RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit"
 import { getDefaultConfig } from "@rainbow-me/rainbowkit"
 import {
@@ -42,7 +42,7 @@ const chains: readonly [Chain, ...Chain[]] = [
 const config = getDefaultConfig({
 	appName: "AltInvest",
 	projectId: "7564d8ad0218271d25696e1c5fc7b379", //https://cloud.walletconnect.com/
-	chains: [sepolia, optimismSepolia, liskSepolia, mainnet, polygonMumbai, optimism, polygonAmoy ],
+	chains: [sepolia, optimismSepolia, liskSepolia, mainnet, polygonMumbai, optimism, polygonAmoy, polygonZkEvmCardona],
 	transports: {
 		[mainnet.id]: http(),
 		[polygonMumbai.id]: http(),
@@ -50,6 +50,8 @@ const config = getDefaultConfig({
         [optimismSepolia.id]: http(),
         [liskSepolia.id]: http(),
         [polygonAmoy.id]: http(),
+        [polygonZkEvmTestnet.id]: http(),
+        [polygonZkEvmCardona.id]: http(),
 	},
     
 })

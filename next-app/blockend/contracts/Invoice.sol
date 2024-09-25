@@ -7,7 +7,6 @@ import "C:/Next/Alt-Investment/Alt-Investment/next-app/node_modules/@openzeppeli
 import "C:/Next/Alt-Investment/Alt-Investment/next-app/node_modules/@openzeppelin/contracts/utils/Pausable.sol";
 import "C:/Next/Alt-Investment/Alt-Investment/next-app/node_modules/@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
-
 contract InvoiceFactory is AccessControl {
 
     bytes32 public constant FACTOR_ROLE = keccak256("FACTOR_ROLE");
@@ -15,15 +14,16 @@ contract InvoiceFactory is AccessControl {
     mapping(address => bool) public activeInvoices;
     address public immutable admin;
 
-    // Fixed USDC token address (Ethereum mainnet)
-    address public constant USDC_ADDRESS = 0x2295B8D2b756163cFe8C6C9151be898E6109Eaa8;
+    // Fixed USDC token address (=
+    address public USDC_ADDRESS;
 
     event InvoiceCreated(address invoiceAddress, string ipfsHash);
     event FactorAdded(address factor);
     event FactorRemoved(address factor);
 
-    constructor() {
+    constructor(address usdc_address) {
         admin = msg.sender;
+        USDC_ADDRESS = usdc_address;
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(FACTOR_ROLE, msg.sender);
     }
@@ -63,7 +63,7 @@ contract InvoiceFactory is AccessControl {
         Invoice(invoiceAddress).setFactor(newFactor);
     }
 
-    mapping(address => address[]) public investorInvoices; // Mapping of investor address to an array of invoice addresses.
+    mapping(address => address[]) private investorInvoices; // Mapping of investor address to an array of invoice addresses.
 
     function addInvestorInvoice(address investor, address invoiceAddress) external {
         require(activeInvoices[invoiceAddress], "Invoice is not active");
@@ -102,6 +102,10 @@ contract Invoice is ReentrancyGuard, AccessControl, Pausable {
     uint256 public expectedRepaymentDate;
     uint256 public expectedPayoutDate;
     bool public isCompleted;
+    string public sellerName;
+    string public buyerName;
+    uint256 xirr;
+    bool public invoiceClaimedBySeller;
 
     struct Investor {
         uint256 investedAmount;
@@ -113,12 +117,32 @@ contract Invoice is ReentrancyGuard, AccessControl, Pausable {
     mapping(address => Investor) public investors;
     address[] public investorList;
 
+     struct InvoiceInfo{
+        string  invoiceHash;
+        string  agreementHash;
+
+        string  sellerName;
+        string  buyerName;
+        uint256  xirr;
+        
+        uint256  totalInvoiceAmount;
+        uint256  fees;
+        uint256  amountPerUnit;
+        uint256  repaymentPerUnit;
+        uint256  totalUnits;
+        uint256  purchasedUnits;
+        uint256  tenure;
+        bool isCompleted;
+    }
+
     event InvoiceApproved(address factor, uint256 totalAmount, uint256 totalUnits);
     event InvoicePurchased(address investor, uint256 units, uint256 amount);
     event InvoicePaid(address payer, uint256 amount);
     event FundsTransferredToSeller(address seller, uint256 amount);
     event InvestorRepaid(address investor, uint256 amount);
     event FeesTransferredToFactor(address factor, uint256 amount);
+    event InvoiceSigned(address seller);
+
 
     constructor(string memory _ipfsHash, address _seller, address _factoryAddress) {
         require(_seller != address(0), "Seller address cannot be zero");
@@ -153,7 +177,10 @@ contract Invoice is ReentrancyGuard, AccessControl, Pausable {
         uint256 _totalUnits,
         uint256 _tenure,
         string memory _agreementHash,
-        uint256 _fees
+        uint256 _fees,
+        string memory _sellerName,
+        string memory _buyerName,
+        uint256 _xirr
     ) external onlyRole(FACTOR_ROLE) whenNotPaused {
         require(_fees < _totalInvoiceAmount, "Fees cannot be greater than total invoice amount");
         require(_totalInvoiceAmount == _amountPerUnit*(_totalUnits), "Invalid total amount");
@@ -168,6 +195,9 @@ contract Invoice is ReentrancyGuard, AccessControl, Pausable {
         tenure = _tenure;
         expectedRepaymentDate = block.timestamp + (tenure * (86400));       
         // expectedPayoutDate = block.timestamp.add(1 days); // Assuming 1 day for payout after full investment
+        sellerName = _sellerName;
+        buyerName = _buyerName;
+        xirr = _xirr;
 
         emit InvoiceApproved(msg.sender, totalInvoiceAmount, totalUnits);
     }
@@ -178,7 +208,9 @@ contract Invoice is ReentrancyGuard, AccessControl, Pausable {
         uint256 purchaseAmount = _units * amountPerUnit;
         
         require(usdcToken.balanceOf(msg.sender) >= purchaseAmount, "Insufficient USDC balance");
-        require(usdcToken.allowance(msg.sender, address(this)) >= purchaseAmount, "Insufficient allowance");
+        // require(usdcToken.allowance(msg.sender, address(this)) >= purchaseAmount, "Insufficient allowance");
+        require(!invoiceClaimedBySeller, "Invoice is already claimed");
+
 
         // Update state before external calls
         purchasedUnits += _units;
@@ -202,12 +234,19 @@ contract Invoice is ReentrancyGuard, AccessControl, Pausable {
         }
     }
 
+     function signAgreement() external onlyRole(SELLER_ROLE) {
+        //Think on how to get it signed by Payer and Seller
+        //Request should go to seller's and payer's dashboard to sign - but apart from that
+        //It should be signed just by the seller - perhaps. Confirm on this with AB
+        emit InvoiceSigned(msg.sender);
+    }
+
 
     function payInvoice() external nonReentrant whenNotPaused {
         require(!isCompleted, "Invoice already completed");
-        require(purchasedUnits == totalUnits, "Invoice not fully funded");
+      //  require(purchasedUnits == totalUnits, "Invoice not fully funded");
 
-        uint256 totalPayable = (totalUnits * repaymentPerUnit) + fees;
+        uint256 totalPayable = (purchasedUnits * repaymentPerUnit) + fees;
         
         // Update state before external calls
         isCompleted = true;
@@ -251,6 +290,16 @@ contract Invoice is ReentrancyGuard, AccessControl, Pausable {
         emit FeesTransferredToFactor(msg.sender, feeAmount);
     }
 
+    function claimInvoiceAmount() external onlyRole(SELLER_ROLE) nonReentrant whenNotPaused {
+        require(!isCompleted, "Invoice already completed");
+        require(purchasedUnits > 0, "No amount to claim");
+
+        invoiceClaimedBySeller = true;
+      
+        usdcToken.safeTransfer(msg.sender, purchasedUnits*amountPerUnit);
+        emit FundsTransferredToSeller(seller, purchasedUnits*amountPerUnit);
+    }
+
     function _transferToSeller() internal {
         require(seller != address(0), "Seller address not set");
         require(usdcToken.transfer(seller, totalInvoiceAmount), "Transfer to seller failed");
@@ -272,4 +321,25 @@ contract Invoice is ReentrancyGuard, AccessControl, Pausable {
     function getAllInvestors() external view returns (address[] memory) {
         return investorList;
     }
+
+    function getInvoiceInfo() public view returns(InvoiceInfo memory){
+        InvoiceInfo memory invoiceInfo;
+        invoiceInfo.agreementHash = agreementHash;
+        invoiceInfo.amountPerUnit = amountPerUnit;
+        invoiceInfo.buyerName = buyerName;
+        invoiceInfo.fees = fees;
+        invoiceInfo.invoiceHash = invoiceHash;
+        invoiceInfo.sellerName = sellerName;
+        invoiceInfo.xirr = xirr;
+        invoiceInfo.purchasedUnits = purchasedUnits;
+        invoiceInfo.repaymentPerUnit = repaymentPerUnit;
+        invoiceInfo.tenure = tenure;
+        invoiceInfo.totalInvoiceAmount = totalInvoiceAmount;
+        invoiceInfo.totalUnits = totalUnits;
+        invoiceInfo.isCompleted = isCompleted;
+
+        return invoiceInfo;
+
+    }
+
 }

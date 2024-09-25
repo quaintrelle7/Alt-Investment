@@ -77,6 +77,7 @@ export const Button: ComponentStyleConfig = {
 			borderColor: "gray.300",
 			_hover: {
 				bg: "gray.50",
+				color: "black",
 			},
 		},
 

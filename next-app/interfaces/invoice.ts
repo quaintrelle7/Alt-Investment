@@ -11,4 +11,5 @@ interface UploadedInvoice {
 	archived: boolean
 	signedBySeller: boolean
 	chainId: string
+	isCompleted: boolean
 }

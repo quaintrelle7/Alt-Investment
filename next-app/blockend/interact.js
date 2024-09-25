@@ -40,7 +40,7 @@ import web3 from "./web3";
 // The MetaMask plugin also allows signing transactions to
 // send ether and pay to change state within the blockchain.
 // For this, you need the account signer...
-const usdcAddress = '0xf9fA7f55a571B847e29Af95eE2FA4145ED1EF62B';
+const usdcAddress = '0x0a4f24Bf4F510a15F3276B805CeeAdCD842D3A33';
 export const usdcContract = new web3.eth.Contract(usdcAbi, usdcAddress);
 
 
@@ -49,7 +49,7 @@ export const usdcContract = new web3.eth.Contract(usdcAbi, usdcAddress);
 // const signer = provider.getSigner();
 // Create an instance of the factory contract
 
-const factoryAddress = '0x357F8Ffc31631664641136B33DDe937cAc319faE';
+const factoryAddress = '0x86F67fda98f438f6e50c5D4fecF4BA6b93000c20';
 export const factoryContract = new web3.eth.Contract(factoryAbi, factoryAddress);
 
 
