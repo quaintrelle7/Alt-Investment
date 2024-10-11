@@ -23,18 +23,19 @@ import {useAccount} from 'wagmi'
 function invest() {
 
     const [signedInvoices, setSignedInvoices] = useState([]);
-	const { chainId } = useAccount()
+	const { isConnected, chainId } = useAccount();
 
 	useEffect(() => {
 		const fetchInvoices = async () => {
 			const response = await fetch(`api/uploaded_invoices?signedBySeller=true&chainId=${chainId}&isCompleted=false`).then((res) =>
 				res.json()
+                
 			)
 			setSignedInvoices(response)
             console.log(response);
 		}
 		fetchInvoices()
-	}, [])
+	}, [isConnected,chainId])
 
 
 	return (

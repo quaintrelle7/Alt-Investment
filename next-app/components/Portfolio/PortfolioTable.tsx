@@ -40,7 +40,7 @@ function PortfolioTable() {
         })
   }
 
-  const {address} = useAccount();
+  const {address, isConnected} = useAccount();
 
   const [invoices, setInvoices] = useState([]);
 
@@ -48,6 +48,8 @@ function PortfolioTable() {
 
 useEffect(() => {
     const fetchInvoices = async () => {
+
+        
         const result = await factoryContract.methods.getInvestorInvoices(address).call();
        
         let uniqueAddresses = Array.from(new Set(result));
@@ -67,8 +69,10 @@ useEffect(() => {
         const invoices = await Promise.all(invoicePromises);
         setInvoices(invoices);
     }
-    fetchInvoices()
-}, [address])
+    if(isConnected)
+        fetchInvoices()
+
+}, [isConnected, address])
 
 
   return (

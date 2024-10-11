@@ -44,7 +44,7 @@ const ClientDashboard = (sellerAddress:any) => {
 		}
 
 		fetchInvoices()
-	}, [])
+	}, [chainId, address])
 
 
     const handleSignAgreement =async(invoice) => {

@@ -44,7 +44,7 @@ type Props = {}
 
 export default function ({}: Props) {
 	const [uploadedInvoices, setUploadedInvoices] = useState([])
-	const { address, chainId } = useAccount()
+	const { address, chainId, isConnected } = useAccount()
 	const [approveForm, setApproveForm] = useState(false)
 	const [isSubmitting, setIsSubmitting] = useState(false)
     const [invoice, setInvoice] = useState<UploadedInvoice>();
@@ -70,6 +70,7 @@ export default function ({}: Props) {
 	})
 
 	useEffect(() => {
+
 		const fetchInvoices = async () => {
 			const response = await fetch(`api/uploaded_invoices?active=true&approved=false&chainId=${chainId}`).then((res) =>
 				res.json()
@@ -78,7 +79,7 @@ export default function ({}: Props) {
 		}
 
 		fetchInvoices()
-	}, [])
+	}, [isConnected, chainId])
 
 	const updateDecline = async (invoice: UploadedInvoice) => {}
 
@@ -177,7 +178,7 @@ export default function ({}: Props) {
 										marginBottom="20px"
 										marginTop="2px"
 										name="totalInvoiceAmount"
-										placeholder="Amount in Eth"
+										placeholder="Amount in USDC"
 										value={formData.totalInvoiceAmount}
 										onChange={handleInputChange}
 									/>

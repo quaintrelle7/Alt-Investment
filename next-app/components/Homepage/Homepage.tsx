@@ -33,7 +33,7 @@ import {factoryContract} from "@/blockend/interact"
 type Props = {}
 
 function Homepage({}: Props) {
-	const { address, chainId} = useAccount()
+	const { address, chainId, chain} = useAccount()
 	// const { openConnectModal } = useConnectModal()
 	const [uploadClicked, setUploadClicked] = useState(false)
 	const inputFile = useRef(null)
@@ -151,6 +151,9 @@ function Homepage({}: Props) {
 	}
 
     const saveToMongoDB = async() => {
+        console.log("chainId: ", chainId);
+        console.log("chain: ", chain);
+
         	const newInvoice = new UploadedInvoice({
 					email: email,
                     contractAddress: deployedContractAddress,
