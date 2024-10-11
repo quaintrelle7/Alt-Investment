@@ -25,7 +25,7 @@ import About from "./About"
 import Lottie from "lottie-react"
 import animationDataHome from "../../public/assets/js/homepage.json"
 import { useAccount, useSignMessage } from "wagmi"
-import { useConnectModal } from "@rainbow-me/rainbowkit"
+// import { useConnectModal } from "@rainbow-me/rainbowkit"
 import axios from "axios"
 import UploadedInvoice from "@/models/UploadedInvoice"
 import {factoryContract} from "@/blockend/interact"
@@ -34,7 +34,7 @@ type Props = {}
 
 function Homepage({}: Props) {
 	const { address, chainId} = useAccount()
-	const { openConnectModal } = useConnectModal()
+	// const { openConnectModal } = useConnectModal()
 	const [uploadClicked, setUploadClicked] = useState(false)
 	const inputFile = useRef(null)
 	const [file, setFile] = useState<File | undefined>()
@@ -73,11 +73,11 @@ function Homepage({}: Props) {
 
 
 	const handleUploadInvoice = () => {
-		if (openConnectModal) {
-			openConnectModal()
-		} else {
+		// if (openConnectModal) {
+		// 	openConnectModal()
+		// } else {
 			setUploadClicked(true)
-		}
+		// }
 	}
 
 	const queryPinataFiles = async () => {
@@ -321,10 +321,10 @@ function Homepage({}: Props) {
 			<Flex padding={100}width={{base:"1000%", sm: "100%"}} mt={{ base: "0", md: "10" }} height={"80vh"}>
 				<Stack textAlign={"left"} width={{base:"40%", sm: "40%"}}>
 					<Box fontSize={{ base: "6xl", sm: "60px" }}>
-						<h1>Grow Your Wealth With Crypto</h1>
+						<h1>Invest with Invoice Discounting</h1>
 					</Box>
 					<Text mt={10} fontSize={{base:40, sm:20}}>
-						We help you in generating fixed-yields on your crypto
+						We help you in generating fixed-yields on your
 						investment. Diversify your portfolio now with Invoice Discounting.
 					</Text>
 

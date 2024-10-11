@@ -59,3 +59,9 @@ export const factoryContract = new web3.eth.Contract(factoryAbi, factoryAddress)
 
 //usdcAddress = 0x698e9d8C3Dc156bBB4bE95e8300b3C30212845E0
 //InvoiceFactoryAddress = 0xd02Ca68F3DDF77AaBc5871Cb7c7F9f26a41cA761
+
+//Optimism
+// const usdcAddress = '0x0a4f24Bf4F510a15F3276B805CeeAdCD842D3A33';
+// const factoryAddress = '0x86F67fda98f438f6e50c5D4fecF4BA6b93000c20';
+
+

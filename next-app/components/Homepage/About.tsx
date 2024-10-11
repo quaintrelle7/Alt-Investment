@@ -27,7 +27,7 @@ function About({}: Props) {
 					textAlign={"center"}
                     fontSize={{ base: "6xl", sm: "60px" }}
                     >
-					<h1 style={{fontSize: "50px"}} color="brand.primary">Start Investment Now</h1>
+					<h1 style={{fontSize: "50px"}} color="brand.primary">Why AltInvest?</h1>
 				</Center>
 			</Flex>
 
