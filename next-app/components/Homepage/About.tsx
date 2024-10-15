@@ -37,15 +37,15 @@ function About({}: Props) {
     				<Center
     					bg={"brand.ternary"}
     					color="brand.secondary"
-    					height={{ md: "50vh" }}>
-    					<Stack textAlign={"center"} p={10}>
+    					height={{ md: "60vh" }}>
+    					<Stack textAlign={"center"} p={10} pb={20}>
     						<Center>
     							{/* <a href="https://www.flaticon.com/free-animated-icons/connect" title="connect animated icons"></a> */}
     							<Lottie
-    								style={{ width: "16rem", height: "16rem" }}
+    								style={{ width: "18rem", height: "18rem" }}
     								animationData={animationDataGlobe}></Lottie>
     						</Center>
-    						<Heading fontSize={20}>Invest Globally</Heading>
+    						<Heading mt={-7} fontSize={20}>Invest Globally</Heading>
     						<Divider />
 
     						<p>
@@ -59,8 +59,8 @@ function About({}: Props) {
     					mx={10}
     					bg={"brand.ternary"}
     					color="brand.secondary"
-    					height={{ md: "50vh" }}>
-    					<Stack textAlign={"center"} p={10}>
+    					height={{ md: "60vh" }}>
+    					<Stack textAlign={"center"} p={10} pb={20}>
     						<Center>
     							<Lottie
     								style={{ width: "15rem", height: "15rem" }}
@@ -81,8 +81,8 @@ function About({}: Props) {
     				<Center
     					bg={"brand.ternary"}
     					color="brand.secondary"
-    					height={{ md: "50vh" }}>
-    					<Stack textAlign={"center"} p={10}>
+    					height={{ md: "60vh" }}>
+    					<Stack textAlign={"center"} p={10} pb={20}>
     						<Center>
     							<Lottie
     								style={{ width: "15rem", height: "15rem" }}
