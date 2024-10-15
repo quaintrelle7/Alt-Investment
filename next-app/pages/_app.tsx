@@ -110,11 +110,12 @@ export default function App({ Component, pageProps }: AppProps) {
 							accentColorForeground: "black",
 							borderRadius: "large",
 						})}> */}
-						<Layout>
-							<ChakraProvider theme={theme}>
+		            <ChakraProvider theme={theme}>
+                        <Layout>
 								<Component {...pageProps} />
-							</ChakraProvider>
 						</Layout>
+                    </ChakraProvider>
+
 					{/* </RainbowKitProvider> */}
 					{/* </RainbowKitSiweNextAuthProvider> */}
 			{/* </SessionProvider> */}

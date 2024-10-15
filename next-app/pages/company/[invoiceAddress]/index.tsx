@@ -1,6 +1,4 @@
 import IDFAQ from "@/components/FAQ/IDFAQ"
-import Footer from "@/components/Header/Footer"
-import Header from "@/components/Header/Header"
 import InvoiceDetails from "@/components/Invest/InvoiceDetails"
 import ProfileCard from "@/components/Invest/ProfileCard"
 import {
@@ -45,7 +43,6 @@ function company() {
 
 	return (
 		<>
-			<Header />
 
 			<InvoiceDetails invoiceInfo={invoiceDetails} />
 
@@ -89,7 +86,6 @@ function company() {
 				</Flex>
 			</Stack>
 
-			<Footer />
 		</>
 	)
 }

@@ -7,7 +7,7 @@ export default function LoginButton() {
   const disableLogin = !ready || (ready && authenticated);
 
   return (
-    <Button disabled={disableLogin} onClick={login}>
+    <Button variant="solid_complete" disabled={disableLogin} onClick={login}>
       Log in
     </Button>
   );

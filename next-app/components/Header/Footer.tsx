@@ -9,7 +9,7 @@ type Props = {}
 function Footer({}: Props) {
   return (
     <Center >
-     <Flex width={"30%"}justifyContent={"space-between"} my={10}    >
+     <Flex width={"15%"}justifyContent={"space-between"} my={10}    >
 
                 <Link href='https://www.linkedin.com/in/sharayushendre/' target='_blank'>
 

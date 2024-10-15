@@ -5,6 +5,8 @@ import {
 	AccordionItem,
 	AccordionPanel,
 	Box,
+    Center,
+    Flex,
 } from "@chakra-ui/react"
 import React from "react"
 
@@ -30,7 +32,16 @@ const faq = [
 const IDFAQ = (props: Props) => {
 	return (
 		<>
-			<Accordion allowToggle>
+            <Flex mb={10} width={{base:"500%", sm: "100%"}} justify={"center"}>
+				<Center
+					width={{ base: "100%", md: "60%", lg: "70%", xl: "50%" }}
+					textAlign={"center"}
+                    fontSize={{ base: "6xl", sm: "60px" }}
+                    >
+					<h1 style={{fontSize: "30px"}} color="brand.primary">FAQs</h1>
+				</Center>
+			</Flex>
+			<Accordion id="faq" allowToggle>
 				{faq.map((faq) => (
 					<AccordionItem>
 						<h2>

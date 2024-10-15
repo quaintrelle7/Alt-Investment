@@ -9,6 +9,7 @@ import {
 	Button,
 	Container,
 	Divider,
+    Tooltip,
 } from "@chakra-ui/react"
 import React, {useEffect, useState} from "react"
 import { LiaIndustrySolid } from "react-icons/lia"
@@ -69,15 +70,33 @@ const InvoiceInfo = (props:Props) => {
 								/>
 								<Stack>
 									<Text className="invoice-card-heading">Seller</Text>
-									<Text>{invoiceDetails?.sellerName || "Loading ..."}</Text>
-								</Stack>
+                                    <Tooltip label={invoiceDetails?.sellerName} hasArrow>
+                                        <Text
+                                          maxWidth="80px" 
+                                          whiteSpace="nowrap"
+                                          overflow="hidden"
+                                          textOverflow="ellipsis"
+                                        >
+                                          {invoiceDetails?.sellerName}
+                                        </Text>
+                                    </Tooltip>								
+                                </Stack>
 							</Flex>
 
 							<Flex>
 								<Stack mr={"0"}>
 									<Text className="invoice-card-heading">Buyer</Text>
-									<Text>{invoiceDetails?.buyerName}</Text>
-								</Stack>
+                                     <Tooltip label={invoiceDetails?.buyerName} hasArrow>
+                                        <Text
+                                          maxWidth="80px" 
+                                          whiteSpace="nowrap"
+                                          overflow="hidden"
+                                          textOverflow="ellipsis"
+                                        >
+                                          {invoiceDetails?.buyerName}
+                                        </Text>
+                                      </Tooltip>								
+                                </Stack>
 								<LiaIndustrySolid size={60} />
 							</Flex>
 						</Flex>
@@ -86,17 +105,17 @@ const InvoiceInfo = (props:Props) => {
 						<Flex textAlign={"center"} justifyContent={"space-between"}>
 							<Stack>
 								<Text className="invoice-card-heading">Unit Cost</Text>
-								<Text>{Number(invoiceDetails?.amountPerUnit)/10**6}</Text>
+								<Text>{Number(invoiceDetails?.amountPerUnit)/10**6} USDC</Text>
 							</Stack>
 
 							<Stack>
 								<Text className="invoice-card-heading">Repayment/Unit</Text>
-								<Text>{Number(invoiceDetails?.repaymentPerUnit)/10**6}</Text>
+								<Text>{Number(invoiceDetails?.repaymentPerUnit)/10**6} USDC</Text>
 							</Stack>
 
 							<Stack>
 								<Text className="invoice-card-heading">XIRR</Text>
-								<Text>{Number(invoiceDetails?.xirr)/100}</Text>
+								<Text>{Number(invoiceDetails?.xirr)/100} %</Text>
 							</Stack>
 						</Flex>
 

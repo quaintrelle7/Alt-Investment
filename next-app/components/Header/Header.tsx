@@ -116,7 +116,7 @@ const handleRoute = (path: string) => (event: React.MouseEvent<HTMLButtonElement
 
     				<Button
     					border={"none"}
-    					mx={"5"}
+    					// mx={"5"}
     					bg={"transparent"}
     					style={{ textDecoration: "none", fontSize: 15, fontWeight: 600 }}
     					_hover={{ color: "brand.quinary", background: "transparent" }}
@@ -130,6 +130,18 @@ const handleRoute = (path: string) => (event: React.MouseEvent<HTMLButtonElement
     					_hover={{ color: "brand.quinary", background: "transparent" }}
     					onClick={handleRoute("portfolio")}>
     					My Portfolio
+    				</Button>
+                    <Button
+    						border={"none"}
+    						bg={"transparent"}
+    						style={{ textDecoration: "none", fontSize: 15, fontWeight: 600 }}
+    						_hover={{ color: "brand.quinary", background: "transparent" }}>
+    						<Link
+    							style={{ textDecoration: "none", fontSize: 15, fontWeight: 600 }}
+    							_hover={{ color: "brand.quinary" }}
+    							href="#About">
+    							FAQs
+    						</Link>
     				</Button>
                      {/* <p>
               Connection status: {isConnecting && <span>🟡 connecting...</span>}
@@ -145,10 +157,10 @@ const handleRoute = (path: string) => (event: React.MouseEvent<HTMLButtonElement
 			<Flex width={"40%"} mr={5} align={"center"} justify={"flex-end"}>
 				{/* {isConnected && <Profile/>} */}
 				{/* SIWE */}
-                <Text mr={5}>{isConnected && address.slice(0, 4) + "..." + address.slice(-4)}</Text>
+                {isConnected && address ? <Text mr={5}>{address.slice(0, 4) + "..." + address.slice(-4)}</Text> : ""}
                 {/* <FundWallet/> */}
-                <Button onClick={handleFund}>Buy USDC</Button>
-                <MintUSDC address={address}/>
+                <Button variant={"solid_complete"} disabled={!isConnected} mr={5} onClick={handleFund}>Buy USDC</Button>
+                {/* <MintUSDC address={address}/> */}
 				{/* {isConnected && address &&<ConnectButton
 					accountStatus={{
 						smallScreen: "avatar",

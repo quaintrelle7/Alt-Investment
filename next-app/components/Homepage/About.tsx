@@ -20,14 +20,14 @@ function About({}: Props) {
     //   }
     // };
   return (
-		<Stack id="About" mx={20} pt={20} my={10}>
+		<Stack id="About" mx={20} pt={10} my={5}>
 			<Flex width={{base:"500%", sm: "100%"}} justify={"center"}>
 				<Center
 					width={{ base: "100%", md: "60%", lg: "70%", xl: "50%" }}
 					textAlign={"center"}
                     fontSize={{ base: "6xl", sm: "60px" }}
                     >
-					<h1 style={{fontSize: "50px"}} color="brand.primary">Why AltInvest?</h1>
+					<h1 style={{fontSize: "30px"}} color="brand.primary">Why AltInvest?</h1>
 				</Center>
 			</Flex>
 

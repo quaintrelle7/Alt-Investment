@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useAccount } from 'wagmi';
 import {usePrivy} from '@privy-io/react-auth';
+import Header from '@/components/Header/Header'
 
 const Layout = ({ children }) => {
   const router = useRouter();
@@ -25,7 +26,10 @@ const Layout = ({ children }) => {
     }
   }, [isConnected, router, modalOpened]);
 
-  return <>{children}</>;
+  return(  <>
+      <Header />
+      {children}
+  </>);
 };
 
 export default Layout;

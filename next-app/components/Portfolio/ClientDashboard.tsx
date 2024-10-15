@@ -14,6 +14,9 @@ import invoiceAbi from '@/blockend/build/invoice.json'
 import web3 from "@/blockend/web3";
 import Link from "next/link";
 import {useAccount} from "wagmi";
+import { useClipboard } from '@chakra-ui/react'
+import { FaRegCopy } from "react-icons/fa";
+
 
 type Props = {
 }
@@ -25,7 +28,9 @@ const ClientDashboard = (sellerAddress:any) => {
 
     const {chainId} = useAccount();
     
-    const toast = useToast()
+    const toast = useToast();
+    const { onCopy, value, setValue, hasCopied } = useClipboard('')
+
 
     //get the agreements for the address == deployed.contract. seller
     //How will you find that - think
@@ -115,6 +120,17 @@ const ClientDashboard = (sellerAddress:any) => {
             })
     }
 
+const copyToClipboard = (contractAddress) => {
+    setValue(contractAddress);
+    onCopy();
+    toast({
+        title: 'Copied',
+        description: "Contract address copied to clipboard.",
+        status: 'success',
+        duration: 9000,
+        isClosable: true,
+    })
+}
 
 	return (
 		<>
@@ -136,7 +152,7 @@ const ClientDashboard = (sellerAddress:any) => {
 					<Tbody color={"brand.secondary"}>
                     {invoices.map((invoice:UploadedInvoice)=>(
                         <Tr>
-							<Td>{invoice.contractAddress}</Td>
+							<Td>{ invoice.contractAddress.slice(0, 4) + "..." + invoice.contractAddress.slice(-6)} <button style={{marginLeft:"5px"}} onClick={()=>copyToClipboard(invoice.contractAddress)}><FaRegCopy /></button></Td>
 							<Td>{invoice.date_added.slice(0,10)}</Td>
 							<Td color="brand.senary"><Link  target="_blank" href={`https://ipfs.io/ipfs/${invoice?.fileURL}`} >Click to View</Link></Td>
 							<Td>
@@ -146,7 +162,7 @@ const ClientDashboard = (sellerAddress:any) => {
 								<Button isDisabled={invoice.isCompleted} onClick={()=>claimPayment(invoice)} variant={"oauth"}>Withdraw Amount</Button>
 							</Td>
 							<Td>
-								<Button onClick={()=>payInvoice(invoice)} variant={"pay"}>Pay Invoice</Button>
+								<Button onClick={()=>payInvoice(invoice)}>Pay Invoice</Button>
 							</Td>
 						</Tr>
 

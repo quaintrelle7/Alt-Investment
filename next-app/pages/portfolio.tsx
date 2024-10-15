@@ -24,14 +24,11 @@ function portfolio() {
     const {address} = useAccount();
 	return (
 		<>
-			<Header />
-			{/* <UserDashboard /> */}
+		{/* <UserDashboard /> */}
 
-			<Center mt={10}>
-				<Heading>My Portfolio</Heading>
-			</Center>
+			
 
-			<Stack mt={20} style={{ marginRight: "2.5rem" }}>
+			<Stack mt={10} style={{ marginRight: "2.5rem" }}>
 				<Tabs variant="soft-rounded" ml={10}>
 					<TabList>
 						<Tab

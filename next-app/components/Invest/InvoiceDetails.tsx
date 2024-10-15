@@ -137,7 +137,7 @@ function InvoiceDetails(props:any) {
 				<Flex justify={"space-between"}>
 					<Stack width={"20%"}>
 						<Text className="invoice-detail-heading">Invoice Amount</Text>
-						<Text className="invoice-detail-text">{Number(invoiceInfo?.totalInvoiceAmount)/10**6}</Text>
+						<Text className="invoice-detail-text">{Number(invoiceInfo?.totalInvoiceAmount)/10**6} USDC</Text>
 					</Stack>
 					<Stack width={"20%"}>
 						<Text className="invoice-detail-heading">XIRR</Text>
@@ -168,8 +168,8 @@ function InvoiceDetails(props:any) {
 						<Text className="invoice-detail-text">Low</Text>
 					</Stack>
 					<Stack width={"20%"}>
-						<Text className="invoice-detail-heading">Invoice Contract</Text>
-						<Text fontSize="10" className="invoice-detail-text">{invoiceAddress}</Text>
+						<Text className="invoice-detail-heading">Units Remaining</Text>
+						<Text className="invoice-detail-text">{Number(invoiceInfo?.totalUnits) - Number(invoiceInfo?.purchasedUnits)} / {invoiceInfo?.totalUnits.toString()}</Text>
 					</Stack>
 				</Flex>
 				<Flex>

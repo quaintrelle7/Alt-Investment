@@ -24,7 +24,6 @@ export default function Home() {
 
 	return (
 		<>
-			<Header />
 			<Homepage />
 			{/* <About/> */}
 			{/* <AboutCompanies/> */}

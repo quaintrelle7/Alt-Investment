@@ -29,6 +29,9 @@ import { useAccount, useSignMessage } from "wagmi"
 import axios from "axios"
 import UploadedInvoice from "@/models/UploadedInvoice"
 import {factoryContract} from "@/blockend/interact"
+import {useRouter} from "next/router"
+import IDFAQ from "../FAQ/IDFAQ"
+import SellerCard from "./SellerCard"
 
 type Props = {}
 
@@ -45,6 +48,8 @@ function Homepage({}: Props) {
     const [isFileuploaded, setIsFileUploaded] = useState(false);
     const [deployedContractAddress, setDeployedContractAddress] = useState(null);
     const toast = useToast()
+    const router = useRouter();
+
 
 
 	const pinataConfig = {
@@ -230,6 +235,9 @@ function Homepage({}: Props) {
                           duration: 9000,
                           isClosable: true,
                     })
+
+                    router.push('/portfolio');
+
                 
                 })
 
@@ -305,12 +313,12 @@ function Homepage({}: Props) {
 									<ModalFooter>
 
 
-                                        <Button isDisabled={!isFileuploaded} type="submit">Submit</Button>
+                                        <Button mr={-6} isDisabled={!isFileuploaded} type="submit">Submit</Button>
 
 
-										<Button ml={4} onClick={() => setUploadClicked(false)}>
+										{/* <Button ml={4} onClick={() => setUploadClicked(false)}>
 											Close
-										</Button>
+										</Button> */}
 									</ModalFooter>
 								</form>
 							</Stack>
@@ -332,12 +340,16 @@ function Homepage({}: Props) {
 					</Text>
 
 					<Flex justify={"flex-start"} mt="10">
-						<Button mr={10} onClick={() => window.open("/invest", "_self")}>
+						<Button variant={"solid_complete"} mr={10} onClick={() => window.open("/invest", "_self")}>
 							Invest Now
 						</Button>
-						<Button onClick={handleUploadInvoice}>Upload Invoice</Button>
 						{/* <ListNFTForm/> */}
 					</Flex>
+
+                    <Stack cursor="pointer" onClick={handleUploadInvoice} mt="10">
+                            <h1><i>Click to sell your invoices</i></h1>
+                    </Stack>
+
 				</Stack>
 
                 <Hide below="md">
@@ -352,6 +364,11 @@ function Homepage({}: Props) {
 			</Flex>
 
 			<About />
+           
+            <Stack mx={20} pt={10} my={5}>
+                <IDFAQ/>
+            </Stack>
+
 			{/* <AboutCompanies /> */}
 		</>
 	)

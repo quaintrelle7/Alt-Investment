@@ -12,14 +12,14 @@ import {
   Center,
   Heading,
   Text,
-  Button
+  Button,
+  Link
 } from '@chakra-ui/react'
 import { useToast } from '@chakra-ui/react'
 import { factoryContract } from '@/blockend/interact'
 import {useAccount} from 'wagmi';
 import invoiceAbi from '@/blockend/build/invoice.json'
 import web3 from '@/blockend/web3';
-import Link from 'next/link';
 
 
 
@@ -96,7 +96,7 @@ useEffect(() => {
 					<Tbody color={"brand.secondary"}>
                         {invoices.map((invoice) => (
                           <Tr>
-							<Td><Link href={`/company/${invoice?.invoiceAddress}`}>Click for Company Info</Link></Td>
+							<Td><Link color={"brand.senary"} href={`/company/${invoice?.invoiceAddress}`}>View Invoice Details</Link></Td>
 							<Td>{Number(invoice?.res?.investedAmount)/10**6} USDC</Td>
 							<Td>{Number(invoice?.res?.repaymentAmount)/10**6} USDC</Td>
 							<Td>{Number(invoice?.res?.totalUnits)}</Td>

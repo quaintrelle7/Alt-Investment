@@ -1,4 +1,3 @@
-import Header from "@/components/Header/Header"
 import {
 	Center,
 	Heading,
@@ -315,7 +314,6 @@ export default function ({}: Props) {
 					{/* {renderAlert()} */}
 				</ModalContent>
 			</Modal>
-			<Header />
 			<Center>
 				<Heading fontSize={25} mt={"40px"}>
 					Uploaded Invoices

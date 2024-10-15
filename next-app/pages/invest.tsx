@@ -1,5 +1,4 @@
 import Footer from '@/components/Header/Footer'
-import Header from '@/components/Header/Header'
 import HeroSection from '@/components/Invest/HeroSection'
 import InvoiceInfo from '@/components/Invest/InvoiceInfo'
 import NFTCard from '@/components/Invest/NFTCard'
@@ -40,27 +39,26 @@ function invest() {
 
 	return (
 		<>
-			<Stack>
-				<Header />
-                
-				<Center mt={10}>
-					<Heading>Invoice Discounting Marketplace</Heading>{" "}
-				</Center>
+			<Stack mt={10} mx={20}>
+				<Flex >
+                   {/* <Heading>Marketplace</Heading>{" "} */}
+                   {/* search bar  */}
 
-				<Flex mt={20} p={6}>
-					<Button width={"150px"}>
-						Sort
-						<FaSort style={{ marginLeft: "10px" }} />
-					</Button>
-					<Button width={"150px"} ml={10}>
-						Filter
-						<FaFilter style={{ marginLeft: "10px" }} />
-					</Button>
+					<Flex width={"100%"} justifyContent={"flex-start"}>
+                        <Button  variant={"oauth"} width={"150px"}>
+    						Sort
+    						<FaSort style={{ marginLeft: "10px" }} />
+    					</Button>
+    					<Button variant={"oauth"} width={"150px"} ml={5}>
+    						Filter
+    						<FaFilter style={{ marginLeft: "10px" }} />
+    					</Button>
+                    </Flex>
 				</Flex>
 
-				<Flex px="6">
+				{/* <Flex>
 					<Divider></Divider>
-				</Flex>
+				</Flex> */}
 
 				<Grid
 					mt={5}
@@ -71,7 +69,7 @@ function invest() {
 					}}
 					gap={8}
 					alignItems={"center"}
-					p={6}>
+					py={6}>
                     {signedInvoices.map((invoice) => (
                         <InvoiceInfo
                             key={invoice.contractAddress}
@@ -81,9 +79,9 @@ function invest() {
 				</Grid>
 			</Stack>
 
-			<div style={{ position: "static", bottom: "0", width: "auto" }}>
+			{/* <div style={{ position: "static", bottom: "0", width: "auto" }}>
 				<Footer />
-			</div>
+			</div> */}
 		</>
 	)
 }
