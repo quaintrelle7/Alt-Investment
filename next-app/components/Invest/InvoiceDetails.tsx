@@ -174,16 +174,10 @@ function InvoiceDetails(props:any) {
 				</Flex>
 				<Flex>
 					<Stack mt={10}>
-						{/* <Text className="invoice-detail-heading">
-							The 2023 Tesla Model 3 is the cheapest Tesla car currently
-							offered. The base rear-wheel drive (RWD) trim has an official
-							starting price of $40,240. The Model 3 Long Range is a tad more
-							expensive at $47,240. The most expensive Model 3 is the
-							Performance model, which costs a minimum of $53,240.
-						</Text> */}
+						
 						<Flex position={"absolute"} bottom={"0"}>
-							<Link target="_blank" href={`https://ipfs.io/ipfs/${invoiceInfo?.invoiceHash}`} ><Button>View Invoice</Button></Link>
-							<Link target="_blank" href={`https://ipfs.io/ipfs/${invoiceInfo?.invoiceHash}`}><Button ml={5}>View Agreement</Button></Link>
+							<Link target="_blank" href={`https://ipfs.io/ipfs/${invoiceInfo?.invoiceHash}`} ><Text fontStyle={"italic"}  color={"brand.quinary"}>View Invoice</Text></Link>
+							<Link target="_blank" href={`https://ipfs.io/ipfs/${invoiceInfo?.invoiceHash}`}><Text fontStyle={"italic"}  ml={5} color={"brand.senary"}>View Agreement</Text></Link>
 						</Flex>
 					</Stack>
 				</Flex>
@@ -194,7 +188,7 @@ function InvoiceDetails(props:any) {
             <Stack width="30%" height={"35vh"} position={"relative"}>
                 <Center mb={5}>
     				<Stack>
-    					<Text className="invoice-card-heading" mb={1} textAlign={"center"}>
+    					<Text className="invoice-detail-heading" mb={1} textAlign={"center"}>
     						No. of Units
     					</Text>
     					<HStack>

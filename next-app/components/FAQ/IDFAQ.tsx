@@ -16,7 +16,7 @@ const faq = [
 	{
 		question: "What is invoice discounting?",
 		answer:
-			"What Is Invoice Discounting? The Number 1 Financing SolutionInvoice discounting is a type of financing that allows a business to sell unpaid invoices to a third party at a discount, and receive immediate payment for them. ",
+			"Invoice discounting is a type of financing that allows a business to sell unpaid invoices to a third party at a discount, and receive immediate payment for them. ",
 	},
 	{
 		question: "What is recourse?",
@@ -25,7 +25,7 @@ const faq = [
 	{
 		question: "What is AltInvest?",
 		answer:
-			"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut eniad minim veniam, quis nostrud exercitation ullamco laboris nisi aliquip ex ea commodo consequat",
+"AltInvest is an investment platform for crypto investors. AltInvest connects Stablecoin investors with SMEs and provides fixed income opportunities through invoice discounting. Crypto investments should not always lead you to the verge of bankruptcy. We provide a fixed yield to the investors on their crypto investment. With AltInvest, you can invest in multiple invoices for the given tenure as short as 30 days.",
 	},
 ]
 
@@ -46,13 +46,13 @@ const IDFAQ = (props: Props) => {
 					<AccordionItem>
 						<h2>
 							<AccordionButton>
-								<Box flex="1" textAlign="left">
+								<Box fontSize="xl" fontWeight="semibold" flex="1" textAlign="left">
 									{faq.question}
 								</Box>
 								<AccordionIcon />
 							</AccordionButton>
 						</h2>
-						<AccordionPanel pb={4}>{faq.answer}</AccordionPanel>
+						<AccordionPanel pb={30}>{faq.answer}</AccordionPanel>
 					</AccordionItem>
 				))}
 			</Accordion>

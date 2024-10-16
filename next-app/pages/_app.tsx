@@ -84,8 +84,8 @@ export default function App({ Component, pageProps }: AppProps) {
         appearance: {
           theme: 'dark',
           accentColor: '#676FFF',
-          logo: 'https://your-logo-url',
-        //   showWalletLoginFirst: true, 
+          logo: 'https://i.imghippo.com/files/h03bk1729098041.png',
+          showWalletLoginFirst: true, 
 
         },
         

@@ -53,13 +53,12 @@ function company() {
 					<ProfileCard />
 				</Flex>
 
-				<Flex justifyContent={"space-between"} mt={10}>
+				<Flex justifyContent={"space-between"} my={10}>
 					<Stack width={"50%"}>
 						<Text mb={5} className="invoice-detail-text">
-							FAQs
+							{/* FAQs */}
 						</Text>
 
-						<IDFAQ />
                         
 					</Stack>
 					<Stack width={"30%"}>
