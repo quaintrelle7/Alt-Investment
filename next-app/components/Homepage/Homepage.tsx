@@ -31,7 +31,6 @@ import UploadedInvoice from "@/models/UploadedInvoice"
 import {factoryContract} from "@/blockend/interact"
 import {useRouter} from "next/router"
 import IDFAQ from "../FAQ/IDFAQ"
-import SellerCard from "./SellerCard"
 
 type Props = {}
 
