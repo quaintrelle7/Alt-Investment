@@ -32,7 +32,7 @@ const faq = [
 const IDFAQ = (props: Props) => {
 	return (
 		<>
-            <Flex mb={10} width={{base:"500%", sm: "100%"}} justify={"center"}>
+            <Flex id="FAQ" mb={10} width={{base:"500%", sm: "100%"}} justify={"center"}>
 				<Center
 					width={{ base: "100%", md: "60%", lg: "70%", xl: "50%" }}
 					textAlign={"center"}

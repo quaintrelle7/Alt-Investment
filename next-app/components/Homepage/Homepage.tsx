@@ -364,7 +364,7 @@ function Homepage({}: Props) {
 
 			<About />
            
-            <Stack mx={20} pt={10} my={5}>
+            <Stack  mx={20} pt={10} my={5}>
                 <IDFAQ/>
             </Stack>
 

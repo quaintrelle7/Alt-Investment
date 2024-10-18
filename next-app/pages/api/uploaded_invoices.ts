@@ -66,7 +66,6 @@ export default async function handler(
 									const invoices = await collection
 										.find({
 											active: true,
-											approved: true,
 											sellerAddress: query.sellerAddress,
 											chainId: query.chainId,
 										})

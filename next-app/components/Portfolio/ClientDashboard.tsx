@@ -4,6 +4,7 @@ import {
 	Table,
 	Tbody,
 	Td,
+	Text,
 	Th,
 	Thead,
 	Tr,
@@ -138,7 +139,8 @@ const copyToClipboard = (contractAddress) => {
 				<h1>Invoices</h1>
 			</Center>
 			<Center p={20} mx={20} my={10} bg={"brand.ternary"}>
-				<Table textAlign={"center"} fontSize={15}>
+            {invoices.length > 0 ? (
+                <Table textAlign={"center"} fontSize={15}>
 					<Thead>
 						<Tr>
 							<Th color={"brand.quinary"}>Contract Address</Th>
@@ -156,7 +158,7 @@ const copyToClipboard = (contractAddress) => {
 							<Td>{invoice.date_added.slice(0,10)}</Td>
 							<Td color="brand.senary"><Link  target="_blank" href={`https://ipfs.io/ipfs/${invoice?.fileURL}`} >Click to View</Link></Td>
 							<Td>
-								<Button isDisabled={invoice.signedBySeller} variant={"signUp"} onClick={()=>{handleSignAgreement(invoice)}}>Sign Agreement</Button>
+								<Button isDisabled={invoice.signedBySeller || !invoice.approved} variant={"signUp"} onClick={()=>{handleSignAgreement(invoice)}}>Sign Agreement</Button>
 							</Td>
                             <Td>
 								<Button isDisabled={invoice.isCompleted} onClick={()=>claimPayment(invoice)} variant={"oauth"}>Withdraw Amount</Button>
@@ -168,7 +170,11 @@ const copyToClipboard = (contractAddress) => {
 
                     ))}		
 					</Tbody>
-				</Table>
+				</Table>)
+                :
+                (<Text>No invoices uploaded yet.</Text>)
+            }
+				
 			</Center>
 			{/* Due Date show here Agreement Uploaded Date Approval Date Decline */}
 			{/* Date Decline Reason */}

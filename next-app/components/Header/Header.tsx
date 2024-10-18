@@ -139,7 +139,7 @@ const handleRoute = (path: string) => (event: React.MouseEvent<HTMLButtonElement
     						<Link
     							style={{ textDecoration: "none", fontSize: 15, fontWeight: 600 }}
     							_hover={{ color: "brand.quinary" }}
-    							href="#About">
+    							href="#FAQ">
     							FAQs
     						</Link>
     				</Button>
@@ -160,7 +160,7 @@ const handleRoute = (path: string) => (event: React.MouseEvent<HTMLButtonElement
                 {isConnected && address ? <Text mr={5}>{address.slice(0, 4) + "..." + address.slice(-4)}</Text> : ""}
                 {/* <FundWallet/> */}
                 <Button variant={"solid_complete"} disabled={!isConnected} mr={5} onClick={handleFund}>Buy USDC</Button>
-                {/* <MintUSDC address={address}/> */}
+                <MintUSDC address={address}/>
 				{/* {isConnected && address &&<ConnectButton
 					accountStatus={{
 						smallScreen: "avatar",
