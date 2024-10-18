@@ -31,6 +31,8 @@ import UploadedInvoice from "@/models/UploadedInvoice"
 import {factoryContract} from "@/blockend/interact"
 import {useRouter} from "next/router"
 import IDFAQ from "../FAQ/IDFAQ"
+import UserJourney from "./UserJourney"
+import AnimatedComponent from "./AnimatedComponent"
 
 type Props = {}
 
@@ -362,7 +364,30 @@ function Homepage({}: Props) {
                 </Hide>
 			</Flex>
 
-			<About />
+            <AnimatedComponent>
+                <UserJourney/>
+                <Stack width={"100%"}>
+            
+                    <Flex  my={"10"}>
+                        <Stack width={"50%"} align={"center"}>
+                            
+                            <Button mr={10} mt={-20} onClick={() => window.open("/invest", "_self")}>
+							    Invest Now
+						    </Button>
+                        </Stack>
+
+                        <Stack align={"center"} width={"50%"}>
+                          <Button  ml={-40} mt={-20} onClick={handleUploadInvoice}>
+                            Upload Invoice
+                          </Button>
+                        </Stack>
+                    </Flex>
+                </Stack>
+            </AnimatedComponent>
+
+            <AnimatedComponent>
+			    <About />
+            </AnimatedComponent>
            
             <Stack  mx={20} pt={10} my={5}>
                 <IDFAQ/>

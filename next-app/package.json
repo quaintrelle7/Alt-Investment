@@ -27,7 +27,7 @@
     "clsx": "^2.1.0",
     "dotenv": "^16.4.5",
     "ethers": "^5.7.2",
-    "framer-motion": "^11.0.18",
+    "framer-motion": "^11.11.9",
     "lottie-react": "^2.4.0",
     "mongodb": "^6.7.0",
     "mongoose": "^8.4.3",
